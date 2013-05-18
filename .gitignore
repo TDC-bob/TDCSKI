@@ -1,4 +1,4 @@
-*.py[cod]
+﻿*.py[cod]
 
 # C extensions
 *.so
@@ -33,3 +33,25 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+*.bat
+updateVersion.au3
+test*
+*.odg
+*.zip
+*.lnk
+*.log
+*.ini
+version
+uploadMSI.au3
+ftp*.txt
+signPass.txt
+Backup/
+InnoPackage/*
+InnoBuild/*
+build/*
+!InnoPackage/sample.txt
+!InnoBuild/sample.txt
+!build/sample.txt
+updateVersion.exe
+/source/*.txt
+/updateVersion_tidy.txt

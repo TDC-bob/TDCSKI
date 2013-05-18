@@ -1,0 +1,224 @@
+0.8.23.0
+~ bug avec le raccourci pour le document tuto de la DropBox
+
+0.8.22.0
+~ amélioration de l'algorithme de parsing des fichiers distants
++ tests pour le module de prise en charge des Mods
++ tests pour le module de prise en charge de l'upload automatique des skins
++ tests pour le module de prise en charge de l'upload automatique des missions
++ tests pour l'intégration du TDCMEME et du TDCSKI dans le TDCWorld (pun intended)
+~ correction de la skin de EFA
+
+0.8.21.0
+- le programme est moins (inutilement) bavard
++ modification mineure de la GUI
++ ajout d'un lien vers ce fichier dans la GUI
++ correction d'un bug qui faisait qu'il était impossible de quitter le programme lorsque celui-ci était en cours. Le programme quitte maintenant sans délai quand l'utilisateur le lui demande.
+
+0.8.20.0
+~ correction d'un bug lors du téléchargement des missions (toutes les missions étaient téléchargées vers le répertoire solo; les missions MULTI seront supprimées du répertoire SOLO)
+
+0.8.19.0
+~ correction d'un bug lors du téléchargement des missions. Merci Ian !
+
+0.8.18.0
+~ correction du bug lors de la mise à jour automatique
+
+0.8.16.0
++ le TDCSKI met à nouveau à jour les missions des TDC
++ ajout d'un tutorial sur la façon de mettre en ligne des livrées ou des missions (lien dans le menu démarrer et dans l'interface principale)
+
+0.8.15.0
+~ correction d'un bug rapporté par BenJee lié à l'utilisation des chemins courts par Windows
+
+0.8.14.0
++ correction de l'oubli du script de modification du Graphics.cfg dans la version 0.8.12.0, j'attends vos retours !
+
+0.8.12.0
+!!! GROS CHANGEMENT !!!
+~ le TDCSKI utilise maintenant une Dropbox au lieu du serveur FTP des TDC; la connexion est plus rapide, et plus stable. Forcément, cela entraîne un grand nombre de changements. Je mettrai le fichier README à jour au plus vite, et ajouterai un petit tuto pour ceux qui upload des livrées ou des missions. Un peu de patience SVP =)
+- cette version ne synchronise pas encore les missions à partir de la Dropbox; bientôt ! =)
+
+0.8.11.0
+~ tentative de correction d'un bug rapporté par Ian lors de la récupération de la liste des fichiers présents sur le FTP (merci Ian !)
+
+0.8.10.0
+~ correction d'un bug rapporé par BenJee. Merci BenJee !
+
+0.8.9.0
+!!! ATTENTION !!! !!! ATTENTION !!! !!! ATTENTION !!! !!! ATTENTION !!! !!! ATTENTION !!! !!! ATTENTION !!! !!! ATTENTION !!! !!! ATTENTION !!! !!! ATTENTION !!! !!! ATTENTION !!! !!! ATTENTION !!! 
+Cette version apporte de nombreux changements; il est tout à fait possible que certaines choses ne fonctionnent pas directement comme prévu. Comme à l'habitude, je tâcherai d'y remédier au plus vite =þ
+
++ le TDCSKI vous permet de soumettre manuellement un rapport de bug, ou simplement de contacter l'auteur; cette opération vous demandera d'entrer votre pseudo ainsi qu'une adresse mail à laquelle je peux vous joindre
++ le TDCSKI se "souviendra" du dernier couple pseudo/adresse mail que vous avez entré, vous épargnant ainsi de les retaper à chaque fois (ces informations sont enregistrées dans la base de registre Windows, et sont traitées de manière confidentielle)
++ la touche "escape" ("echap") permet d'interrompre et de quitter le TDCSKI (excepté pendant la connexion au serveur FTP, qui prend un certain temps)
++ prise en charge des installations A10 via Steam
++ ajout d'un case permettant de spécifier si l'on souhaite lancer A10 une fois le prorgamme du TDCSKI terminé (cocher cette case lancera également le TrackIR et HELIOS si eux-ci sont installés)
+~ l'entierté du programme a été traduit en français, et le système d'affichage ainsi que d'écriture dans le log a été complètement refondu; l'affichage "clignote" légèrement lors de l'exécution, c'est malheureusement dû à une limitation du langage utilisé
+-> pour la prochaine version: ré-agencement de l'interface principale, pour que tout ça soit un peu plus joli
+
+0.8.8.0
++ ajout du logo des TDC à l'interface principale du programme
+
+0.8.7.0
+~ corrections pour le bug rapporté par Stupefian lors de la connexion au FTP
+
+0.8.6.0
++ le programme vérifie au lancement qu'il ne tourne pas déjà (pour éviter les instanciations multiples)
+
+0.8.5.0
+~ correction d'un (autre) mini-bug lors du téléchargement d'un fichier via FTP 
+
+0.8.4.0
+~ correction d'un mini-bug lors du téléchargement d'un fichier via FTP 
+
+0.8.3.0
+~ correction d'un bug mineur qui faisait que l'utilisateur n'était pas sytématiquement averti lors de la mise à jour d'une livrée
+
+0.8.2.0
+~ correction d'un petit bug lros du téléchargement des skins
+
+0.8.1.0
++ détection des fichiers ouverts ou protégés lors des tentatives de suppression; l'utilisateur sera averti, et le TDCSKI lui indiquera le fichier en faute
++ ajout d'un "filet de sécurité" lors des téléchargements: le TDCSKI essayera de télécharger jusque 5 fois le même fichier avant d'abandonner et de prévenir l'utilisateur que la connexion avec le FTP à été perdue (merci Gandalf!)
++ ajout d'un "filet de sécurité" lors de la détection de la liste des fichiers sur le serveur: si le TDCSKI rencontre une erreur, il plantera "normalement", et ne donnera plus de message d'erreur obscure (merci Stupefian!)
+~ la mise à jour du TDCSKI se fait maintenant de faàn entièrement automatisée
+~ correction d'un bug qui faisait que le programme quitte lorsque l'utilisateur ne souhaitait pas mettre à jour
+- désactivation temporaire de la fonction "/ALPHA" pour les testeurs
+
+0.8.0.0
++ le TDCSKI tient également à jour, en plus des livrées des TDC, les missions des TDC
+
+0.7.5.0
++ mises à jour automatiques (on gagne des clics ^^)
+- nettoyage des fichiers sources du répertoire d'installation (elles sont maintenant proprement installées dans
+  un sous-répertoire "sources\")
+~ fermeture automatique de l'interface utilisateur si tout s'est bien passé
+
+0.7.4.0
+~ correction du bug lors de la fermeture du fichier WriteGraphics.lua (rapporté par Duet et efa77fr; merci!)
+
+0.7.3.0
+~ correction d'un bug relatif à la version STEAM du jeu ( bug soumis par Duet, merci beaucoup Duet ! )
+
+0.7.2.0
+~ correction d'un problème lors du téléchargement du fichier description.lua lorsque ce dernier avait été modifié sur le serveur
+
+0.7.1.0
+~ problème corrigé
+! ceux qui souhaitent faire la mise à jour vers la versions ALPHA (BenJee ? ^^) devront ajouter un switch "/A" à leur raccourci vers le TDC, sans quoi ces 
+  versions seront tout simplement ignorées par le système de mise à jour
+
+0.7.0.12
+~ test de la correction
+
+0.7.0.11
+~ découverte d'un problème lié au téléchargement de nouvelles versino, tests et corrections en cours
+
+0.7.0.10
++ intégration d'un système  de vérification dennouvelle version qu prend en compte les versions ALPHA et BETA
+
+0.7.0.9
+~ tests
+
+0.7.0.8
+~ correction du bug qui corrompait le fichier Graphics.cfg, faisant ainsi planter le jeu irrémédiablement
+- diminution de la quantité d'informations affichées lors de l'exécution du programme (si vous voulez les avoir malgré tout, référez vous au fichier log.log)
+
+0.7.0.7
++ nouvelle interface graphique beaucoup plus parlante; le nombre d'informations affichées est appelé à diminuer dans un futur 
+  proche
+
+0.7.0.6
+~ réécriture du README (il était temps ... :s mes excuses !)
+~ beaucoup de changement sous le capot au niveau de la procédure de passage à une nouvelle version, il se pourrait qu'il y ait
+  quelques soucis de jeunesse, 
+  mais à priori rien qui empêchera le programme de fonctionner correctement =)
++ intégration du certificat officiel; vous pourrez maintenant être assuré que le programme qui va être exécuté sur votre machine 
+  provient bien de moi, sans avoir à installer mon certificat "maison", donc sans prise de tête !
+
+0.7.0.5
+~ encore quelques bugs ...
+
+0.7.0.4
+x tests
+
+0.7.0.3
+x tests
+
+0.7.0.2
+~ correction de bugs
+
+0.7.0.1
++ Package .msi pour l'installation
+
+0.6.0.11
++ lancement automatique de A10 une fois le programme terminé
+
+0.6.0.10
+- stripped up source from useless commented lines of code
++ added _entering/_exiting to _writeToGraphicsCFG()
+
+0.6.0.9
+- __Ftp_switchRemoteDirTo est maintenant silencieux dans le log (beaucoup de bruit pour rien)
+
+0.6.0.8
+- le programme ne demande plus de confirmation de la part de l'utilisateur une fois qu'il a trouvé le répertoire d'installation 
+  de A10 dans la base de registre
+~ en-têtes modifiés dans la source (ajout contributeur)
+
+0.6.0.7
++ retour de l'icône
+
+0.6.0.6
+x test de la vérification de version
+
+0.6.0.5
+~ correction d'un bug lors de la vérification de la dernière version
+
+0.6.0.4
+- suppression des CallBacks pour les sessions FTPs
+~ correction d'un bug de nomenclature dans le FS (hyphen)
+
+0.6.0.3
+~ correction d'un bug lors du backup d'un fichier
+
+0.6.0.2
+~ passage au nouveau FTP
+
+0.6.0.1
+~ refonte complète de la source; elle est maintenant morcelée en plusieurs fichiers au3, ce qui permet d'augmenter la lisibilité 
+  ainsi que la modularité
+~ correction de nombreux petits bugs, et amélioration des performances en général de par l'optimisation/décrétinisation de 
+  certaines parties du code
+~ déplacement du dossier A10/TDC vers A10/TDCSkinInstaller, pour plus de cohérence avec des nouvelles fonctions et la modification 
+  du système de backup
+~ modification profond du système de backup: au lieu de faire une copie à côté du fichier modifié, et d'ajouter "_BACKUP" au nom du
+  fichier, tous les fichiers modifiés sont maintenant copiés vers le répertoire "A10/TDCSkinsInstaller/Backups". La structure des 
+  dossiers dans A10 est préservée lors du backup; par exemple, le fichier "A10/Config/graphics.cfg" sera copié vers 
+  "A10/TDCSkinsInstaller/Backups/Config/graphics.cfg. Cette façon devrait permettre de restaurer la version originale d'un fichier 
+  plus facilement, et également permettre de savoir rapidement quels fichiers ont été modifiés. Note pour les utilisateurs des 
+  versions précédentes de TDCSkinsInstaller: lorsque vous exécuterez cette nouvelle version pour la première fois, le programme 
+  ira chercher le premier backup qui a été effectué (graphics.cfg_BACKUP) et le copiera au bon endroit, il ne fera pas de backup 
+  de la version déjà modifiée du fichier. Compatible, donc, pas de souci ^^
+
+0.5.1.3
++ affichage de la version dans les popups
+
+0.5.1.2
+~ correction d'un bug dans la fonction _checkConnection()
+~ modification du texte présenté à l'utilisateur en cas d'erreur fatale non contrôlée
++ ajout d'un texte en popup lorsque la vérification de la connexion à internet échoue
+
+0.5.1.1
+- nettoyage du code
++ ajout d'un système de recherche de nouvelle de version
+~ correction d'un bug qui faisait que le fichier graphics.cfg n'était pas systématiquement mis à jour quand l'utilisateur annulait 
+  un download lors d'une itération précédente
+
+0.5.0.47
++ ajout d'une sécurité au niveau du nombre de fichiers qui peuvent être téléchargés. Par livrée, un seul fichier de chaque type 
+  (zip, lua et txt) peut-être téléchargé. Si jamais vous en placez plusieurs sur le FTP, le premier dans l'ordre alphabétique 
+  sera installé, les autres seront ignorés les livrées sont automatiquement renommée lorsqu'elles sont installées dans le dossier 
+  LIVERIES. Si le nom de la livrée ne commence pas par "TDC - ", ce préfixe sera ajouté. Ainsi, elles appraîtront groupées dans le
+  dossier LIVERIES, ainsi qu'en jeu, et cela rend l'identification ainsi que la sélection des livrées TDC plus aisées.
