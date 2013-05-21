@@ -55,3 +55,8 @@ build/*
 updateVersion.exe
 /source/*.txt
 /updateVersion_tidy.txt
+__pycache__
+*.log
+*.~py
+*.lnk
+*.psproj
