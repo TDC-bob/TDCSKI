@@ -12,18 +12,13 @@
 #!/usr/bin/env python
 
 
-from . import _logging
-logger = _logging.mkLogger("EXCEPTION")
-
-def wait_for_console():
-    print("\n\nAppuyez sur ENTER pour fermer la fenêtre")
-    input()
+from _logging import mkLogger
+logger = mkLogger("EXCEPTION")
 
 class Error(Exception):
-    def __init__(self, short_msg="Pas de description", long_msg="Pas d'information supplémentaire", logger=logger):
-        logger.exception('''FATAL ERROR: {}\n\tMessage: {}'''.format(base_info, message))
+    def __init__(self, base_info="Pas d'information sur cette erreur", message="Pas de message pour cette erreur", logger=logger):
+        logger.error('''FATAL ERROR: {}\n\tMessage: {}'''.format(base_info, message))
 
 class GitRunError(Exception):
     def __init__(self, short_msg="Pas de description", long_msg="Pas d'information supplémentaire", logger=logger):
-        logger.exception('''ERREUR FATALE\n\nDESCRIPTION: {}\nMESSAGE: {}\nDETAILS TECHNIQUES:\n\n'''.format(short_msg, long_msg))
-        wait_for_console()
+        logger.error('''FATAL ERROR: {}\n\tMessage: {}'''.format(short_msg, long_msg))

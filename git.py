@@ -14,8 +14,8 @@
 import subprocess
 import os
 from . import Exceptions
-from . import _logging
-from ._logging import logged
+import _logging
+from _logging import logged
 
 import logging
 logger = _logging.mkLogger(__name__, logging.DEBUG)
@@ -55,7 +55,8 @@ class GSP():
     ##    print(rtn)
     ##    return
         self.logger.info("running following git command: {}".format(" ".join([cc for cc in args])))
-        cmd = [os.path.normpath(os.path.join(os.getcwd(),"dist/bin/git.exe"))]
+        cmd = [os.path.normpath(os.path.join(os.getcwd(),"bobgit/bin/_git.exe"))]
+        print(cmd)
         for a in args:
             cmd.append(a)
     ##    print(cmd)
