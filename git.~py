@@ -13,37 +13,68 @@
 
 import subprocess
 import os
-import Exceptions
+from . import Exceptions
+from . import _logging
+from ._logging import logged
 
-import logging, _logging
-logger = _logging.mkLogger(__name__, logging.INFO )
+import logging
+logger = _logging.mkLogger(__name__, logging.DEBUG)
 
-def clone(target_dir, remote_repo):
-    cur_dir = None
-    if not os.path.exists(target_dir):
-        os.makedirs(target_dir)
-    if not os.getcwd() == target_dir:
-        cur_dir = os.getcwd()
+class GSP():
+    def __init__self():
+        pass
 
+    def clone(self, target_dir, remote_repo):
+        cur_dir = None
+        if not os.path.exists(target_dir):
+            os.makedirs(target_dir)
+        if not os.getcwd() == target_dir:
+            cur_dir = os.getcwd()
 
-def _run(args):
-    cmd = ["git"]
-    for a in args:
-        cmd.append(a)
-##    print(cmd)
-    try:
-        rtn = subprocess.check_output(cmd,
-                                    shell=True,
-                                    universal_newlines=True,
-                                    stderr=subprocess.STDOUT)
-    except subprocess.CalledProcessError as e:
-        cmd, code, output = e.cmd, e.returncode, e.output
-##        print("GIT FATAL ERROR\nCMD: {}\nOUTPUT:\n-------\n{}\n------------\nEND OF OUTPUT"
-##                                                                        .format(cmd,output))
-        raise Exceptions.GitRunError("failed while running git command: {}".format(cmd),
-                            "Git output was:\n------------\n{}\n------------\nEND OF GIT OUTPUT".format(output))
-        exit(1)
-##    print(rtn)
+    @logged
+    def _run(self, args):
+
+    ##    with subprocess.Popen(args,
+    ##     bufsize=-1,
+    ##     executable=os.path.normpath(os.path.join(os.getcwd(),"dist/bin/git.exe")),
+    ##     stdin=None,
+    ##     stdout=subprocess.PIPE,
+    ##     stderr=subprocess.STDOUT,
+    ##     preexec_fn=None,
+    ##     close_fds=False,
+    ##     shell=True,
+    ##     cwd=None,
+    ##     env=None,
+    ##     universal_newlines=True,
+    ##     startupinfo=None,
+    ##     creationflags=0,
+    ##     restore_signals=True,
+    ##     start_new_session=False,
+    ##     pass_fds=()) as proc:
+    ##        rtn = proc.stdout.read()
+    ##    print(rtn)
+    ##    return
+        self.logger.info
+        cmd = [os.path.normpath(os.path.join(os.getcwd(),"dist/bin/git.exe"))]
+        for a in args:
+            cmd.append(a)
+    ##    print(cmd)
+        try:
+            rtn = subprocess.check_output(cmd,
+                                        shell=True,
+                                        universal_newlines=True,
+                                        stderr=subprocess.STDOUT)
+        except subprocess.CalledProcessError as e:
+            cmd, code, output = e.cmd, e.returncode, e.output
+    ##        print("GIT FATAL ERROR\nCMD: {}\nOUTPUT:\n-------\n{}\n------------\nEND OF OUTPUT"
+    ##                                                                        .format(cmd,output))
+            raise Exceptions.GitRunError("échec de la commande Git: \n\n{}\n\n".format(" ".join([c for c in cmd[1:]])),
+                "Git stdErr &> stdOut:\n------------\n{}\n------------\nEnd of Git output\n\n".format(output),
+                logger)
+    ##        exit(1)
+        #TODO: parse return
+        logger.debug("git output:\n\n{}\n\nEND OF GIT OUTPUT\n\n".format(rtn))
+        return rtn
 
 
 def main():
