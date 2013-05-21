@@ -10,7 +10,7 @@
 #-------------------------------------------------------------------------------
 #!/usr/bin/env python
 
-import lib.git.git as git
+import bobgit.git as git
 import _logging
 logger = _logging.mkLogger(__name__, _logging.DEBUG)
 
@@ -18,7 +18,6 @@ def main():
 ##    git._run(["clone","https://github.com/caolan/async","test1"])
     p = git.GSP()
     p._run(["merge","master"])
-    print("Chouk de merde !")
     print("Press ENTER to close this window")
     input()
 
