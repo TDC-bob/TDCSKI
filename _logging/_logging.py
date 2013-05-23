@@ -1,16 +1,15 @@
 ﻿# -*- coding: UTF-8 -*-
 #-------------------------------------------------------------------------------
-# Name:        module1
-# Purpose:
+# Author:      Bob Daribouca
 #
-# Author:      owner
+# Copyright:   (c) Bob Daribouca 2013
+# Licence:     CC BY-NC-SA 3.0
 #
-# Created:     10/05/2013
-# Copyright:   (c) owner 2013
-# Licence:     <your licence>
+#               Please refer to the "LICENSE" file distributed with the package,
+#               or to http://creativecommons.org/licenses/by-nc-sa/3.0/
+#
 #-------------------------------------------------------------------------------
 #!/usr/bin/env python
-# coding=utf-8
 """
 This module provides an environement to make
 module- and class-specific loggers
@@ -77,10 +76,3 @@ def __setupLogger(name="main", lvl=logging.DEBUG, logFile="python.log"):
     logger.addHandler(fh)
     logger.addHandler(ch)
     return logger
-
-
-def main():
-    pass
-
-if __name__ == '__main__':
-    main()
