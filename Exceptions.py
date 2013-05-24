@@ -12,7 +12,7 @@
 #!/usr/bin/env python
 
 
-from _logging import mkLogger
+from _logging._logging import mkLogger, logged, DEBUG, INFO, WARN, ERROR
 logger = mkLogger("EXCEPTION")
 
 class Error(Exception):
