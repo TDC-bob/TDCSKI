@@ -14,22 +14,29 @@
 import subprocess
 import os
 from . import Exceptions
-import _logging
-from _logging import logged
+from _logging._logging import logged, mkLogger, DEBUG, INFO, WARN, ERROR
+import pygit2
 
-import logging
-logger = _logging.mkLogger(__name__, logging.DEBUG)
+logger = mkLogger(__name__, DEBUG)
 
 class GSP():
-    def __init__self():
-        pass
+    def __init__(self):
+        self.git = os.path.normpath(os.path.join(os.getcwd(),"bobgit/bin/git.exe"))
 
-    def clone(self, target_dir, remote_repo):
-        cur_dir = None
-        if not os.path.exists(target_dir):
-            os.makedirs(target_dir)
-        if not os.getcwd() == target_dir:
-            cur_dir = os.getcwd()
+    def clone(self, remote_repo, local_repo_name):
+        cur_dir = os.getcwd()
+        os.chdir(os.path.normpath(os.path.join(os.getcwd(),"bobgit")))
+        self._run(["clone",remote_repo,local_repo_name])
+        os.chdir(cur_dir)
+
+    def pull(self, repo, remote="origin"):
+        cur_dir = os.getcwd()
+        os.chdir(repo)
+        self._run(["fetch", remote])
+        self._run(["merge", "master"])
+        os.chdir(cur_dir)
+
+
 
     @logged
     def _run(self, args):
@@ -54,11 +61,11 @@ class GSP():
     ##        rtn = proc.stdout.read()
     ##    print(rtn)
     ##    return
-        self.logger.info("running following git command: {}".format(" ".join([cc for cc in args])))
-        cmd = [os.path.normpath(os.path.join(os.getcwd(),"bobgit/bin/_git.exe"))]
-        print(cmd)
+
+        cmd = [self.git]
         for a in args:
             cmd.append(a)
+        self.logger.info("running following git command: {}".format(cmd))
     ##    print(cmd)
         try:
             rtn = subprocess.check_output(cmd,
@@ -70,12 +77,12 @@ class GSP():
     ##        print("GIT FATAL ERROR\nCMD: {}\nOUTPUT:\n-------\n{}\n------------\nEND OF OUTPUT"
     ##                                                                        .format(cmd,output))
             raise Exceptions.GitRunError("échec de la commande Git: \n\n{}\n\n".format(" ".join([c for c in cmd[1:]])),
-                "Git stdErr &> stdOut:\n------------\n{}\n------------\nEnd of Git output\n\n".format(output),
-                logger)
+                "Git stdErr &> stdOut:\n=========\n{}\n=========\nEnd of Git output\n\n".format(output),
+                self.logger)
     ##        exit(1)
         #TODO: parse return
-        logger.debug("git output:\n\n{}\n\nEND OF GIT OUTPUT\n\n".format(rtn))
-        return rtn
+        self.logger.info("git output:\n\n{}\n\nEND OF GIT OUTPUT\n\n".format(rtn))
+##        return rtn
 
 
 def main():
