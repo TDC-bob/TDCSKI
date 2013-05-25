@@ -15,32 +15,79 @@ import subprocess
 import os
 from . import Exceptions
 from _logging._logging import logged, mkLogger, DEBUG, INFO, WARN, ERROR
-import pygit2
 
 logger = mkLogger(__name__, DEBUG)
 
 class GSP():
+    """
+    Git wrapper
+
+    Instanciation won't do anything to the local/remote FS, it's just to set up
+    the local path to the Git executable and its libraries/templates.
+
+    .. note::
+
+       This is but a VERY basic stand-alone version of Git, with VERY limited functionalities.
+
+    """
     def __init__(self):
+        '''A really simple class.
+
+        Args:
+           foo (str): We all know what foo does.
+
+        Kwargs:
+           bar (str): Really, same as foo.
+
+        '''
         self.git = os.path.normpath(os.path.join(os.getcwd(),"bobgit/bin/git.exe"))
 
-    def clone(self, remote_repo, local_repo_name):
+    def clone(self, remote_repo, local_repo_name=""):
+        '''
+        Alias for the git 'clone' command
+
+        :param remote_repo: full path or web address of the repo you want to clone
+        :type remote_repo: string
+        :param local_repo_name: the local path of the clone (defaults to Git default")
+        :type local_repo_name: string
+        :returns: output of both fetch & merge command
+        :rtype: list
+        '''
         cur_dir = os.getcwd()
         os.chdir(os.path.normpath(os.path.join(os.getcwd(),"bobgit")))
         self._run(["clone",remote_repo,local_repo_name])
         os.chdir(cur_dir)
 
     def pull(self, repo, remote="origin"):
+        '''
+        Alias for the git 'pull' command
+
+        :param repo: full path to the repo in which the pull has to be run
+        :type repo: string
+        :param remote: the remote to pull from (defaults to origin)
+        :type remote: string
+        :returns: output of both fetch & merge command
+        :rtype: list
+        '''
         cur_dir = os.getcwd()
         os.chdir(repo)
-        self._run(["fetch", remote])
-        self._run(["merge", "master"])
+        rtn_fetch = self._run(["fetch", remote])
+        rtn_merge = self._run(["merge", "master"])
         os.chdir(cur_dir)
-
+        return rtn_fetch, rtn_merge
 
 
     @logged
     def _run(self, args):
+        '''
+        Runs an arbitrary git command
 
+        :param args: arguments passed to git
+        :type args: list
+        :returns: output of git subprocess
+        :rtype: string
+        :raises: Exceptions.GitRunError
+        '''
     ##    with subprocess.Popen(args,
     ##     bufsize=-1,
     ##     executable=os.path.normpath(os.path.join(os.getcwd(),"dist/bin/git.exe")),
@@ -66,7 +113,6 @@ class GSP():
         for a in args:
             cmd.append(a)
         self.logger.info("running following git command: {}".format(cmd))
-    ##    print(cmd)
         try:
             rtn = subprocess.check_output(cmd,
                                         shell=True,
@@ -74,15 +120,13 @@ class GSP():
                                         stderr=subprocess.STDOUT)
         except subprocess.CalledProcessError as e:
             cmd, code, output = e.cmd, e.returncode, e.output
-    ##        print("GIT FATAL ERROR\nCMD: {}\nOUTPUT:\n-------\n{}\n------------\nEND OF OUTPUT"
-    ##                                                                        .format(cmd,output))
-            raise Exceptions.GitRunError("échec de la commande Git: \n\n{}\n\n".format(" ".join([c for c in cmd[1:]])),
+            raise Exceptions.GitRunError(
+                "Git failed running: \n\n{}\n\n".format(" ".join([c for c in cmd[1:]])),
                 "Git stdErr &> stdOut:\n=========\n{}\n=========\nEnd of Git output\n\n".format(output),
                 self.logger)
-    ##        exit(1)
-        #TODO: parse return
+        #TODO: parse return ?
         self.logger.info("git output:\n\n{}\n\nEND OF GIT OUTPUT\n\n".format(rtn))
-##        return rtn
+        return rtn
 
 
 def main():
