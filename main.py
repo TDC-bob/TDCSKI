@@ -11,12 +11,12 @@
 #!/usr/bin/env python
 
 import git
-import _logging
-logger = _logging.mkLogger(__name__, _logging.DEBUG)
+from _logging._logging import logged, mkLogger, DEBUG, INFO, WARN, ERROR
+logger = mkLogger(__name__, DEBUG)
 
 def main():
     remote = "https://github.com/TDC-bob/bobgit.git"
-    local = r"C:\Documents and Settings\owner\My Documents\BORIS\TDC\tests7"
+    local = r"C:\Documents and Settings\owner\My Documents\BORIS\TDC\tests8.git"
     p = git.GSP()
     p.clone(remote, local)
     p.pull(local)
