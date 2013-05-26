@@ -13,10 +13,18 @@
 
 import subprocess
 import os
-from . import Exceptions
-from _logging._logging import logged, mkLogger, DEBUG, INFO, WARN, ERROR
+try:
+    from . import Exceptions
+except ImportError:
+    import Exceptions
+try:
+    from _logging._logging import logged, mkLogger, DEBUG, INFO, WARN, ERROR
+    logger = mkLogger(__name__, DEBUG)
+    head_less = False
+except ImportError:
+    head_less = True
 
-logger = mkLogger(__name__, DEBUG)
+#todo: import _logging as a subtree (FFS, that's getting tangled)
 
 class GSP():
     """
@@ -127,47 +135,3 @@ class GSP():
         #TODO: parse return ?
         self.logger.info("git output:\n\n{}\n\nEND OF GIT OUTPUT\n\n".format(rtn))
         return rtn
-
-
-def main():
-    _run(["test",])
-    return
-    os.chdir("C:\\")
-    if not os.path.exists(r"d:\test\test1"):
-        os.makedirs(r"d:\test\test1")
-    os.chdir(r"d:\test\test1")
-    try:
-        rtn = subprocess.check_output(
-        [
-            "git","clone","C:\Documents and Settings\owner\My Documents\BORIS\TDC\TDCSKI.git",r"d:\test\test2"
-        ],
-        shell=True,
-        universal_newlines=True,
-        stderr=subprocess.STDOUT
-        )
-        rtn = subprocess.check_output(
-        [
-            "git","fetch"
-        ],
-        shell=True,
-        universal_newlines=True,
-        stderr=subprocess.STDOUT
-        )
-        rtn = subprocess.check_output(
-        [
-            "git","merge","master"
-        ],
-        shell=True,
-        universal_newlines=True,
-        stderr=subprocess.STDOUT
-        )
-    except subprocess.CalledProcessError as e:
-        print(e.cmd)
-        print(e.returncode)
-        print(e.output)
-        exit(1)
-    print(rtn)
-    exit(0)
-
-if __name__ == '__main__':
-    main()

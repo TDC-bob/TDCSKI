@@ -10,14 +10,16 @@
 #-------------------------------------------------------------------------------
 #!/usr/bin/env python
 
-import bobgit.git as git
+import git
 import _logging
 logger = _logging.mkLogger(__name__, _logging.DEBUG)
 
 def main():
-##    git._run(["clone","https://github.com/caolan/async","test1"])
+    remote = "https://github.com/TDC-bob/bobgit.git"
+    local = r"C:\Documents and Settings\owner\My Documents\BORIS\TDC\tests7"
     p = git.GSP()
-    p._run(["merge","master"])
+    p.clone(remote, local)
+    p.pull(local)
     print("Press ENTER to close this window")
     input()
 
