@@ -11,8 +11,8 @@
 #!/usr/bin/env python
 
 import bobgit.git as git
-import _logging
-logger = _logging.mkLogger(__name__, _logging.DEBUG)
+from _logging._logging import logged, mkLogger, DEBUG, INFO, WARN, ERROR
+logger = mkLogger(__name__, DEBUG)
 
 def main():
     remote = "https://github.com/TDC-bob/bobgit.git"
