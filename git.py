@@ -13,17 +13,20 @@
 
 import subprocess
 import os
-try:
-    from . import Exceptions
-except (ImportError, SystemError):
-    import Exceptions
+##try:
+##    from . import Exceptions
+##except (ImportError, SystemError):
+##    import bobgit.Exceptions as Exceptions
+##import bobgit.Exceptions as Exceptions
+##from .Exceptions import *
+from . import GitExceptions
 
 from _logging._logging import logged, mkLogger, DEBUG, INFO, WARN, ERROR
 logger = mkLogger(__name__, DEBUG)
 
 #todo: import _logging as a subtree (FFS, that's getting tangled)
 
-class GSP():
+class Git():
     """
     Git wrapper
 
@@ -35,16 +38,23 @@ class GSP():
        This is but a VERY basic stand-alone version of Git, with VERY limited functionalities.
 
     """
+    @logged
     def __init__(self):
         '''
         Checks for git.exe path.
 
         May switch to a glob.glob() type os search in the PATH later on
         '''
-        if os.path.exists("./bobgit/bin/git.exe"):
-            self.git = os.path.abspath("./bobgit/bin/git.exe")
-        else:
-            self.git = os.path.abspath("./bin/git.exe")
+        self.git = None
+        paths = ["./bobgit/bin/git.exe",
+                "./bin/git.exe"
+                ]
+        for p in paths:
+            if os.path.exists(p):
+                self.git = os.path.abspath("./bobgit/bin/git.exe")
+        if not self.git:
+            raise Exceptions.GitNotFound("Could not find git",
+                "Could not find git.exe in following paths: {}".format(repr(paths)))
 
     def clone(self, remote_repo, local_repo_name=""):
         '''
@@ -59,7 +69,12 @@ class GSP():
         '''
 ##        cur_dir = os.getcwd()
 ##        os.chdir(os.path.normpath(os.path.join(os.getcwd(),"bobgit")))
-        self._run(["clone",remote_repo,local_repo_name])
+        if os.path.exists(local_repo_name):
+            return False
+        success, rtn = self._run(["clone",remote_repo,local_repo_name])
+        self.logger.debug("Git clone: {}".format(rtn))
+        print("success: {}".format(success))
+        print(rtn == "Cloning into '{}'...")
 ##        os.chdir(cur_dir)
 
     def pull(self, repo, remote="origin"):
@@ -75,48 +90,41 @@ class GSP():
         '''
         cur_dir = os.getcwd()
         os.chdir(repo)
-        rtn_fetch = self._run(["fetch", remote])
-        rtn_merge = self._run(["merge", "master"])
+        rtn_fetch = self.fetch(repo,remote)
+        rtn_merge = self.merge(repo,"master")
         os.chdir(cur_dir)
         return rtn_fetch, rtn_merge
+
+    def fetch(self, repo, remote="origin"):
+        cur_dir = os.getcwd()
+        os.chdir(repo)
+        success, rtn = self._run(["fetch", remote])
+        if not success:
+            raise GitExceptions.GitFetchError("\tRepo: {}\n\tRemote: {}\n".format(repo,remote))
+        os.chdir(cur_dir)
+        return rtn
+
+    def merge(self, repo, branch="master"):
+        cur_dir = os.getcwd()
+        os.chdir(repo)
+        success, rtn = self._run(["merge", branch])
+        if not success:
+            raise Exceptions.GitCloneError("\tRepo: {}\n\tBranch: {}\n".format(repo,branch))
+        os.chdir(cur_dir)
+        return rtn
 
 
     @logged
     def _run(self, args):
         '''
         Runs an arbitrary git command
-
-        :param args: arguments passed to git
-        :type args: list
-        :returns: output of git subprocess
-        :rtype: string
-        :raises: Exceptions.GitRunError
         '''
-    ##    with subprocess.Popen(args,
-    ##     bufsize=-1,
-    ##     executable=os.path.normpath(os.path.join(os.getcwd(),"dist/bin/git.exe")),
-    ##     stdin=None,
-    ##     stdout=subprocess.PIPE,
-    ##     stderr=subprocess.STDOUT,
-    ##     preexec_fn=None,
-    ##     close_fds=False,
-    ##     shell=True,
-    ##     cwd=None,
-    ##     env=None,
-    ##     universal_newlines=True,
-    ##     startupinfo=None,
-    ##     creationflags=0,
-    ##     restore_signals=True,
-    ##     start_new_session=False,
-    ##     pass_fds=()) as proc:
-    ##        rtn = proc.stdout.read()
-    ##    print(rtn)
-    ##    return
 
         cmd = [self.git]
+        cmd.append("-v")
         for a in args:
             cmd.append(a)
-        self.logger.info("running following git command: {}".format(cmd))
+        self.logger.info("running git command: {}".format(cmd[1:]))
         try:
             rtn = subprocess.check_output(
                         cmd,
@@ -126,10 +134,11 @@ class GSP():
                         )
         except subprocess.CalledProcessError as e:
             cmd, code, output = e.cmd, e.returncode, e.output
-            raise Exceptions.GitRunError(
-                "Git failed running: \n\n{}\n\n".format(" ".join([c for c in cmd[1:]])),
-                "OUTPUT:\n=========\n{}\n=========\nEND OF OUTPUT\n\n".format(output),
-                self.logger)
+            return False, e.output
+##            raise Exceptions.GitRunError(
+##                "Git failed running: \n\n{}\n\n".format(" ".join([c for c in cmd[1:]])),
+##                "OUTPUT:\n=========\n{}\n=========\nEND OF OUTPUT\n\n".format(output),
+##                self.logger)
         #TODO: parse return ?
-        self.logger.info("git output:\n\n{}\n\nEND OF GIT OUTPUT\n\n".format(rtn))
-        return rtn
+        self.logger.info("output: {}\n".format(rtn))
+        return True, rtn
