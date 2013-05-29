@@ -10,22 +10,33 @@
 #-------------------------------------------------------------------------------
 #!/usr/bin/env python
 
-import git
+try:
+    import bobgit.git as git
+except ImportError:
+    import git
 from _logging._logging import logged, mkLogger, DEBUG, INFO, WARN, ERROR
 logger = mkLogger(__name__, DEBUG)
 
-# test
-
 def main():
-    remote = "https://github.com/TDC-bob/bobgit.git"
-    local = r"C:\Documents and Settings\owner\My Documents\BORIS\TDC\tests8.git"
-    p = git.GSP()
+    local = r"C:\Documents and Settings\owner\My Documents\BORIS\TDC\tests10.git"
+    repo = git.Repo(local)
+    print(repo)
+
+    print("Press ENTER to close this window")
+    input()
+    return
+    remote = "https://github.com/TDC-bob/_logging.git"
+    local = r"C:\Documents and Settings\owner\My Documents\BORIS\TDC\tests10.git"
+    p = git.Git()
     p.clone(remote, local)
     p.pull(local)
     print("Press ENTER to close this window")
     input()
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        pass
 
 

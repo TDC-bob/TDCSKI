@@ -20,7 +20,10 @@ import re
 ##    import bobgit.Exceptions as Exceptions
 ##import bobgit.Exceptions as Exceptions
 ##from .Exceptions import *
-from . import Exceptions
+try:
+    from . import Exceptions
+except (ImportError, SystemError):
+    import Exceptions
 
 from _logging._logging import logged, mkLogger, DEBUG, INFO, WARN, ERROR
 logger = mkLogger(__name__, DEBUG)
@@ -110,7 +113,7 @@ class Repo():
                 ]
         for p in paths:
             if os.path.exists(p):
-                return os.path.abspath("./bobgit/bin/git.exe")
+                return os.path.abspath(p)
         if not self.git:
             raise Exceptions.GitNotFound("Could not find git",
                 "Could not find git.exe in following paths: {}".format(repr(paths)))
