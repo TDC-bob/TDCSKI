@@ -28,11 +28,10 @@ except (ImportError, SystemError):
 from _logging._logging import logged, mkLogger, DEBUG, INFO, WARN, ERROR
 logger = mkLogger(__name__, DEBUG)
 
-#todo: import _logging as a subtree (FFS, that's getting tangled)
 
 class Repo():
     @logged
-    def __init__(self, local, remote=None):
+    def __init__(self, local, init_remote=None):
         self.local = local
         self.git_exe = self.__get_git_exe()
         self.cloned = False
@@ -41,32 +40,77 @@ class Repo():
         self.merged = False
         self.local_repo_exists = os.path.exists(local)
         self.remotes = []
-        if not (remote or self.local_repo_exists):
+        self.branches = []
+        self.active_branch = None
+        if not (init_remote or self.local_repo_exists):
             raise Exceptions.GitRepoDoesNotExist(
                     "no local directory found, and no remote given")
 
         if not self.local_repo_exists:
-            pass
-        self.build_remotes_list()
+            self.clone(init_remote)
 
-    def build_remotes_list(self):
+        self.__build_remotes_list()
+        self.__build_branches_list()
+
+    def clone(self, init_remote):
+        success, output, cmd = self.__run(["clone","-v",init_remote, self.local], True)
+        if not success:
+            raise Exceptions.GitCloneError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
+
+    def fetch(self, remote="origin"):
+        if not remote in [remote.name for remote in self.remotes]:
+            raise Exceptions.GitRemoteNotKnown("unknown remote: {}".format(remote))
+        success, output, cmd = self.__run(["fetch","-v",remote], True)
+        if not success:
+            raise Exceptions.GitFetchError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
+
+##    def fetch(self, branch="master"):
+##        if not remote in [remote.name for remote in self.remotes]:
+##            raise Exceptions.GitRemoteNotKnown("unknown remote: {}".format(remote))
+##        success, output, cmd = self.__run(["fetch","-v",remote], True)
+##        if not success:
+##            raise Exceptions.GitFetchError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
+
+
+    def __build_remotes_list(self):
         success, output, cmd = self.__run(["remote","-v","show"])
         if not success:
-            raise Exceptions.GitListRemoteError("\tOutput: {}\n\tCmd: {}".format(output, cmd))
+            raise Exceptions.GitListRemoteError("\tOutput: {}\n\tCmd: {}".format(output, cmd), self.logger)
         lines = output.split("\n")
         for line in lines[:-1]:
-            chunks = re.split('[ \t\r\f\v]', line)
+            chunks = re.split('\s+', line)
             self.remotes.append(Remote(chunks[0],chunks[1],re.sub("[\(\)]","",chunks[2]),self))
+
+    def __build_branches_list(self):
+        success, output, cmd = self.__run(["branch","-v"])
+        if not success:
+            raise Exceptions.GitListRemoteError("\tOutput: {}\n\tCmd: {}".format(output, cmd), self.logger)
+        lines = output.split("\n")
+        for line in lines[:-1]:
+            regular_branch = re.compile("\s+(?P<name>.*)\s+(?P<SHA>[a-z0-9]{7})\s+(?P<commit>.*)")
+            active_branch = re.compile("\*\s+(?P<name>.*)\s+(?P<SHA>[a-z0-9]{7})\s+(?P<commit>.*)")
+            m = re.match(active_branch, line)
+            if m:
+                self.active_branch = Branch(m.group('name'), m.group("SHA"), m.group("commit"), self)
+                self.branches.append(self.active_branch)
+            else:
+                m = re.match(regular_branch, line)
+                if m:
+                    self.branches.append(Branch(m.group('name'), m.group("SHA"), m.group("commit"), self))
+##            chunks = re.split('\s+', line)
+##            self.remotes.append(Remote(chunks[0],chunks[1],re.sub("[\(\)]","",chunks[2]),self))
+##            for chunk in chunks:
+##                print(chunk)
 
 
     @logged
-    def __run(self, args):
+    def __run(self, args, no_ch_dir=False):
         '''
         Runs an arbitrary git command
         '''
 
         cur_dir = os.getcwd()
-        if not cur_dir == self.local:
+        if not cur_dir == self.local and not no_ch_dir:
             os.chdir(self.local)
         cmd = [self.git_exe]
         for a in args:
@@ -95,13 +139,17 @@ class Repo():
                     "Local: {}",
                     "Cloned: {}",
                     "Merged: {}",
-                    "Remotes: \n\t\t{}"
+                    "Remotes: \n\t\t{}",
+                    "Branches: \n\t\t{}"
                     ])).format(
                     self.local,
                     self.cloned,
                     self.merged,
                     "\n\t\t".join(
                             [str(remote) for remote in self.remotes]
+                                ),
+                    "\n\t\t".join(
+                            [str(branch) for branch in self.branches]
                                 )
                     )
 
@@ -116,7 +164,20 @@ class Repo():
                 return os.path.abspath(p)
         if not self.git:
             raise Exceptions.GitNotFound("Could not find git",
-                "Could not find git.exe in following paths: {}".format(repr(paths)))
+                "Could not find git.exe in following paths: {}".format(repr(paths)), self.logger)
+
+class Branch():
+    @logged
+    def __init__(self, name, sha, commit, parent_repo):
+        self.name = name
+        self.sha = sha
+        self.commit = commit
+        self.repo = parent_repo
+
+    def __str__(self):
+        return "BRANCH:\n\tName: {}\n\tSHA: {}\n\tCommit: {}\n\tParent repo: {}".format(
+                        self.name, self.sha, self.commit, self.repo.local
+                        )
 
 class Remote():
     @logged
@@ -126,7 +187,7 @@ class Remote():
         self.address = address
         self.type = _type
         if not self.type in ["fetch","push"]:
-            raise Exceptions.GitRemoteError("Unknown remote type: {}".format(self.type))
+            raise Exceptions.GitRemoteError("Unknown remote type: {}".format(self.type), self.logger)
 
     def __str__(self):
         return "REMOTE:\n\tName: {}\n\tAddress: {} ({})\n\tParent repo: {}".format(
