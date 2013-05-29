@@ -49,3 +49,7 @@ class GitListRemoteError(Error):
 class GitRemoteError(Error):
     def __init__(self, long_msg="Pas d'information supplémentaire", logger=logger):
         write_error_to_log("GIT REMOTE ERROR", long_msg)
+
+class GitRemoteNotKnown(Error):
+    def __init__(self, long_msg="Pas d'information supplémentaire", logger=logger):
+        write_error_to_log("GIT REMOTE ERROR", long_msg)
