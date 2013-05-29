@@ -16,7 +16,7 @@ from _logging._logging import mkLogger, logged, DEBUG, INFO, WARN, ERROR
 logger = mkLogger("EXCEPTION")
 
 def write_error_to_log(base_info, long_msg):
-    logger.error('''{}\n\tMessage: {}'''.format(base_info, long_msg))
+    logger.error('''{}\nMessage:\n{}'''.format(base_info, long_msg))
 
 class Error(Exception):
     def __init__(self, base_info="Pas d'information sur cette erreur", long_msg="Pas de message pour cette erreur", logger=logger):
@@ -37,3 +37,15 @@ class GitFetchError(Error):
 class GitCloneError(Error):
     def __init__(self, long_msg="Pas d'information supplémentaire", logger=logger):
         write_error_to_log("GIT CLONE ERROR", long_msg)
+
+class GitRepoDoesNotExist(Error):
+    def __init__(self, long_msg="Pas d'information supplémentaire", logger=logger):
+        write_error_to_log("GIT REPO ERROR", long_msg)
+
+class GitListRemoteError(Error):
+    def __init__(self, long_msg="Pas d'information supplémentaire", logger=logger):
+        write_error_to_log("GIT LIST REMOTE ERROR", long_msg)
+
+class GitRemoteError(Error):
+    def __init__(self, long_msg="Pas d'information supplémentaire", logger=logger):
+        write_error_to_log("GIT REMOTE ERROR", long_msg)
