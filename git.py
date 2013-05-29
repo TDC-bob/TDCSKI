@@ -41,7 +41,7 @@ class Repo():
         self.local_repo_exists = os.path.exists(local)
         self.remotes = []
         self.branches = []
-        self.active_branch = None
+        self.__active_branch = None
         if not (init_remote or self.local_repo_exists):
             raise Exceptions.GitRepoDoesNotExist(
                     "no local directory found, and no remote given")
@@ -51,6 +51,23 @@ class Repo():
 
         self.__build_remotes_list()
         self.__build_branches_list()
+
+    @property
+    def current_commit(self):
+        return self.active_branch.commit
+
+    @property
+    def active_branch(self):
+        return self.__active_branch
+
+    def checkout(self, branch):
+        print([branch.name for branch in self.branches])
+        if not branch in [branch.name for branch in self.branches]:
+            raise Exceptions.GitBranchNotKnown("unknown branch: {}".format(branch))
+        success, output, cmd = self.__run(["checkout",branch])
+        if not success:
+            raise Exceptions.GitCheckoutError("could not checkout branch: {}".format(branch))
+
 
     def clone(self, init_remote):
         success, output, cmd = self.__run(["clone","-v",init_remote, self.local], True)
@@ -87,11 +104,11 @@ class Repo():
             raise Exceptions.GitListRemoteError("\tOutput: {}\n\tCmd: {}".format(output, cmd), self.logger)
         lines = output.split("\n")
         for line in lines[:-1]:
-            regular_branch = re.compile("\s+(?P<name>.*)\s+(?P<SHA>[a-z0-9]{7})\s+(?P<commit>.*)")
-            active_branch = re.compile("\*\s+(?P<name>.*)\s+(?P<SHA>[a-z0-9]{7})\s+(?P<commit>.*)")
+            regular_branch = re.compile("\s+(?P<name>\S*)\s+(?P<SHA>[a-z0-9]{7})\s+(?P<commit>\S*)")
+            active_branch = re.compile("\*\s+(?P<name>\S*)\s+(?P<SHA>[a-z0-9]{7})\s+(?P<commit>\S*)")
             m = re.match(active_branch, line)
             if m:
-                self.active_branch = Branch(m.group('name'), m.group("SHA"), m.group("commit"), self)
+                self.__active_branch = Branch(m.group('name'), m.group("SHA"), m.group("commit"), self)
                 self.branches.append(self.active_branch)
             else:
                 m = re.match(regular_branch, line)
@@ -117,6 +134,7 @@ class Repo():
             cmd.append(a)
 ##        cmd.append("-v")
         self.logger.info("running git command: {}".format(cmd[1:]))
+        sep = "----------------------------------------------------"
         try:
             rtn = subprocess.check_output(
                         cmd,
@@ -126,10 +144,10 @@ class Repo():
                         )
         except subprocess.CalledProcessError as e:
             cmd, code, output = e.cmd, e.returncode, e.output
+            self.logger.error("output:\n{}\n{}\n{}".format(sep,output,sep))
             os.chdir(cur_dir)
             return False, e.output, e.cmd
         #TODO: parse return ?
-        sep = "----------------------------------------------------"
         self.logger.info("output:\n{}\n{}\n{}".format(sep,rtn,sep))
         os.chdir(cur_dir)
         return True, rtn, cmd

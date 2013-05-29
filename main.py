@@ -22,7 +22,9 @@ def main():
     remote = "https://github.com/TDC-bob/_logging.git"
     repo = git.Repo(local, remote)
 ##    repo.fetch()
-    print(repo)
+##    print(repo)
+##    print(repo.current_commit)
+    repo.checkout("master")
 
     print("Press ENTER to close this window")
 ##    input()
