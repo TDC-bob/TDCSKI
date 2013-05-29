@@ -163,8 +163,8 @@ class Repo():
             if os.path.exists(p):
                 return os.path.abspath(p)
         if not self.git:
-            raise Exceptions.GitNotFound("Could not find git",
-                "Could not find git.exe in following paths: {}".format(repr(paths)), self.logger)
+            raise Exceptions.GitNotFound("Could not find git.exe in following paths: {}".format(
+                        repr(paths)), self.logger)
 
 class Branch():
     @logged
