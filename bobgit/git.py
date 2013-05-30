@@ -13,6 +13,13 @@
 
 import subprocess
 import os
+import re
+##try:
+##    from . import Exceptions
+##except (ImportError, SystemError):
+##    import bobgit.Exceptions as Exceptions
+##import bobgit.Exceptions as Exceptions
+##from .Exceptions import *
 try:
     from . import Exceptions
 except (ImportError, SystemError):
@@ -21,102 +28,113 @@ except (ImportError, SystemError):
 from _logging._logging import logged, mkLogger, DEBUG, INFO, WARN, ERROR
 logger = mkLogger(__name__, DEBUG)
 
-#todo: import _logging as a subtree (FFS, that's getting tangled)
 
-class GSP():
-    """
-    Git wrapper
+class Repo():
+    @logged
+    def __init__(self, local, init_remote=None):
+        self.local = local
+        self.git_exe = self.__get_git_exe()
+        self.cloned = False
+        self.fetched = False
+        self.up_to_date = False
+        self.merged = False
+        self.local_repo_exists = os.path.exists(local)
+        self.remotes = []
+        self.branches = []
+        self.__active_branch = None
+        if not (init_remote or self.local_repo_exists):
+            raise Exceptions.GitRepoDoesNotExist(
+                    "no local directory found, and no remote given")
 
-    Instanciation won't do anything to the local/remote FS, it's just to set up
-    the local path to the Git executable and its libraries/templates.
+        if not self.local_repo_exists:
+            self.clone(init_remote)
 
-    .. note::
+        self.__build_remotes_list()
+        self.__build_branches_list()
 
-       This is but a VERY basic stand-alone version of Git, with VERY limited functionalities.
+    @property
+    def current_commit(self):
+        return self.active_branch.commit
 
-    """
-    def __init__(self):
-        '''
-        Checks for git.exe path.
+    @property
+    def active_branch(self):
+        return self.__active_branch
 
-        May switch to a glob.glob() type os search in the PATH later on
-        '''
-        if os.path.exists("./bobgit/bin/git.exe"):
-            self.git = os.path.abspath("./bobgit/bin/git.exe")
-        else:
-            self.git = os.path.abspath("./bin/git.exe")
+    def checkout(self, branch):
+        print([branch.name for branch in self.branches])
+        if not branch in [branch.name for branch in self.branches]:
+            raise Exceptions.GitBranchNotKnown("unknown branch: {}".format(branch))
+        success, output, cmd = self.__run(["checkout",branch])
+        if not success:
+            raise Exceptions.GitCheckoutError("could not checkout branch: {}".format(branch))
 
-    def clone(self, remote_repo, local_repo_name=""):
-        '''
-        Alias for the git 'clone' command
 
-        :param remote_repo: full path or web address of the repo you want to clone
-        :type remote_repo: string
-        :param local_repo_name: the local path of the clone (defaults to Git default")
-        :type local_repo_name: string
-        :returns: output of both fetch & merge command
-        :rtype: list
-        '''
-##        cur_dir = os.getcwd()
-##        os.chdir(os.path.normpath(os.path.join(os.getcwd(),"bobgit")))
-        self._run(["clone",remote_repo,local_repo_name])
-##        os.chdir(cur_dir)
+    def clone(self, init_remote):
+        success, output, cmd = self.__run(["clone","-v",init_remote, self.local], True)
+        if not success:
+            raise Exceptions.GitCloneError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
 
-    def pull(self, repo, remote="origin"):
-        '''
-        Alias for the git 'pull' command
+    def fetch(self, remote="origin"):
+        if not remote in [remote.name for remote in self.remotes]:
+            raise Exceptions.GitRemoteNotKnown("unknown remote: {}".format(remote))
+        success, output, cmd = self.__run(["fetch","-v",remote], True)
+        if not success:
+            raise Exceptions.GitFetchError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
 
-        :param repo: full path to the repo in which the pull has to be run
-        :type repo: string
-        :param remote: the remote to pull from (defaults to origin)
-        :type remote: string
-        :returns: output of both fetch & merge command
-        :rtype: list
-        '''
-        cur_dir = os.getcwd()
-        os.chdir(repo)
-        rtn_fetch = self._run(["fetch", remote])
-        rtn_merge = self._run(["merge", "master"])
-        os.chdir(cur_dir)
-        return rtn_fetch, rtn_merge
+##    def fetch(self, branch="master"):
+##        if not remote in [remote.name for remote in self.remotes]:
+##            raise Exceptions.GitRemoteNotKnown("unknown remote: {}".format(remote))
+##        success, output, cmd = self.__run(["fetch","-v",remote], True)
+##        if not success:
+##            raise Exceptions.GitFetchError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
+
+
+    def __build_remotes_list(self):
+        success, output, cmd = self.__run(["remote","-v","show"])
+        if not success:
+            raise Exceptions.GitListRemoteError("\tOutput: {}\n\tCmd: {}".format(output, cmd), self.logger)
+        lines = output.split("\n")
+        for line in lines[:-1]:
+            chunks = re.split('\s+', line)
+            self.remotes.append(Remote(chunks[0],chunks[1],re.sub("[\(\)]","",chunks[2]),self))
+
+    def __build_branches_list(self):
+        success, output, cmd = self.__run(["branch","-v"])
+        if not success:
+            raise Exceptions.GitListRemoteError("\tOutput: {}\n\tCmd: {}".format(output, cmd), self.logger)
+        lines = output.split("\n")
+        for line in lines[:-1]:
+            regular_branch = re.compile("\s+(?P<name>\S*)\s+(?P<SHA>[a-z0-9]{7})\s+(?P<commit>\S*)")
+            active_branch = re.compile("\*\s+(?P<name>\S*)\s+(?P<SHA>[a-z0-9]{7})\s+(?P<commit>\S*)")
+            m = re.match(active_branch, line)
+            if m:
+                self.__active_branch = Branch(m.group('name'), m.group("SHA"), m.group("commit"), self)
+                self.branches.append(self.active_branch)
+            else:
+                m = re.match(regular_branch, line)
+                if m:
+                    self.branches.append(Branch(m.group('name'), m.group("SHA"), m.group("commit"), self))
+##            chunks = re.split('\s+', line)
+##            self.remotes.append(Remote(chunks[0],chunks[1],re.sub("[\(\)]","",chunks[2]),self))
+##            for chunk in chunks:
+##                print(chunk)
 
 
     @logged
-    def _run(self, args):
+    def __run(self, args, no_ch_dir=False):
         '''
         Runs an arbitrary git command
-
-        :param args: arguments passed to git
-        :type args: list
-        :returns: output of git subprocess
-        :rtype: string
-        :raises: Exceptions.GitRunError
         '''
-    ##    with subprocess.Popen(args,
-    ##     bufsize=-1,
-    ##     executable=os.path.normpath(os.path.join(os.getcwd(),"dist/bin/git.exe")),
-    ##     stdin=None,
-    ##     stdout=subprocess.PIPE,
-    ##     stderr=subprocess.STDOUT,
-    ##     preexec_fn=None,
-    ##     close_fds=False,
-    ##     shell=True,
-    ##     cwd=None,
-    ##     env=None,
-    ##     universal_newlines=True,
-    ##     startupinfo=None,
-    ##     creationflags=0,
-    ##     restore_signals=True,
-    ##     start_new_session=False,
-    ##     pass_fds=()) as proc:
-    ##        rtn = proc.stdout.read()
-    ##    print(rtn)
-    ##    return
 
-        cmd = [self.git]
+        cur_dir = os.getcwd()
+        if not cur_dir == self.local and not no_ch_dir:
+            os.chdir(self.local)
+        cmd = [self.git_exe]
         for a in args:
             cmd.append(a)
-        self.logger.info("running following git command: {}".format(cmd))
+##        cmd.append("-v")
+        self.logger.info("running git command: {}".format(cmd[1:]))
+        sep = "----------------------------------------------------"
         try:
             rtn = subprocess.check_output(
                         cmd,
@@ -126,10 +144,70 @@ class GSP():
                         )
         except subprocess.CalledProcessError as e:
             cmd, code, output = e.cmd, e.returncode, e.output
-            raise Exceptions.GitRunError(
-                "Git failed running: \n\n{}\n\n".format(" ".join([c for c in cmd[1:]])),
-                "OUTPUT:\n=========\n{}\n=========\nEND OF OUTPUT\n\n".format(output),
-                self.logger)
+            self.logger.error("output:\n{}\n{}\n{}".format(sep,output,sep))
+            os.chdir(cur_dir)
+            return False, e.output, e.cmd
         #TODO: parse return ?
-        self.logger.info("git output:\n\n{}\n\nEND OF GIT OUTPUT\n\n".format(rtn))
-        return rtn
+        self.logger.info("output:\n{}\n{}\n{}".format(sep,rtn,sep))
+        os.chdir(cur_dir)
+        return True, rtn, cmd
+
+    def __str__(self):
+        return ("\n\t".join(["REPO:",
+                    "Local: {}",
+                    "Cloned: {}",
+                    "Merged: {}",
+                    "Remotes: \n\t\t{}",
+                    "Branches: \n\t\t{}"
+                    ])).format(
+                    self.local,
+                    self.cloned,
+                    self.merged,
+                    "\n\t\t".join(
+                            [str(remote) for remote in self.remotes]
+                                ),
+                    "\n\t\t".join(
+                            [str(branch) for branch in self.branches]
+                                )
+                    )
+
+
+    @staticmethod
+    def __get_git_exe():
+        paths = ["./bobgit/bin/git.exe",
+                "./bin/git.exe"
+                ]
+        for p in paths:
+            if os.path.exists(p):
+                return os.path.abspath(p)
+        if not self.git:
+            raise Exceptions.GitNotFound("Could not find git.exe in following paths: {}".format(
+                        repr(paths)), self.logger)
+
+class Branch():
+    @logged
+    def __init__(self, name, sha, commit, parent_repo):
+        self.name = name
+        self.sha = sha
+        self.commit = commit
+        self.repo = parent_repo
+
+    def __str__(self):
+        return "BRANCH:\n\tName: {}\n\tSHA: {}\n\tCommit: {}\n\tParent repo: {}".format(
+                        self.name, self.sha, self.commit, self.repo.local
+                        )
+
+class Remote():
+    @logged
+    def __init__(self, name, address, _type, repo):
+        self.repo = repo
+        self.name = name
+        self.address = address
+        self.type = _type
+        if not self.type in ["fetch","push"]:
+            raise Exceptions.GitRemoteError("Unknown remote type: {}".format(self.type), self.logger)
+
+    def __str__(self):
+        return "REMOTE:\n\tName: {}\n\tAddress: {} ({})\n\tParent repo: {}".format(
+                        self.name, self.address, self.type, self.repo.local
+                        )
