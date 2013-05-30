@@ -60,3 +60,4 @@ __pycache__
 *.~py
 *.lnk
 *.psproj
+.idea/*
