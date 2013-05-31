@@ -87,6 +87,10 @@ class Repo():
         if not success:
            raise Exceptions.GitMergeError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
 
+    def pull(self, remote="origin", branch="master"):
+        self.fetch(remote)
+        self.merge(branch)
+
 
     def __build_remotes_list(self):
         success, output, cmd = self.__run(["remote","-v","show"])
