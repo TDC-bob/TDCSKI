@@ -34,8 +34,6 @@ class Repo():
     def __init__(self, local, init_remote=None):
         self.local = os.path.abspath(local)
         self.initiliazed = os.path.exists(os.path.abspath(os.path.join(self.local, ".git")))
-        if not self.initiliazed:
-            self.init()
         self.git_exe = self.__get_git_exe()
         self.cloned = False
         self.fetched = False
@@ -51,6 +49,8 @@ class Repo():
 
         if not self.local_repo_exists:
             self.clone(init_remote)
+        elif not self.initiliazed:
+            self.init()
 
         self.__build_remotes_list()
         self.__build_branches_list()
