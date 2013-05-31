@@ -67,13 +67,16 @@ class Repo():
         success, output, cmd = self.__run(["init"])
         if not success:
             raise Exceptions.GitInitError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
-        success, output, cmd = self.__run(["add", ".", "-f"])
-        if not success:
-            raise Exceptions.GitInitError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
+        # success, output, cmd = self.__run(["add", ".", "-f"])
+        # if not success:
+        #     raise Exceptions.GitInitError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
         success, output, cmd = self.__run(["remote", "add", "origin", init_remote])
         if not success:
             raise Exceptions.GitInitError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
-        success, output, cmd = self.__run(["pull", "origin", "master", "-f"])
+        success, output, cmd = self.__run(["fetch", "origin"])
+        if not success:
+            raise Exceptions.GitInitError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
+        success, output, cmd = self.__run(["reset", "--hard", "origin/master"])
         if not success:
             raise Exceptions.GitInitError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
 
