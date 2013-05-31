@@ -4,7 +4,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=Written & maintained by TDC-Bob
-#AutoIt3Wrapper_Res_Fileversion=0.0.0.16
+#AutoIt3Wrapper_Res_Fileversion=0.0.0.17
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_AU3Check_Stop_OnWarning=n
@@ -35,7 +35,7 @@ Global Const $new_version_path = $repo & "\tdcski.exe"
 
 Global Const $log_dir = @ScriptDir & "\logs"
 Global Const $log_file = $log_dir & "\" & @YEAR & @MON & @MDAY & " - " & @HOUR & "h" & @MIN & " - TDCSKI.log"
-Global $iMemo, $python_path, $git_path
+Global $iMemo, $python_path, $git_path, $gui_handle
 
 Global $portable_git_folder = @ScriptDir & "\portable-git"
 
@@ -52,7 +52,7 @@ Func _main()
 	; Create GUI
 	$w = @DesktopWidth * 0.75
 	$h = @DesktopHeight * 0.75
-	GUICreate($str_app_name, $w, $h)
+	$gui_handle = GUICreate($str_app_name, $w, $h)
 	$iMemo = GUICtrlCreateEdit("", 2, 2, $w - 2, $h, $ES_AUTOVSCROLL + $WS_VSCROLL)
 	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
 	GUICtrlSetState($iMemo, $GUI_DISABLE)
@@ -448,7 +448,7 @@ EndFunc   ;==>install_python
 
 Func _ask_user($title, $msg)
 	Local $func = "_ask_user"
-	$rtn = MsgBox(4100, $title, $msg)
+	$rtn = MsgBox(4100, $title, $msg, 0, $gui_handle)
 	Switch $rtn
 		Case 6
 			Return
