@@ -4,7 +4,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=Written & maintained by TDC-Bob
-#AutoIt3Wrapper_Res_Fileversion=0.0.0.19
+#AutoIt3Wrapper_Res_Fileversion=0.0.0.20
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_AU3Check_Stop_OnWarning=n
@@ -80,7 +80,7 @@ Func _check_for_new_version()
 			$updater = '"' & $updater_path & '"'
 			$dest = '"' & @ScriptFullPath & '"'
 			$source = '"' & $new_version_path & '"'
-			ShellExecute($updater, $source & " " & $dest)
+			Run($updater, ".\tdcski")
 			Exit 0
 			If @error Then
 				_err("Erreur fatale lors de la tentative de mise à jour du lanceur", $func)
