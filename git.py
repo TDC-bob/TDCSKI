@@ -67,7 +67,7 @@ class Repo():
         success, output, cmd = self.__run(["init"])
         if not success:
             raise Exceptions.GitInitError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
-        self.remote_add(remote)
+        self.remote_add(init_remote)
 
     def checkout(self, branch):
         if not branch in [branch.name for branch in self.branches]:
