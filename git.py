@@ -67,7 +67,7 @@ class Repo():
         success, output, cmd = self.__run(["init"])
         if not success:
             raise Exceptions.GitInitError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
-        self.remote_add(init_remote)
+        self.remote_add("origin", init_remote)
 
     def checkout(self, branch):
         if not branch in [branch.name for branch in self.branches]:
@@ -89,8 +89,8 @@ class Repo():
         if not success:
             raise Exceptions.GitFetchError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
 
-    def remote_add(self, remote):
-        success, output, cmd = self.__run(["remote","add",remote])
+    def remote_add(self, name, remote):
+        success, output, cmd = self.__run(["remote","add",name, remote])
         if not success:
             raise Exceptions.GitRemoteAddError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
 
