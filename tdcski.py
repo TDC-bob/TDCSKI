@@ -21,7 +21,10 @@ from _logging._logging import mkLogger, DEBUG
 logger = mkLogger(__name__, DEBUG)
 
 def main():
-    main_repo = git.Repo(".","https://github.com/TDC-bob/TDCSKI.git")
+    try:
+        main_repo = git.Repo("../..","https://github.com/TDC-bob/TDCSKI.git")
+    except git.Exceptions.GitListRemoteError as e:
+        print(e)
     print(main_repo.remotes)
     # main_repo.pull()
     input()
