@@ -24,7 +24,7 @@ def main():
     try:
         main_repo = git.Repo("../..","https://github.com/TDC-bob/TDCSKI.git")
     except git.Exceptions.GitListRemoteError as e:
-        print(e)
+        main_repo.init()
     print(main_repo.remotes)
     # main_repo.pull()
     input()
