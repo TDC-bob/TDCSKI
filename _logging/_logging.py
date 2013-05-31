@@ -17,7 +17,6 @@ module- and class-specific loggers
 import logging
 from os.path import exists
 from os import remove
-from sys import exit
 ##from msgbox import MsgBox
 ##from PyQt4 import QtGui
 DEBUG = logging.DEBUG

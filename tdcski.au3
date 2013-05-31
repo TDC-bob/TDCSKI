@@ -15,18 +15,20 @@ Global Const $str_python_not_found = "Le " & $app_name & " a besoin de Python 3.
 
 $python_path = get_python_path()
 If $python_path Then
-	ConsoleWrite("should start program here")
-	;start_tdcski()
+	start_tdcski()
 Else
 	$install_python = ask_user($app_name, $str_python_not_found)
 	If Not $install_python Then
 		Exit 0
 	EndIf
 	install_python()
+	start_tdcski()
 EndIf
 
 Func start_tdcski()
-	Run("python main.py")
+	ConsoleWrite($python_path & " tdcski.py" & @LF)
+	Run($python_path & " tdcski.py", @ScriptDir)
+	ConsoleWrite(@error & @LF)
 EndFunc   ;==>start_main
 
 Func get_python_path()
@@ -78,7 +80,9 @@ Func install_python()
 	#endregion - download python
 
 	#region - run msiexec installer
-	Run("msiexec /package " & $local_file & " /qn ADDLOCAL=ALL")
+	SplashTextOn($app_name, "Installation de Python 3.3 ...")
+	RunWait("msiexec /package " & $local_file & " /qn ADDLOCAL=ALL")
+	SplashOff()
 	#endregion - run msiexec installer
 EndFunc   ;==>install_python
 

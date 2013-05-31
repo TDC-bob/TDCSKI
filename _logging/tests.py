@@ -18,6 +18,7 @@ try:
 except ImportError:
     from . import _logging
 
+# noinspection PyUnresolvedReferences
 class TestLoggingPackage(unittest.TestCase):
 
     def SetUp(self):

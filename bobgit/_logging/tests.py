@@ -27,6 +27,7 @@ class TestLoggingPackage(unittest.TestCase):
         pass
 
     def test_main_logger_init(self):
+        # noinspection PyUnresolvedReferences
         logger = _logging.mkLogger("main")
         self.assertTrue(type(logger) == logging.Logger)
 
