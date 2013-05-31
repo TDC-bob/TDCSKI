@@ -25,6 +25,9 @@ Else
 EndIf
 
 Func start_tdcski()
+;~ 	If Not FileExists(@ScriptDir & "\.git") Then
+;~ 		RunWait(@ScriptDir & "\bobgit\bin\git.exe init", @ScriptDir)
+;~ 	EndIf
 	ConsoleWrite($python_path & " tdcski.py" & @LF)
 	Run($python_path & " tdcski.py", @ScriptDir)
 	ConsoleWrite(@error & @LF)
