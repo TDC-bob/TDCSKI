@@ -61,7 +61,6 @@ class Repo():
         return self.__active_branch
 
     def checkout(self, branch):
-        print([branch.name for branch in self.branches])
         if not branch in [branch.name for branch in self.branches]:
             raise Exceptions.GitBranchNotKnown("unknown branch: {}".format(branch))
         success, output, cmd = self.__run(["checkout",branch])
@@ -81,12 +80,12 @@ class Repo():
         if not success:
             raise Exceptions.GitFetchError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
 
-##    def fetch(self, branch="master"):
-##        if not remote in [remote.name for remote in self.remotes]:
-##            raise Exceptions.GitRemoteNotKnown("unknown remote: {}".format(remote))
-##        success, output, cmd = self.__run(["fetch","-v",remote], True)
-##        if not success:
-##            raise Exceptions.GitFetchError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
+    def merge(self, branch="master"):
+        if not branch in [branch.name for branch in self.branches]:
+            raise Exceptions.GitBranchNotKnown("unknown branch: {}".format(branch))
+        success, output, cmd = self.__run(["merge","-v",branch], True)
+        if not success:
+           raise Exceptions.GitMergeError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
 
 
     def __build_remotes_list(self):
