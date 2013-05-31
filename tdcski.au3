@@ -1,8 +1,7 @@
 #NoTrayIcon
 #Region ;**** Directives created by AutoIt3Wrapper_GUI ****
 #AutoIt3Wrapper_Icon=resources\TDCSKI.ico
-#AutoIt3Wrapper_Outfile=test_x86.exe
-#AutoIt3Wrapper_Outfile_x64=test_x64.exe
+#AutoIt3Wrapper_Outfile=tdcski.exe
 #AutoIt3Wrapper_Res_Icon_Add=resources\TDCSKI.ico
 #AutoIt3Wrapper_Run_After=copy "%out%" \\TEST-PC\Users\Public
 #EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
