@@ -73,3 +73,7 @@ class GitInitError(Error):
 class GitRemoteAddError(Error):
     def __init__(self, long_msg="Pas d'information supplémentaire", logger=logger):
         write_error_to_log("GIT REMOTE ADD ERROR", long_msg)
+
+class GitResetError(Error):
+    def __init__(self, long_msg="Pas d'information supplémentaire", logger=logger):
+        write_error_to_log("GIT RESET ERROR", long_msg)
