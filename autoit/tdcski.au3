@@ -4,7 +4,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=Written & maintained by TDC-Bob
-#AutoIt3Wrapper_Res_Fileversion=0.0.0.7
+#AutoIt3Wrapper_Res_Fileversion=0.0.0.13
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_AU3Check_Stop_OnWarning=n
@@ -27,8 +27,11 @@ Global Const $Python33_x86_download_link = "http://www.python.org/ftp/python/3.3
 Global Const $Python33_x64_download_link = "http://www.python.org/ftp/python/3.3.2/python-3.3.2.amd64.msi"
 Global Const $PortableGit_download_link = "https://dl.dropboxusercontent.com/u/73452794/git-portable.zip"
 
-Global Const $updater_path = @ScriptDir & "\tdcski\updater.exe"
-Global Const $new_version_path = @ScriptDir & "\tdcski\tdcski.exe"
+Global Const $repo = @ScriptDir & "\tdcski"
+Global Const $repo_remote = "https://github.com/TDC-bob/TDCSKI.git"
+
+Global Const $updater_path = $repo & "\updater.exe"
+Global Const $new_version_path = $repo & "\tdcski.exe"
 
 Global Const $log_dir = @ScriptDir & "\logs"
 Global Const $log_file = $log_dir & "\" & @YEAR & @MON & @MDAY & " - " & @HOUR & "h" & @MIN & " - TDCSKI.log"
@@ -36,21 +39,12 @@ Global $iMemo, $python_path, $git_path
 
 Global $portable_git_folder = @ScriptDir & "\portable-git"
 
-ConsoleWrite(__MD5(@ScriptFullPath) & @LF)
-
-Exit 0
-_check_git()
-$t = _git_run("status")
-ConsoleWrite($t & @LF)
-Exit 0
-
 _main()
 
 Exit 0
 
 Func _main()
 	Local $func = "main"
-	_check_for_new_version()
 	If Not FileExists($log_dir) Then
 		DirCreate($log_dir)
 	EndIf
@@ -65,9 +59,9 @@ Func _main()
 	GUISetState()
 	_check_python()
 	_check_git()
-;~ 	__log($git_path)
-
-	; Loop until user exits
+	_check_repo()
+	_check_for_new_version()
+	__log("ON FAIT SEMBLER DE LANCER QUELQUE CHOSE ?", $func)
 	__log($str_all_good, $func)
 
 	Do
@@ -98,24 +92,61 @@ Func _check_for_new_version()
 EndFunc   ;==>_check_for_new_version
 
 Func __MD5($file)
+	$func = "__MD5"
+	__log("Calcul du hash pour le fichier " & $file, $func)
 	Local $BufferSize, $FileHandle
 	$BufferSize = 0x20000
 	$FileHandle = FileOpen($file, 16)
-
+	If $FileHandle = -1 Then
+		_err("Erreur lors de l'ouverture du fichier en lecture binaire", $func)
+	EndIf
+	__log("Initialisation du DLL MD5", $func)
 	$MD5CTX = _MD5Init()
+	__log("Injection des chunks du fichier dans le parser", $func)
+	$chunk = 1
 	For $i = 1 To Ceiling(FileGetSize($file) / $BufferSize)
+		__log("Traitement du chunk " & $chunk, $func)
 		_MD5Input($MD5CTX, FileRead($FileHandle, $BufferSize))
+		__log("Traitement réussi", $func)
+		$chunk += 1
 	Next
+	__log("Parsing terminé, calcul du hash", $func)
 	$Hash = _MD5Result($MD5CTX)
-	FileClose($FileHandle)
-
+	__log("Calcul terminé, le hash pour ce fichier est " & $Hash, $func)
+	__log("Fermeture du fichier", $func)
+	If FileClose($FileHandle) == 0 Then
+		__log("Erreur lors de la fermeture du fichier", $func)
+	EndIf
 	Return $Hash
-
 EndFunc   ;==>__MD5
 
-Func _git_run($cmd)
+Func _check_repo()
+	$func = "check_repo"
+	__log("Vérification du repo principal", $func)
+	If FileExists($repo) Then
+		__log("Le repo existe", $func)
+		_pull_repo()
+	Else
+		_clone_repo()
+	EndIf
+EndFunc   ;==>_check_repo
+
+Func _pull_repo()
+	$func = "pull_repo"
+	__log("Pulling repo", $func)
+	_git_run("pull origin master", $repo)
+EndFunc   ;==>_pull_repo
+
+Func _clone_repo()
+	$func = "_clone_repo"
+	__log("Cloning repo", $func)
+;~ 	_cmd_and__log('"' & $git_path & '"' & "  " & $cmd, $wk)
+	_git_run("clone " & $repo_remote & ' "' & $repo & '"')
+EndFunc   ;==>_clone_repo
+
+Func _git_run($cmd, $wk = '')
 	Local $func = "git_run"
-	$code = _cmd_and__log('"' & $git_path & '"' & "  " & $cmd)
+	$code = _cmd_and__log($git_path & "  " & $cmd, $wk)
 	If $code <> 0 Then
 		_err("Erreur de command Git: " & $cmd, $func)
 	EndIf
@@ -213,8 +244,8 @@ EndFunc   ;==>_install_portable_git
 Func _unzip($zip_file, $target_dir)
 	$func = "unzip"
 	__log("Décompression du fichier ZIP", $func)
-	__log(@TAB & "fichier: " & $zip_file, $func)
-	__log(@TAB & "cible: " & $target_dir, $func)
+	__log("fichier: " & $zip_file, $func)
+	__log("cible: " & $target_dir, $func)
 	_Zip_UnzipAll($zip_file, $target_dir)
 	Local $error = @error
 	If $error Then
@@ -270,14 +301,14 @@ EndFunc   ;==>_ExtractZip
 Func _download($link, $target, $fancy_name)
 	Local $func = "download"
 	__log("Téléchargement en cours", $func)
-	__log(@TAB & "Name: " & $fancy_name, $func)
-	__log(@TAB & "URL: " & $link, $func)
-	__log(@TAB & "Cible: " & $target, $func)
+	__log("Name: " & $fancy_name, $func)
+	__log("URL: " & $link, $func)
+	__log("Cible: " & $target, $func)
 	$size = InetGetSize($link, 11)
 	If @error Then
 		__log("Impossible de récupérer la taille du fichier distant", $func)
 	EndIf
-	__log(@TAB & 'taille du fichier distant: ' & $size, $func)
+	__log('taille du fichier distant: ' & $size, $func)
 	ProgressOn($str_app_name, "Téléchargement de " & $fancy_name)
 	__log("Début du téléchargement", $func)
 	$h = InetGet($link, $target, 27, 1)
@@ -443,9 +474,9 @@ Func _err($msg, $func)
 	Exit 1
 EndFunc   ;==>_err
 
-Func _cmd_and__log($cmd)
+Func _cmd_and__log($cmd, $wk_dir = "")
 	Local $func = "cmd_and__log"
-	$hCMD = Run(@ComSpec & " /c " & $cmd, '', @SW_HIDE, $STDERR_CHILD + $STDOUT_CHILD)
+	$hCMD = Run(@ComSpec & " /c " & $cmd, $wk_dir, @SW_HIDE, $STDERR_CHILD + $STDOUT_CHILD)
 	If @error Then
 		_err($str_err_cmd & $cmd, $func)
 	EndIf
