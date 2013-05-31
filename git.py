@@ -76,9 +76,14 @@ class Repo():
         success, output, cmd = self.__run(["fetch", "origin"])
         if not success:
             raise Exceptions.GitInitError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
-        success, output, cmd = self.__run(["merge", "origin/master", "-X", "theirs"])
+        success, output, cmd = self.__run(["reset", "--hard", "origin/master"])
         if not success:
             raise Exceptions.GitInitError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
+
+    def reset_to(self, ref="origin/master"):
+        success, output, cmd = self.__run(["reset", "--hard", ref])
+        if not success:
+            raise Exceptions.GitResetError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
 
     def checkout(self, branch):
         if not branch in [branch.name for branch in self.branches]:
