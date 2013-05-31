@@ -22,8 +22,8 @@ logger = mkLogger(__name__, DEBUG)
 
 def main():
     main_repo = git.Repo(".","https://github.com/TDC-bob/TDCSKI.git")
-    print(main_repo)
-    main_repo.pull()
+    print(main_repo.remotes)
+    # main_repo.pull()
     return
 
     value, _type = winreg.QueryValueEx (winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Eagle Dynamics\DCS World"), "Path")
