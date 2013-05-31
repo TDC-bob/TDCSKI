@@ -32,7 +32,7 @@ logger = mkLogger(__name__, DEBUG)
 class Repo():
     @logged
     def __init__(self, local, init_remote=None):
-        self.local = local
+        self.local = os.path.abspath(local)
         self.git_exe = self.__get_git_exe()
         self.cloned = False
         self.fetched = False
