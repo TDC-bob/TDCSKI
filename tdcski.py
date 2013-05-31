@@ -24,7 +24,9 @@ def main():
     os.environ["GIT_SSL_NO_VERIFY"] = "1"
 
     main_repo = git.Repo(".","https://github.com/TDC-bob/TDCSKI.git")
-    main_repo.pull()
+    print(os.getcwd())
+    if not os.path.exists("SAFEGUARD"):
+        main_repo.reset_to("origin/master")
 
     DCS_path, _type = winreg.QueryValueEx (winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Eagle Dynamics\DCS World"), "Path")
 
