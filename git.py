@@ -33,6 +33,9 @@ class Repo():
     @logged
     def __init__(self, local, init_remote=None):
         self.local = os.path.abspath(local)
+        self.initiliazed = os.path.exists(os.path.abspath(os.path.join(self.local, ".git")))
+        if not self.initiliazed:
+            self.init()
         self.git_exe = self.__get_git_exe()
         self.cloned = False
         self.fetched = False
