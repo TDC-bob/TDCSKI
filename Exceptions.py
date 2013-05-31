@@ -69,3 +69,7 @@ class GitMergeError(Error):
 class GitInitError(Error):
     def __init__(self, long_msg="Pas d'information supplémentaire", logger=logger):
         write_error_to_log("GIT INIT ERROR", long_msg)
+
+class GitRemoteAddError(Error):
+    def __init__(self, long_msg="Pas d'information supplémentaire", logger=logger):
+        write_error_to_log("GIT REMOTE ADD ERROR", long_msg)

@@ -50,7 +50,7 @@ class Repo():
         if not self.local_repo_exists:
             self.clone(init_remote)
         elif not self.initiliazed:
-            self.init()
+            self.init(init_remote)
 
         self.__build_remotes_list()
         self.__build_branches_list()
@@ -63,17 +63,17 @@ class Repo():
     def active_branch(self):
         return self.__active_branch
 
-    def init(self):
+    def init(self, init_remote):
         success, output, cmd = self.__run(["init"])
         if not success:
-            raise Exceptions.GitInitError("could not init directory: {}".format(self.local))
+            raise Exceptions.GitInitError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
 
     def checkout(self, branch):
         if not branch in [branch.name for branch in self.branches]:
             raise Exceptions.GitBranchNotKnown("unknown branch: {}".format(branch))
         success, output, cmd = self.__run(["checkout",branch])
         if not success:
-            raise Exceptions.GitCheckoutError("could not checkout branch: {}".format(branch))
+            raise Exceptions.GitCheckoutError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
 
 
     def clone(self, init_remote):
@@ -87,6 +87,11 @@ class Repo():
         success, output, cmd = self.__run(["fetch","-v",remote])
         if not success:
             raise Exceptions.GitFetchError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
+
+    def remote_add(self, remote):
+        success, output, cmd = self.__run(["remote","add",remote])
+        if not success:
+            raise Exceptions.GitRemoteAddError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
 
     def merge(self, branch="master"):
         if not branch in [branch.name for branch in self.branches]:
