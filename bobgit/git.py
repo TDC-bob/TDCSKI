@@ -23,12 +23,15 @@ import re
 try:
     from . import Exceptions
 except (ImportError, SystemError):
+    # noinspection PyUnresolvedReferences
     import Exceptions
 
-from _logging._logging import logged, mkLogger, DEBUG, INFO, WARN, ERROR
+from _logging._logging import logged, mkLogger, DEBUG
+
 logger = mkLogger(__name__, DEBUG)
 
 
+# noinspection PyUnresolvedReferences
 class Repo():
     @logged
     def __init__(self, local, init_remote=None):
@@ -125,9 +128,9 @@ class Repo():
 
     @logged
     def __run(self, args, no_ch_dir=False):
-        '''
+        """
         Runs an arbitrary git command
-        '''
+        """
 
         cur_dir = os.getcwd()
         if not cur_dir == self.local and not no_ch_dir:
@@ -200,6 +203,7 @@ class Branch():
                         self.name, self.sha, self.commit, self.repo.local
                         )
 
+# noinspection PyUnresolvedReferences
 class Remote():
     @logged
     def __init__(self, name, address, _type, repo):

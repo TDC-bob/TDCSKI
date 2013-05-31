@@ -1,3 +1,4 @@
+# coding=utf-8
 #-------------------------------------------------------------------------------
 # Name:        module1
 # Purpose:
@@ -13,8 +14,10 @@
 try:
     import bobgit.git as git
 except ImportError:
+    # noinspection PyUnresolvedReferences
     import git
-from _logging._logging import logged, mkLogger, DEBUG, INFO, WARN, ERROR
+from _logging._logging import mkLogger, DEBUG
+
 logger = mkLogger(__name__, DEBUG)
 
 def main():
@@ -28,14 +31,6 @@ def main():
 
     print("Press ENTER to close this window")
 ##    input()
-    return
-    remote = "https://github.com/TDC-bob/_logging.git"
-    local = r"C:\Documents and Settings\owner\My Documents\BORIS\TDC\tests10.git"
-    p = git.Git()
-    p.clone(remote, local)
-    p.pull(local)
-    print("Press ENTER to close this window")
-    input()
 
 if __name__ == '__main__':
     try:
