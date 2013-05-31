@@ -66,7 +66,7 @@ class Repo():
     def init(self):
         success, output, cmd = self.__run(["init"])
         if not success:
-            raise Exceptions.GitCheckoutError("could not init directory: {}".format(self.local))
+            raise Exceptions.GitInitError("could not init directory: {}".format(self.local))
 
     def checkout(self, branch):
         if not branch in [branch.name for branch in self.branches]:
