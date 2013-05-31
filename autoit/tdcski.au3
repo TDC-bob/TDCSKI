@@ -7,7 +7,7 @@
 #AutoIt3Wrapper_Res_Fileversion=0.0.0.7
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
-#AutoIt3Wrapper_AU3Check_Stop_OnWarning=y
+#AutoIt3Wrapper_AU3Check_Stop_OnWarning=n
 #AutoIt3Wrapper_Run_After=copy "%out%" \\TEST-PC\Users\Public\TDCSKI
 #AutoIt3Wrapper_Run_Tidy=y
 #endregion ;**** Directives created by AutoIt3Wrapper_GUI ****
@@ -19,14 +19,16 @@
 #include <Constants.au3>
 #include <date.au3>
 #include <File.au3>
-;~ #include <GUIConstantsEx.au3>
 #include <WindowsConstants.au3>
 #include <EditConstants.au3>
-;~ #include <StaticConstants.au3>
+#include "MD5.au3"
 
 Global Const $Python33_x86_download_link = "http://www.python.org/ftp/python/3.3.2/python-3.3.2.msi"
 Global Const $Python33_x64_download_link = "http://www.python.org/ftp/python/3.3.2/python-3.3.2.amd64.msi"
 Global Const $PortableGit_download_link = "https://dl.dropboxusercontent.com/u/73452794/git-portable.zip"
+
+Global Const $updater_path = @ScriptDir & "\tdcski\updater.exe"
+Global Const $new_version_path = @ScriptDir & "\tdcski\tdcski.exe"
 
 Global Const $log_dir = @ScriptDir & "\logs"
 Global Const $log_file = $log_dir & "\" & @YEAR & @MON & @MDAY & " - " & @HOUR & "h" & @MIN & " - TDCSKI.log"
@@ -34,6 +36,9 @@ Global $iMemo, $python_path, $git_path
 
 Global $portable_git_folder = @ScriptDir & "\portable-git"
 
+ConsoleWrite(__MD5(@ScriptFullPath) & @LF)
+
+Exit 0
 _check_git()
 $t = _git_run("status")
 ConsoleWrite($t & @LF)
@@ -45,10 +50,11 @@ Exit 0
 
 Func _main()
 	Local $func = "main"
+	_check_for_new_version()
 	If Not FileExists($log_dir) Then
 		DirCreate($log_dir)
 	EndIf
-	_rotate__logs($log_dir)
+	_rotate_logs($log_dir)
 	; Create GUI
 	$w = @DesktopWidth * 0.75
 	$h = @DesktopHeight * 0.75
@@ -68,8 +74,44 @@ Func _main()
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 EndFunc   ;==>_main
 
-Func _()
-EndFunc
+Func _check_for_new_version()
+	$func = "check_for_new_version"
+	__log("Vérification de nouvelle version du lanceur", $func)
+	If FileExists($new_version_path) Then
+		__log("Repo trouvé, comparaison des fichiers", $func)
+		$self_hash = __MD5(@ScriptFullPath)
+		$other_hash = __MD5($new_version_path)
+		If StringCompare($self_hash, $other_hash) <> 0 Then
+			__log("Les hash MD5 sont différents, lancement de l'updater", $func)
+			$updater = '"' & $updater_path & '"'
+			$dest = '"' & @ScriptFullPath & '"'
+			$source = '"' & $new_version_path & '"'
+			ShellExecute($updater, $source & " " & $dest)
+			If @error Then
+				_err("Erreur fatale lors de la tentative de mise à jour du lanceur", $func)
+				Exit 0
+			EndIf
+		EndIf
+	Else
+		__log("Première exécution, pas de repo cloné", $func)
+	EndIf
+EndFunc   ;==>_check_for_new_version
+
+Func __MD5($file)
+	Local $BufferSize, $FileHandle
+	$BufferSize = 0x20000
+	$FileHandle = FileOpen($file, 16)
+
+	$MD5CTX = _MD5Init()
+	For $i = 1 To Ceiling(FileGetSize($file) / $BufferSize)
+		_MD5Input($MD5CTX, FileRead($FileHandle, $BufferSize))
+	Next
+	$Hash = _MD5Result($MD5CTX)
+	FileClose($FileHandle)
+
+	Return $Hash
+
+EndFunc   ;==>__MD5
 
 Func _git_run($cmd)
 	Local $func = "git_run"
@@ -79,7 +121,7 @@ Func _git_run($cmd)
 	EndIf
 EndFunc   ;==>_git_run
 
-Func _rotate__logs($sPath)
+Func _rotate_logs($sPath)
 	$func = "rotate__logs"
 	__log($str_logs_rotation, $func)
 	Local $nHandle = FileFindFirstFile($sPath & "\*.log")
@@ -113,7 +155,7 @@ Func _rotate__logs($sPath)
 	WEnd
 	FileClose($nHandle)
 	__log($str_logs_rotation_finished, $func)
-EndFunc   ;==>_rotate__logs
+EndFunc   ;==>_rotate_logs
 
 Func _DateStringWithSlashes($sString)
 	If StringLen($sString) = 8 Then
