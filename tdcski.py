@@ -24,13 +24,9 @@ def main():
     os.environ["GIT_SSL_NO_VERIFY"] = "1"
 
     main_repo = git.Repo(".","https://github.com/TDC-bob/TDCSKI.git")
-    print(main_repo.remotes)
     main_repo.pull()
-    input()
-    return
 
-    value, _type = winreg.QueryValueEx (winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Eagle Dynamics\DCS World"), "Path")
-    print(value)
+    DCS_path, _type = winreg.QueryValueEx (winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Eagle Dynamics\DCS World"), "Path")
 
     if not os.path.exists("../mods"):
         os.makedirs("../mods")
