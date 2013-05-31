@@ -1,10 +1,10 @@
 #NoTrayIcon
-#Region ;**** Directives created by AutoIt3Wrapper_GUI ****
+#region ;**** Directives created by AutoIt3Wrapper_GUI ****
 #AutoIt3Wrapper_Icon=resources\TDCSKI.ico
 #AutoIt3Wrapper_Outfile=tdcski.exe
 #AutoIt3Wrapper_Res_Icon_Add=resources\TDCSKI.ico
 #AutoIt3Wrapper_Run_After=copy "%out%" \\TEST-PC\Users\Public
-#EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
+#endregion ;**** Directives created by AutoIt3Wrapper_GUI ****
 
 Global Const $Python33_x86_download_path = "http://www.python.org/ftp/python/3.3.2/python-3.3.2.msi"
 Global Const $Python33_x64_download_path = "http://www.python.org/ftp/python/3.3.2/python-3.3.2.amd64.msi"
@@ -28,14 +28,20 @@ Func start_tdcski()
 	ConsoleWrite($python_path & " tdcski.py" & @LF)
 	Run($python_path & " tdcski.py", @ScriptDir)
 	ConsoleWrite(@error & @LF)
-EndFunc   ;==>start_main
+EndFunc   ;==>start_tdcski
 
 Func get_python_path()
 	$path = RegRead("HKLM\SOFTWARE\Python\PythonCore\3.3\InstallPath", "")
 	If @error Then
 		$path = RegRead("HKLM64\SOFTWARE\Python\PythonCore\3.3\InstallPath", "")
 		If @error Then
-			Return False
+			$path = RegRead("HKCU\SOFTWARE\Python\PythonCore\3.3\InstallPath", "")
+			If @error Then
+				$path = RegRead("HKCU64\SOFTWARE\Python\PythonCore\3.3\InstallPath", "")
+				If @error Then
+					Return False
+				EndIf
+			EndIf
 		EndIf
 	EndIf
 	Return $path & "python.exe"
@@ -70,8 +76,8 @@ Func install_python()
 			_error("Erreur pendant le téléchargement de Python")
 		EndIf
 		$progress_bytes = InetGetInfo($h, 0)
-		$progress = $progress_bytes / $size *100
-		ProgressSet($progress,$progress_bytes/1024 & " / " & $size/1024 & " KB")
+		$progress = $progress_bytes / $size * 100
+		ProgressSet($progress, $progress_bytes / 1024 & " / " & $size / 1024 & " KB")
 		If InetGetInfo($h, 3) Then
 			ExitLoop
 		EndIf
