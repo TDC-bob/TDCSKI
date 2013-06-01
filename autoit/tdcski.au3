@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=TDCSKI
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.29
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.31
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_AU3Check_Stop_OnWarning=n
@@ -526,8 +526,6 @@ Func _ask_user($title, $msg)
 EndFunc   ;==>_ask_user
 
 Func __log($msg, $func, $TimeStamp = True)
-	$msg = StringReplace($msg, @CR, @CRLF & @TAB); Place a tab in each line of the output for a nicer log format
-	$msg = StringReplace($msg, "#", @CRLF & @TAB)
 	$hFile = FileOpen($log_file, 1)
 	If $hFile <> -1 Then
 		$msg = _Now() & ' - ' & $func & ' - ' & $msg & @CRLF
@@ -555,6 +553,8 @@ Func _cmd_and__log($cmd, $wk_dir = "")
 		$Return &= StderrRead($hCMD)
 		If @error Then ExitLoop
 	WEnd
+	$Return = StringReplace($Return, @CR, @CRLF & @TAB); Place a tab in each line of the output for a nicer log format
+	$Return = StringReplace($Return, "#", @CRLF & @TAB)
 	$msg = _Now() & ' - ' & $func & ' - ' & $cmd & @CRLF & 'Output: ' & $Return & @CRLF
 	__log($cmd & @CRLF & @TAB & 'Output: ' & $Return, $func)
 EndFunc   ;==>_cmd_and__log
