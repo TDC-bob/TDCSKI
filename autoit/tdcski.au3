@@ -4,7 +4,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=Written & maintained by TDC-Bob
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.16
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.18
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_AU3Check_Stop_OnWarning=n
@@ -71,15 +71,9 @@ Func _main()
 EndFunc   ;==>_main
 
 Func _write_config()
-	Local $to_write[2], $to_write_python[2], $to_write_git[2], $func
-	$func = "write_config"
+	Local $func = "write_config"
+	Local $to_write[2][2] = [["python_path", $python_path],["git_path", $git_path]]
 	__log("Ecriture du fichier de configuration", $func)
-	$to_write_git[0] = "git_path"
-	$to_write_git[1] = $git_path
-	$to_write_python[0] = "python_path"
-	$to_write_python[1] = $python_path
-	$to_write[0] = $to_write_git
-	$to_write[1] = $to_write_python
 	IniWriteSection($config_file, "general", $to_write, 0)
 	If @error Then
 		_err("Erreur pendant l'écriture du fichier de configuration", $func)
