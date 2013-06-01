@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=TDCSKI
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.35
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.36
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_AU3Check_Stop_OnWarning=n
@@ -501,7 +501,7 @@ Func install_python()
 	$local_file = @ScriptDir & "\python_installer.msi"
 	_download($download_link, $local_file, "Python3.3")
 	__log("Installation de Python 3.3 ...", $func)
-	$msiexec_return_code = RunWait("msiexec /package " & $local_file & " /qn ADDLOCAL=ALL")
+	$msiexec_return_code = RunWait('msiexec /package "' & $local_file & '" /qn ADDLOCAL=ALL')
 	If $msiexec_return_code > 0 Then
 		__log("L'installation a échoué. Code retour MSIEXEC: " & $msiexec_return_code & @CRLF & "(cfr. http://msdn.microsoft.com/en-us/library/windows/desktop/aa376931(v=vs.85).aspx )", $func)
 		_err($str_err_python_install_failed, $func)
