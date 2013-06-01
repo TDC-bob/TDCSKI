@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=TDCSKI
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.26
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.29
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_AU3Check_Stop_OnWarning=n
@@ -21,6 +21,7 @@
 #include <WindowsConstants.au3>
 #include <EditConstants.au3>
 #include <Misc.au3>
+#include <GuiEdit.au3>
 #include "MD5.au3"
 #include "zip.au3"
 #include "strings.au3"
@@ -54,18 +55,18 @@ Func _main()
 	_first_start()
 	_rotate_logs($log_dir)
 	; Create GUI
-	$w = @DesktopWidth * 0.75
-	$h = @DesktopHeight * 0.75
+	$w = @DesktopWidth * 0.40
+	$h = @DesktopHeight * 0.40
 	$gui_handle = GUICreate($str_app_name, $w, $h)
-	$iMemo = GUICtrlCreateEdit("", 2, 2, $w - 2, $h)
+;~ 	$iMemo = GUICtrlCreateEdit("", 2, 2, $w - 2, $h)
+	$iMemo = _GUICtrlEdit_Create($gui_handle, "", 2, 2, $w - 2, $h, BitOR($ES_MULTILINE, $ES_WANTRETURN, $WS_VSCROLL, $WS_HSCROLL, $ES_AUTOVSCROLL, $ES_AUTOHSCROLL, $ES_READONLY))
 	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
-	GUICtrlSetState($iMemo, $GUI_DISABLE)
 	GUISetState()
 	_check_python()
 	_check_git()
 	_check_repo()
-	_check_for_new_version()
 	_write_config()
+	_check_for_new_version()
 	__log("ON FAIT SEMBLER DE LANCER QUELQUE CHOSE ?", $func)
 	__log($str_all_good, $func)
 	GUICtrlSetState($iMemo, $GUI_ENABLE)
@@ -533,7 +534,8 @@ Func __log($msg, $func, $TimeStamp = True)
 		FileWriteLine($hFile, $msg)
 		FileClose($hFile)
 	EndIf
-	GUICtrlSetData($iMemo, $msg, 1)
+	_GUICtrlEdit_AppendText($iMemo, $msg)
+;~ 	GUICtrlSetData($iMemo, $msg, 1)
 EndFunc   ;==>__log
 
 Func _err($msg, $func)
