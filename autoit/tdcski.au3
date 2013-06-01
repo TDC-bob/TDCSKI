@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=TDCSKI
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.34
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.35
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_AU3Check_Stop_OnWarning=n
@@ -299,7 +299,7 @@ Func _install_portable_git()
 	Local $func, $fancy_name, $temp_zip_file
 	$func = "install_portable_git"
 	$fancy_name = "Portable Git"
-	$temp_zip_file = _TempFile(@ScriptDir, "", ".zip")
+	$temp_zip_file = _TempFile(@ScriptDir, "")
 	__log($str_git_install, $func)
 	__log("Fichier temporaire: " & $temp_zip_file, $func)
 	_download($PortableGit_download_link, $temp_zip_file, $fancy_name)
