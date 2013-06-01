@@ -4,7 +4,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=Written & maintained by TDC-Bob
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.8
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.9
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_AU3Check_Stop_OnWarning=n
@@ -149,7 +149,6 @@ EndFunc   ;==>_clone_repo
 
 Func _git_run($cmd, $wk = '')
 	Local $func = "git_run"
-	RunWait(@ComSpec & ' /k echo ' & '"' & $git_path & '"' & "  " & $cmd, @TempDir, @SW_SHOW)
 	$code = _cmd_and__log('"' & $git_path & '"' & "  " & $cmd, $wk)
 	If $code <> 0 Then
 		_err("Erreur de command Git: " & $cmd, $func)
