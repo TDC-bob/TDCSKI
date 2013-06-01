@@ -4,7 +4,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=Written & maintained by TDC-Bob
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.14
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.15
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_AU3Check_Stop_OnWarning=n
@@ -37,6 +37,8 @@ Global Const $log_dir = @ScriptDir & "\logs"
 Global Const $log_file = $log_dir & "\" & @YEAR & @MON & @MDAY & " - " & @HOUR & "h" & @MIN & " - TDCSKI.log"
 Global $iMemo, $python_path, $git_path, $gui_handle
 
+Global Const $config_file = @ScriptDir & "\tdcski.cfg"
+
 Global $portable_git_folder = @ScriptDir & "\portable-git"
 
 _main()
@@ -59,6 +61,7 @@ Func _main()
 	_check_git()
 	_check_repo()
 	_check_for_new_version()
+	_write_config()
 	__log("ON FAIT SEMBLER DE LANCER QUELQUE CHOSE ?", $func)
 	__log($str_all_good, $func)
 	GUICtrlSetState($iMemo, $GUI_ENABLE)
@@ -66,6 +69,24 @@ Func _main()
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 EndFunc   ;==>_main
+
+Func _write_config()
+	Local $to_write[2], $to_write_python[2], $to_write_git[2], $func
+	$func = "write_config"
+	__log("Ecriture du fichier de configuration", $func)
+	$to_write_git[0] = "git_path"
+	$to_write_git[1] = $git_path
+	$to_write_python[0] = "python_path"
+	$to_write_python[1] = $python_path
+	$to_write[0] = $to_write_git
+	$to_write[1] = $to_write_python
+	IniWriteSection($config_file, "general", $to_write, 0)
+	If @error Then
+		_err("Erreur pendant l'écriture du fichier de configuration", $func)
+	EndIf
+	__log("Fichier de configuration écrit", $func)
+;~ 	IniWrite($config_file, "general", "python_path", $python_path)
+EndFunc   ;==>_write_config
 
 Func _check_for_new_version()
 	$func = "check_for_new_version"
