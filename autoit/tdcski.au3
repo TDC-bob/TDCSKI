@@ -4,7 +4,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=Written & maintained by TDC-Bob
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.11
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.12
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_AU3Check_Stop_OnWarning=n
@@ -45,9 +45,6 @@ Exit 0
 
 Func _main()
 	Local $func = "main"
-	If Not FileExists($log_dir) Then
-		DirCreate($log_dir)
-	EndIf
 	_rotate_logs($log_dir)
 	; Create GUI
 	$w = @DesktopWidth * 0.75
@@ -110,9 +107,9 @@ Func __MD5($file)
 	__log("Injection des chunks du fichier dans le parser", $func)
 	$chunk = 1
 	For $i = 1 To Ceiling(FileGetSize($file) / $BufferSize)
-		__log("Traitement du chunk " & $chunk, $func)
+;~ 		__log("Traitement du chunk " & $chunk, $func) ; Generates too much output
 		_MD5Input($MD5CTX, FileRead($FileHandle, $BufferSize))
-		__log("Traitement réussi", $func)
+;~ 		__log("Traitement réussi", $func) ;  Generates too much output
 		$chunk += 1
 	Next
 	__log("Parsing terminé, calcul du hash", $func)
@@ -157,9 +154,46 @@ Func _git_run($cmd, $wk = '')
 	EndIf
 EndFunc   ;==>_git_run
 
+Func _create_dir($dir, $exit_on_error = True)
+	Local $func = "create_dir"
+	__log("Création du répertoire: " & $dir, $func)
+	If FileExists($dir) Then
+		$attribs = FileGetAttrib($dir)
+		If StringInStr($attribs, "D") Then
+			__log("Le répertoire existe déjà", $func)
+			Return True
+		ElseIf StringInStr($attribs, "N") Then
+			If $exit_on_error Then
+				_err("Le chemin existe déjà, mais c'est un fichier", $func)
+			Else
+				__log("Le chemin existe déjà, mais c'est un fichier", $func)
+			EndIf
+			Return False
+		EndIf
+	EndIf
+	DirCreate($dir)
+	If @error Then
+		If $exit_on_error Then
+			_err("Impossible de créer le répertoire", $func)
+		Else
+			__log("Impossible de créer le répertoire", $func)
+		EndIf
+		Return False
+	EndIf
+	Return True
+EndFunc   ;==>_create_dir
+
 Func _rotate_logs($sPath)
 	$func = "rotate__logs"
 	__log($str_logs_rotation, $func)
+	__log("Vérification de l'existence du répertoire de journalisation", $func)
+	If Not FileExists($log_dir) Then
+		__log("Le répêrtoire n'existe pas, création", $func)
+		_create_dir($log_dir)
+	Else
+		__log("Le répertoire existe", $func)
+	EndIf
+	__log("Recherche de fichier journaux", $func)
 	Local $nHandle = FileFindFirstFile($sPath & "\*.log")
 	Local $sFileName, $sFileDate, $sToday = @YEAR & @MON & @MDAY
 	If $nHandle = -1 Then

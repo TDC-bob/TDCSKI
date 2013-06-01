@@ -1,5 +1,8 @@
 Global Const $str_app_name = "TDCSKI"
 
+Global Const $str_start = "Lancement du TDCSKI"
+Global Const $str_arch_detect = "Détection de l'architecture du système d'exploitation"
+Global Const $str_all_good = "Tout s'est bien passé ! =þ" & @CRLF & @CRLF & "Appuyez sur ECHAP ou fermez cette fenêtre pour quitter"
 
 Global Const $str_python_checking = "Vérification de l'installation de Python 3.3"
 Global Const $str_python_searching = "Recherche d'une installation Python 3.3"
@@ -18,9 +21,6 @@ Global Const $str_err_cmd = "Erreur de la commande: "
 Global Const $str_err_strange_error = "Une erreur très bizarre vient de se produire ... mettez les femmes et les enfants à l'abri !"
 Global Const $str_err_download = "Une erreur est survenue pendant le téléchargement de "
 global const $str_err_python_install_failed = "L'installation de Python 3.3 a échoué"
-
-Global Const $str_arch_detect = "Détection de l'architecture du système d'exploitation"
-Global Const $str_all_good = "Tout s'est bien passé ! =þ" & @CRLF & @CRLF & "Appuyez sur ECHAP ou fermez cette fenêtre pour quitter"
 
 Global Const $str_logs_rotation = "Rotation des fichiers de journalisation"
 Global Const $str_logs_no_logfile_found = "Aucun fichier de journalisation trouvé"
