@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=TDCSKI
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.31
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.33
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_AU3Check_Stop_OnWarning=n
@@ -23,7 +23,8 @@
 #include <Misc.au3>
 #include <GuiEdit.au3>
 #include "MD5.au3"
-#include "zip.au3"
+;~ #include "zip.au3"
+#include "7z.au3"
 #include "strings.au3"
 
 _Singleton("TDCSKI")
@@ -314,7 +315,7 @@ Func _unzip($zip_file, $target_dir)
 	__log("Décompression du fichier ZIP", $func)
 	__log("fichier: " & $zip_file, $func)
 	__log("cible: " & $target_dir, $func)
-	_Zip_UnzipAll($zip_file, $target_dir)
+	_7z_extract_all($zip_file, $target_dir)
 	Local $error = @error
 	If $error Then
 		_err("Erreur pendant la décompression ! Code retour: " & $error, $func)
