@@ -4,7 +4,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=Written & maintained by TDC-Bob
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.10
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.11
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_AU3Check_Stop_OnWarning=n
@@ -64,6 +64,7 @@ Func _main()
 	_check_for_new_version()
 	__log("ON FAIT SEMBLER DE LANCER QUELQUE CHOSE ?", $func)
 	__log($str_all_good, $func)
+	GUICtrlSetState($iMemo, $GUI_ENABLE)
 
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
