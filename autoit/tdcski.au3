@@ -4,7 +4,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=Written & maintained by TDC-Bob
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.13
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.14
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_AU3Check_Stop_OnWarning=n
@@ -507,7 +507,7 @@ Func __log($msg, $func, $TimeStamp = True)
 		FileWriteLine($hFile, $msg)
 		FileClose($hFile)
 	EndIf
-	GUICtrlSetData($iMemo, _Now() & " - " & $msg, 1)
+	GUICtrlSetData($iMemo, $msg, 1)
 EndFunc   ;==>__log
 
 Func _err($msg, $func)
