@@ -1,10 +1,11 @@
 #NoTrayIcon
+
 #region ;**** Directives created by AutoIt3Wrapper_GUI ****
 #AutoIt3Wrapper_Icon=..\resources\TDCSKI.ico
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=Written & maintained by TDC-Bob
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.20
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.23
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_AU3Check_Stop_OnWarning=n
@@ -12,8 +13,6 @@
 #AutoIt3Wrapper_Run_Tidy=y
 #endregion ;**** Directives created by AutoIt3Wrapper_GUI ****
 
-#include "zip.au3"
-#include "strings.au3"
 #include <GUIConstantsEx.au3>
 #include <EventLog.au3>
 #include <Constants.au3>
@@ -21,7 +20,12 @@
 #include <File.au3>
 #include <WindowsConstants.au3>
 #include <EditConstants.au3>
+#include <Misc.au3>
 #include "MD5.au3"
+#include "zip.au3"
+#include "strings.au3"
+
+_Singleton("TDCSKI")
 
 Global Const $Python33_x86_download_link = "http://www.python.org/ftp/python/3.3.2/python-3.3.2.msi"
 Global Const $Python33_x64_download_link = "http://www.python.org/ftp/python/3.3.2/python-3.3.2.amd64.msi"
