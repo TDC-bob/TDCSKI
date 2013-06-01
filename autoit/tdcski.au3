@@ -4,7 +4,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=Written & maintained by TDC-Bob
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.18
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.20
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_AU3Check_Stop_OnWarning=n
@@ -47,12 +47,12 @@ Exit 0
 
 Func _main()
 	Local $func = "main"
+	_first_start()
 	_rotate_logs($log_dir)
 	; Create GUI
 	$w = @DesktopWidth * 0.75
 	$h = @DesktopHeight * 0.75
 	$gui_handle = GUICreate($str_app_name, $w, $h)
-;~ 	$iMemo = GUICtrlCreateEdit("", 2, 2, $w - 2, $h, $ES_AUTOVSCROLL + $WS_VSCROLL)
 	$iMemo = GUICtrlCreateEdit("", 2, 2, $w - 2, $h)
 	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
 	GUICtrlSetState($iMemo, $GUI_DISABLE)
@@ -69,6 +69,13 @@ Func _main()
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 EndFunc   ;==>_main
+
+Func _first_start()
+	If FileExists($config_file) Then
+		Return False
+	EndIf
+	_ask_user($str_app_name, $str_first_start)
+EndFunc   ;==>_first_start
 
 Func _write_config()
 	Local $func = "write_config"
