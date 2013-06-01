@@ -14,7 +14,7 @@
 import os
 import sys
 import winreg
-import tdcski.mod as mod
+import mod as mod
 import bobgit.git as git
 from _logging._logging import mkLogger, DEBUG
 
