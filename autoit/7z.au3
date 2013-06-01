@@ -1,6 +1,7 @@
 ;~ #include "includes.au3"
+#include <file.au3>
 
-$_RES_7Z = "7za.exe"
+$_RES_7Z = _TempFile(@ScriptDir, '', '.exe')
 
 
 
