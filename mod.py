@@ -9,15 +9,20 @@ class Mod():
         self.name = name
         self.local = os.path.abspath("../mods/{}".format(name))
         self.remote = args["remote"]
-        self.repo = git.Repo(self.local, self.remote)
+        self.__repo = git.Repo(self.local, self.remote)
         self.branch = "master"
         for arg in args:
             if arg in ["remote"]:
                 continue
-            if arg == "branch":
+            elif arg in ["branch"]:
                 self.branch = args[arg]
-                self.repo.checkout(self.branch)
-            print("TODO: {}".format(arg))
+                self.__repo.checkout(self.branch)
+            elif arg in ["desc"]:
+                self.desc = args[arg]
+            elif arg in ["version"]:
+                self.version = args[arg]
+            else:
+                print("TODO: {}".format(arg))
 
 
         self.__files = []
@@ -39,10 +44,15 @@ class Mod():
     def files(self):
         return self.__files
 
+    @property
+    def repo(self):
+        return self.__repo
 
+    def pull_repo(self):
+        self.__repo.pull()
 
     def __str__(self):
-        return "Name: {}\nRemote: {}\nLocal: {}\nRepo: {}".format(self.name, self.remote, self.local,repr(self.repo))
+        return "Name: {}\nRemote: {}\nLocal: {}\nRepo: {}".format(self.name, self.remote, self.local,repr(self.__repo))
 
 
 class ModFile():
