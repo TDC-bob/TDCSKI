@@ -1,0 +1,26 @@
+<%
+    rows = [[v for v in range(0,10)] for row in range(0,10)]
+%>
+<table>
+    % for row in rows:
+        ${makerow(row)}
+    % endfor
+</table>
+
+${salutation}
+
+${target}
+
+<form name="input" action="receive" method="get">
+First name: <input type="text" name="user" value=""><br>
+Last name: <input type="text" name="pwd" value=""><br>
+<input type="submit" value="Submit">
+</form> 
+
+<%def name="makerow(row)">
+    <tr>
+    % for name in row:
+        <td>${name}</td>\
+    % endfor
+    </tr>
+</%def>
