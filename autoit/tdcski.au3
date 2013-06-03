@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=TDCSKI
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.52
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.53
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_Run_After=signtool sign /v /n "Bob" /d "TDCSKI" /du "https://github.com/TDC-bob/TDCSKI.git" /t http://timestamp.verisign.com/scripts/timstamp.dll "%out%"
@@ -169,6 +169,8 @@ EndFunc   ;==>_check_repo
 Func _pull_repo()
 	$func = "pull_repo"
 	__log("Pulling repo", $func)
+	_git_run('config user.email "tdcski@tdcski.com"')
+	_git_run('config user.name tdcski')
 	_git_run("pull origin master", $repo)
 EndFunc   ;==>_pull_repo
 
