@@ -100,7 +100,7 @@ class Mod():
         return self.__branch
 
     def pull_repo(self):
-        self.__repo.pull()
+        self.__repo.pull(self.remote, self.branch)
         self.buil_files_list()
 
     def install(self):
