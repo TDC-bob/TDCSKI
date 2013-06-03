@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=TDCSKI
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.56
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.57
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_Run_After=signtool sign /v /n "Bob" /d "TDCSKI" /du "https://github.com/TDC-bob/TDCSKI.git" /t http://timestamp.verisign.com/scripts/timstamp.dll "%out%"
@@ -31,7 +31,7 @@ _Singleton("TDCSKI")
 
 Global Const $Python33_x86_download_link = "http://www.python.org/ftp/python/3.3.2/python-3.3.2.msi"
 Global Const $Python33_x64_download_link = "http://www.python.org/ftp/python/3.3.2/python-3.3.2.amd64.msi"
-Global Const $PortableGit_download_link = "https://dl.dropboxusercontent.com/u/73452794/PortableGit-1.8.1.2-preview20130201.7z"
+Global Const $PortableGit_download_link = "https://msysgit.googlecode.com/files/PortableGit-1.8.3-preview20130601.7z"
 
 Global Const $repo = @ScriptDir & "\tdcski"
 Global Const $repo_remote = "https://github.com/TDC-bob/TDCSKI.git"
@@ -177,7 +177,7 @@ Func _pull_repo($branch)
 	__log("Pulling repo", $func)
 	_git_run('config --global user.email "tdcski@tdcski.com"')
 	_git_run('config --global user.name tdcski')
-	_git_run("checkout " & $branch)
+	_git_run("checkout " & $branch, $repo)
 	_git_run("pull origin " & $branch, $repo)
 EndFunc   ;==>_pull_repo
 
