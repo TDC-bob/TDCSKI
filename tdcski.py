@@ -14,6 +14,7 @@
 import os
 import sys
 import winreg
+import traceback
 from time import strftime, gmtime
 from lib.configobj import ConfigObj
 import mod
@@ -105,10 +106,8 @@ def main():
             test.install()
     except Exception as e:
         logger.error(e.__class__)
-        # logger.error(e.__module__.__dict__["__name__"])
         logger.error(e)
-        logger.error(e.__dict__)
-        logger.error(e.__traceback__)
+        logger.error(traceback.format_tb(e.__traceback__))
         exit(1)
         # conf.create("skins", s, "path", test.local)
         # conf.create("skins", s, "desc", test.desc)
