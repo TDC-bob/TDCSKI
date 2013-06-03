@@ -130,6 +130,9 @@ class ModFile():
         self.__install_to = re.sub(strip, '', self.__full_path).lstrip('\\')
         if self.__install_to[:11] == "SAVED_GAMES":
             self.__install_to = self.__install_to.lstrip("SAVED_GAMES")
+            if conf.get("general","saved_games_path") == None:
+                logger.error("le répertoire des parties sauvegardées est inccorect")
+                exit(1)
             self.__install_to = "{}{}".format(conf.get("general","saved_games_path"), self.__install_to)
             self.__install_to = os.path.normpath((self.__install_to))
         if self.__install_to[:3] == "DCS":
