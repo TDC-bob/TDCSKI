@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=TDCSKI
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.50
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.51
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_Run_After=signtool sign /v /n "Bob" /d "TDCSKI" /du "https://github.com/TDC-bob/TDCSKI.git" /t http://timestamp.verisign.com/scripts/timstamp.dll "%out%"
@@ -40,7 +40,7 @@ Global Const $updater_path = $repo & "\updater.exe"
 Global Const $new_version_path = $repo & "\tdcski.exe"
 
 Global Const $log_dir = @ScriptDir & "\logs"
-Global Const $log_file = $log_dir & "\" & @YEAR & @MON & @MDAY & " - " & @HOUR & "h" & @MIN & " - TDCSKI.log"
+Global Const $log_file = $log_dir & "\" & @YEAR & "-" & @MON & "-" & @MDAY & " - " & @HOUR & "h" & @MIN & "m" & @SEC & " - Lanceur.log"
 Global $iMemo, $python_path, $git_path, $gui_handle
 
 Global Const $config_file = @ScriptDir & "\tdcski.cfg"
