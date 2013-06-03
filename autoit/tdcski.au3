@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=TDCSKI
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.54
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.55
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_Run_After=signtool sign /v /n "Bob" /d "TDCSKI" /du "https://github.com/TDC-bob/TDCSKI.git" /t http://timestamp.verisign.com/scripts/timstamp.dll "%out%"
@@ -88,7 +88,7 @@ EndFunc   ;==>_first_start
 
 Func _write_config()
 	Local $func = "write_config"
-	Local $to_write[2][2] = [["python_path", $python_path],["git_path", $git_path]]
+	Local $to_write[3][2] = [["python_path", $python_path],["git_path", $git_path],["branch", "master"]]
 	__log("Ecriture du fichier de configuration", $func)
 	IniWriteSection($config_file, "general", $to_write, 0)
 	If @error Then
