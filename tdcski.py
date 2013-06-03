@@ -54,7 +54,11 @@ def main():
 
     # os.environ["GIT_SSL_NO_VERIFY"] = "1"
     conf = Config()
-    dcs_path, caribou = winreg.QueryValueEx (winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Eagle Dynamics\DCS World"), "Path")
+    try:
+        dcs_path, caribou = winreg.QueryValueEx (winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Eagle Dynamics\DCS World"), "Path")
+    except FileNotFoundError:
+        logger.error("impossible de trouver une installation de DCS")
+        exit(1)
     conf.create("general", "dcs_path", dcs_path)
     conf.create("general", "saved_games_path", os.path.normpath(os.path.expanduser("~/saved games/dcs")))
     config.git_exe = conf.get("general", "git_path")
