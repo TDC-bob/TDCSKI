@@ -70,6 +70,8 @@ def main():
     config.git_exe = conf.get("general", "git_path")
     config.SaveGames_path = conf.get("general", 'saved_games_path')
     config.DCS_path = conf.get("general", 'dcs_path')
+    logger.error(config.DCS_path)
+    exit(0)
 
     if not os.path.exists("../repos/skins"):
         os.makedirs("../repos/skins")
