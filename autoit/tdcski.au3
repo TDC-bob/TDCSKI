@@ -5,13 +5,13 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=TDCSKI
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.39
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.43
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
-#AutoIt3Wrapper_AU3Check_Stop_OnWarning=n
-;~ #AutoIt3Wrapper_Run_After=copy "%out%" \\TEST-PC\Users\Public\TDCSKI
+#AutoIt3Wrapper_Run_After=signtool sign /v /n "Bob" /d "TDCSKI" /du "https://github.com/TDC-bob/TDCSKI.git" /t http://timestamp.verisign.com/scripts/timstamp.dll "%out%"
 #AutoIt3Wrapper_Run_Tidy=y
 #endregion ;**** Directives created by AutoIt3Wrapper_GUI ****
+;~ #AutoIt3Wrapper_Run_After=copy "%out%" \\TEST-PC\Users\Public\TDCSKI
 
 #include <GUIConstantsEx.au3>
 #include <EventLog.au3>
