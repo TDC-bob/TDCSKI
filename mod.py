@@ -245,7 +245,7 @@ class ModFile():
 
     @logged
     def uninstall(self):
-        self.logger.info("Désinstallation du fichier: {}")
+        self.logger.info("Désinstallation du fichier: {}".format(self.__basename))
         if self.__parent.should_be_installed:
             logger.info("Annulation de la désinstallation, le mod parent devrait être installé")
             return
