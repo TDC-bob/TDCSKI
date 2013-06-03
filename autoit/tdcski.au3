@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=TDCSKI
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.55
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.56
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_Run_After=signtool sign /v /n "Bob" /d "TDCSKI" /du "https://github.com/TDC-bob/TDCSKI.git" /t http://timestamp.verisign.com/scripts/timstamp.dll "%out%"
@@ -156,22 +156,29 @@ Func __MD5($file)
 EndFunc   ;==>__MD5
 
 Func _check_repo()
-	$func = "check_repo"
+	Local $func = "check_repo"
+	Local $branch
+	If FileExists($config_file) Then
+		$branch = IniRead($config_file, "general", "branch", "master")
+	Else
+		$branch = "master"
+	EndIf
 	__log("Vérification du repo principal", $func)
 	If FileExists($repo) Then
 		__log("Le repo existe", $func)
-		_pull_repo()
+		_pull_repo($branch)
 	Else
 		_clone_repo()
 	EndIf
 EndFunc   ;==>_check_repo
 
-Func _pull_repo()
+Func _pull_repo($branch)
 	$func = "pull_repo"
 	__log("Pulling repo", $func)
 	_git_run('config --global user.email "tdcski@tdcski.com"')
 	_git_run('config --global user.name tdcski')
-	_git_run("pull origin master", $repo)
+	_git_run("checkout " & $branch)
+	_git_run("pull origin " & $branch, $repo)
 EndFunc   ;==>_pull_repo
 
 Func _clone_repo()
