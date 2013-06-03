@@ -43,10 +43,10 @@ class Mod():
                 self.__repo.checkout(self.__branch)
             elif arg in ["desc"]:
                 self.logger.debug("paramètre descritpion trouvé: {}".format(args[arg]))
-                self.desc = args[arg]
+                self.__desc = args[arg]
             elif arg in ["version"]:
                 self.logger.debug("paramètre version trouvé: {}".format(args[arg]))
-                self.version = args[arg]
+                self.__version = args[arg]
             else:
                 self.error("paramètre inconnu trouvé: {} \t\t Valeur: {}".format(arg, args[arg]))
                 exit(1)
@@ -55,12 +55,17 @@ class Mod():
         if not self.conf.set_or_create(self.__type,  self.__name, "path", self.__local):
             self.logger.error("erreur lors de l'écriture du nom")
             exit(1)
-        if not self.conf.set_or_create(self.__type, self.__name, "desc", self.desc):
+        if not self.conf.set_or_create(self.__type, self.__name, "desc", self.__desc):
             self.logger.error("erreur lors de l'écriture de la description")
             exit(1)
-        if not self.conf.set_or_create(self.__type, self.__name, "installed", False):
-            self.logger.error('erreur lors de "installed"')
+        if not self.conf.set_or_create(self.__type, self.__name, "version", self.__version):
+            self.logger.error("erreur lors de l'écriture de la description")
             exit(1)
+        if not self.conf.set_or_create(self.__type, self.__name, "branch", self.__branch):
+            self.logger.error("erreur lors de l'écriture de la description")
+            exit(1)
+        self.conf.create(self.__type, self.__name, "installed", False)
+
 
         self.buil_files_list()
 
@@ -91,6 +96,14 @@ class Mod():
             return True
         self.logger.debug("réponse: non")
         return False
+
+    @property
+    def desc(self):
+        return self.__desc
+
+    @property
+    def version(self):
+        return self.__version
 
     @property
     def file_count(self):
