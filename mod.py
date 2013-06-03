@@ -10,7 +10,7 @@ from hashlib import md5 as MD5
 from _logging._logging import mkLogger, DEBUG, logged
 
 
-logger = mkLogger(__name__, DEBUG, "tdcski - mod.log")
+logger = mkLogger(__name__, DEBUG)
 
 conf = Config()
 
@@ -55,7 +55,7 @@ class Mod():
 
     @property
     def should_be_installed(self):
-        return conf.get(self.type, self.name, "installed")
+        return bool(conf.get(self.type, self.name, "installed"))
 
     @property
     def file_count(self):
@@ -98,9 +98,13 @@ class Mod():
         self.buil_files_list()
 
     def install(self):
+        logger.debug("installation du {}: {}".format(self.__type, self.__name))
+        if not self.should_be_installed:
+            logger.debug("ce mod ne devrait pas être installé")
+            return False
         for file in self.__files:
-            print("installing {}".format(file.basename))
             file.install()
+        return True
 
     def __str__(self):
         return "Name: {}\nRemote: {}\nLocal: {}\nRepo: {}".format(self.__name, self.__remote, self.__local,repr(self.__repo))
