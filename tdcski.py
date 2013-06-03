@@ -60,10 +60,8 @@ def main():
         conf = Config()
     except Exception as e:
         logger.error("Le fichier de configuration est corrompu, supprimez-le et j'en réinstallerai un nouveau")
-        logger.error(e.__class__)
-        logger.error(e)
-        logger.error("Traceback: {}".format("\n".join(traceback.format_tb(e.__traceback__))))
-        exit(1)
+        logger.debug("Appuyez sur ENTER pour quitter")
+        input()
         exit(1)
 
     logger.info("Recherche du répertoire d'installation de DCS dans la base de registre")
@@ -71,6 +69,7 @@ def main():
         dcs_path, caribou = winreg.QueryValueEx (winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Eagle Dynamics\DCS World"), "Path")
     except FileNotFoundError:
         logger.error("Impossible de trouver une installation de DCS")
+        logger.debug("Appuyez sur ENTER pour quitter")
         exit(1)
     logger.info("Le répertoire d'installation DCS détecté est: \n\t\t{}".format(dcs_path))
     conf.create("general", "dcs_path", dcs_path)
@@ -110,6 +109,8 @@ def main():
         logger.error(e.__class__)
         logger.error(e)
         logger.error("Traceback: {}".format("\n".join(traceback.format_tb(e.__traceback__))))
+        logger.debug("Appuyez sur ENTER pour quitter")
+        input()
         exit(1)
         # conf.create("skins", s, "path", test.local)
         # conf.create("skins", s, "desc", test.desc)
