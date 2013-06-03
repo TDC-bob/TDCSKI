@@ -103,10 +103,20 @@ class Mod():
         self.__repo.pull(self.remote, self.branch)
         self.buil_files_list()
 
+    @logged
+    def uninstall(self):
+        logger.debug("désinstallation du {}: {}".format(self.__type, self.__name))
+        if self.should_be_installed:
+            logger.debug("ce mod devrait être installé, annulation")
+            return False
+        for file in self.__files:
+            logger.debug("ce mod devrait être désinstallé")
+            file.uninstall()
+        return True
+
+    @logged
     def install(self):
         logger.debug("installation du {}: {}".format(self.__type, self.__name))
-        logger.warn("should_be_installed: {}".format(self.should_be_installed))
-        logger.warn("should_be_installed: {}".format(type(self.should_be_installed)))
         if not self.should_be_installed:
             logger.debug("ce mod ne devrait pas être installé")
             return False
@@ -176,6 +186,15 @@ class ModFile():
         return self.__basename
 
     @logged
+    def uninstall(self):
+        self.logger.info("Désinstallation du fichier: {}")
+        if self.__parent.should_be_installed:
+            logger.info("Annulation de la désinstallation, le mod parent devrait être installé")
+            return False
+        restore(self.full_path)
+
+
+    @logged
     def install(self):
         self.logger.info("Installation du fichier: {}  --->   {}".format(self.__full_path, self.__install_to))
 
@@ -219,13 +238,36 @@ def md5(file):
 def backup(file):
     logger.info("backup du fichier: {}".format(file))
     if not os.path.exists(file):
-        logger.debug("le fichier n'existe pas, srien à sauvegarder")
+        logger.debug("le fichier n'existe pas, rien à sauvegarder")
         return True
     dest = "{}.tdcski.original".format(file)
     logger.debug("la destination du backup sera: {}".format(dest))
+    if os.path.exists(dest):
+        logger.debug("la destination existe déjà, backup annulé")
+        return True
     shutil.copy2(file, dest)
     if not os.path.exists(dest):
-        logger.error("la copie s'est mal passée")
-        return False
+        logger.error("la copie s'est mal passée: la destination n'existe pas")
+        exit(1)
+    if not compare_files(file, dest):
+        logger.error("la copie s'est mal passée: la source et la destination sont différentes (MD5)")
+        exit(1)
+    logger.debug("la copie s'est bien passée")
+    return True
+
+def restore(file):
+    logger.info("restauration du fichier: {}".format(file))
+    if not os.path.exists(file):
+        logger.error("le fichier n'existe pas, rien à restaurer")
+        exit(1)
+    src = "{}.tdcski.original".format(file)
+    logger.debug("la source de la restauration sera: {}".format(dest))
+    if os.path.exists(src):
+        logger.error("la source n'existe pas, restauration annulée")
+        exit(1)
+    shutil.copy2(src, file)
+    if not compare_files(file, src):
+        logger.error("la copie s'est mal passée: la source et la destination sont différentes (MD5)")
+        exit(1)
     logger.debug("la copie s'est bien passée")
     return True
