@@ -107,7 +107,7 @@ def main():
     except Exception as e:
         logger.error(e.__class__)
         logger.error(e)
-        logger.error(traceback.format_tb(e.__traceback__))
+        logger.error("Traceback: {}".format("\n".join(traceback.format_tb(e.__traceback__))))
         exit(1)
         # conf.create("skins", s, "path", test.local)
         # conf.create("skins", s, "desc", test.desc)
