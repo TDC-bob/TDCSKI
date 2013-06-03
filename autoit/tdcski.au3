@@ -1,11 +1,11 @@
 #NoTrayIcon
-#RequireAdmin
+;~ #RequireAdmin
 #region ;**** Directives created by AutoIt3Wrapper_GUI ****
 #AutoIt3Wrapper_Icon=..\resources\TDCSKI.ico
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=TDCSKI
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.57
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.62
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_Run_After=signtool sign /v /n "Bob" /d "TDCSKI" /du "https://github.com/TDC-bob/TDCSKI.git" /t http://timestamp.verisign.com/scripts/timstamp.dll "%out%"
@@ -47,6 +47,8 @@ Global Const $config_file = @ScriptDir & "\tdcski.cfg"
 
 Global $portable_git_folder = @ScriptDir & "\portable-git"
 
+
+
 _main()
 
 Exit 0
@@ -59,7 +61,6 @@ Func _main()
 	$w = @DesktopWidth * 0.40
 	$h = @DesktopHeight * 0.40
 	$gui_handle = GUICreate($str_app_name, $w, $h)
-;~ 	$iMemo = GUICtrlCreateEdit("", 2, 2, $w - 2, $h)
 	$iMemo = _GUICtrlEdit_Create($gui_handle, "", 2, 2, $w - 2, $h, BitOR($ES_MULTILINE, $ES_WANTRETURN, $WS_VSCROLL, $WS_HSCROLL, $ES_AUTOVSCROLL, $ES_AUTOHSCROLL, $ES_READONLY))
 	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
 	GUISetState()
@@ -70,14 +71,37 @@ Func _main()
 	_check_for_new_version()
 	__log("ON LANCE QUELQUE CHOSE !", $func)
 	__log("running: " & $python_path & '"' & FileGetLongName(".\tdcski\tdcski.py") & '"', $func)
+;~ 	_run_tdcski()
 	ShellExecute($python_path, '"' & FileGetLongName("tdcski.py") & '"', ".\tdcski")
 	__log($str_all_good, $func)
-	GUICtrlSetState($iMemo, $GUI_ENABLE)
+	GUIDelete($gui_handle)
+;~ 	_spawn_gui()
 	$timer = TimerInit()
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE Or TimerDiff($timer) > 10000
 	Exit (0)
 EndFunc   ;==>_main
+
+Func _spawn_gui()
+	$sections = IniReadSectionNames($config_file)
+	If @error Then
+		ConsoleWrite(@error & @LF)
+	EndIf
+	ConsoleWrite($sections & @LF)
+EndFunc   ;==>_spawn_gui
+
+Func _run_tdcski()
+	Local $func = "run_tdcski"
+	__log("Lancement du TDCSKI", $func)
+	$exit_code = RunWait('"' & $python_path & '" "' & FileGetLongName("tdcski.py") & '"', ".\tdcski")
+	If @error Then
+		_err("Erreur pendant l'exécution du TDCSKI Python", $func)
+	EndIf
+	If $exit_code <> 0 Then
+		_err("Le TDCSKI Python a rencontré une erreur, vérifiez les fichiers journaux et prenez contact avec Bob en cas de souci", $func)
+	EndIf
+	__log("L'exécution du TDCSKI Python s'est bien déroulée", $func)
+EndFunc   ;==>_run_tdcski
 
 Func _first_start()
 	If FileExists($config_file) Then
