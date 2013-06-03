@@ -70,7 +70,7 @@ Func _spawn($config_file)
 					$state = GUICtrlRead(Eval($s[0]))
 					_set_config($content, $s[0], $state)
 				Next
-				$fh = FileOpen($config_file,2)
+				$fh = FileOpen($config_file,258)
 				_FileWriteFromArray($fh, $content, 1)
 				FileClose($fh)
 				_run_tdcski()
