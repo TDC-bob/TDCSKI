@@ -5,6 +5,7 @@ global const $str_first_start = "C'est la première fois que vous lancez le TDCSK
 			" dans lequel je me trouve actuellement. Si vous souhaitez créer un dossier, et/ou déplacer le fichier 'tdcski.exe' c'est le moment !" & @CRLF & @CRLF & "On continue ?"
 Global Const $str_arch_detect = "Détection de l'architecture du système d'exploitation"
 Global Const $str_all_good = "Tout s'est bien passé ! =þ" & @CRLF & @CRLF & "Appuyez sur ECHAP ou fermez cette fenêtre pour quitter"
+Global Const $str_auto_close = @CRLF & @CRLF & @TAB & @TAB & "fermeture automatique dans 10 secondes"
 
 Global Const $str_python_checking = "Vérification de l'installation de Python 3.3"
 Global Const $str_python_searching = "Recherche d'une installation Python 3.3"

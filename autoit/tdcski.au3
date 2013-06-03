@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=TDCSKI
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.47
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.50
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_Run_After=signtool sign /v /n "Bob" /d "TDCSKI" /du "https://github.com/TDC-bob/TDCSKI.git" /t http://timestamp.verisign.com/scripts/timstamp.dll "%out%"
@@ -73,9 +73,10 @@ Func _main()
 	ShellExecute($python_path, '"' & FileGetLongName("tdcski.py") & '"', ".\tdcski")
 	__log($str_all_good, $func)
 	GUICtrlSetState($iMemo, $GUI_ENABLE)
-
+	$timer = TimerInit()
 	Do
-	Until GUIGetMsg() = $GUI_EVENT_CLOSE
+	Until GUIGetMsg() = $GUI_EVENT_CLOSE Or TimerDiff($timer) > 10000
+	Exit (0)
 EndFunc   ;==>_main
 
 Func _first_start()
