@@ -12,7 +12,7 @@ import config
 
 logger = mkLogger(__name__, DEBUG)
 
-
+conf = None
 
 class Mod():
     def __init__(self, name, _type, parent_dir, args):
