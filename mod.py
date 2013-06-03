@@ -80,7 +80,7 @@ class Mod():
                         self.logger.debug("fichier .gitignore trouvé, on zappe")
                         continue
                     self.logger.debug("fichier trouvé")
-                    full_path = os.path.join(root, file)
+                    full_path = os.path.abs(os.path.join(root, file))
                     self.logger.debug("chemin complet: {}".format(full_path))
                     rel_path = full_path.replace(os.path.abspath(self.__local), "")
                     self.logger.debug("chemin relatif {}".format(rel_path))
@@ -92,7 +92,7 @@ class Mod():
                         self.logger.debug("fichier .gitignore trouvé, on zappe")
                         continue
                     self.logger.debug("fichier trouvé")
-                    full_path = os.path.abspath(os.path.join(root, file))
+                    full_path = os.path.abs(os.path.join(root, file))
                     self.logger.debug("chemin complet: {}".format(full_path))
                     rel_path = full_path.replace(os.path.abspath(self.__local), "")
                     self.logger.debug("chemin relatif {}".format(rel_path))
