@@ -76,7 +76,7 @@ class Mod():
         for root, dirs, files in os.walk(self.__local):
             for dir in dirs:
                 if not dir in ["DCS","SAVED_GAMES"]:
-                    logger.debug("répertoire ignoré: {}".dir)
+                    logger.debug("répertoire ignoré: {}".format(dir))
                     dirs.remove(dir)
             # if '.git' in dirs:
             #     self.logger.debug("répertoire .git trouvé, on zappe")
