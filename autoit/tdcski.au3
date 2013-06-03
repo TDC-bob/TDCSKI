@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=TDCSKI
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.62
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.64
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_Run_After=signtool sign /v /n "Bob" /d "TDCSKI" /du "https://github.com/TDC-bob/TDCSKI.git" /t http://timestamp.verisign.com/scripts/timstamp.dll "%out%"
@@ -26,6 +26,9 @@
 ;~ #include "zip.au3"
 #include "7z.au3"
 #include "strings.au3"
+#include "gui.au3"
+
+
 
 _Singleton("TDCSKI")
 
@@ -71,29 +74,32 @@ Func _main()
 	_check_for_new_version()
 	__log("ON LANCE QUELQUE CHOSE !", $func)
 	__log("running: " & $python_path & '"' & FileGetLongName(".\tdcski\tdcski.py") & '"', $func)
-;~ 	_run_tdcski()
-	ShellExecute($python_path, '"' & FileGetLongName("tdcski.py") & '"', ".\tdcski")
 	__log($str_all_good, $func)
+	Sleep(2000)
 	GUIDelete($gui_handle)
-;~ 	_spawn_gui()
+	_run_tdcski()
+	_spawn($config_file)
+	_run_tdcski()
+	Exit 0
 	$timer = TimerInit()
 	Do
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE Or TimerDiff($timer) > 10000
 	Exit (0)
 EndFunc   ;==>_main
 
-Func _spawn_gui()
-	$sections = IniReadSectionNames($config_file)
-	If @error Then
-		ConsoleWrite(@error & @LF)
-	EndIf
-	ConsoleWrite($sections & @LF)
-EndFunc   ;==>_spawn_gui
+;~ Func _spawn_gui()
+;~ 	$sections = IniReadSectionNames($config_file)
+;~ 	If @error Then
+;~ 		ConsoleWrite(@error & @LF)
+;~ 	EndIf
+;~ 	ConsoleWrite($sections & @LF)
+;~ EndFunc   ;==>_spawn_gui
 
 Func _run_tdcski()
 	Local $func = "run_tdcski"
 	__log("Lancement du TDCSKI", $func)
-	$exit_code = RunWait('"' & $python_path & '" "' & FileGetLongName("tdcski.py") & '"', ".\tdcski")
+;~ 	$exit_code = RunWait('"' & $python_path & '" "' & FileGetLongName("tdcski.py") & '"', ".\tdcski")
+	$exit_code = ShellExecuteWait($python_path, '"' & FileGetLongName("tdcski.py") & '"', ".\tdcski")
 	If @error Then
 		_err("Erreur pendant l'exécution du TDCSKI Python", $func)
 	EndIf
