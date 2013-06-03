@@ -296,6 +296,6 @@ def switch_dir(new_dir):
     logger.debug("changement de répertoire courant")
     os.chdir(new_dir)
     if os.getcwd() == new_dir:
-        logger.debug("changement de répertoire réussi")
+        logger.Debug("changement de répertoire réussi")
         return True
     raise Exceptions.GitRunError("échec du changement de répertoire courant")
