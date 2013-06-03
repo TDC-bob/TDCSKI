@@ -52,13 +52,13 @@ class Mod():
                 exit(1)
 
         self.logger.debug("écriture du fichier de configuration")
-        if not self.conf.create(self.__type,  self.__name, "path", self.__local):
+        if not self.conf.set_or_create(self.__type,  self.__name, "path", self.__local):
             self.logger.error("erreur lors de l'écriture du nom")
             exit(1)
-        if not self.conf.create(self.__type, self.__name, "desc", self.desc):
+        if not self.conf.set_or_create(self.__type, self.__name, "desc", self.desc):
             self.logger.error("erreur lors de l'écriture de la description")
             exit(1)
-        if not self.conf.create(self.__type, self.__name, "installed", False):
+        if not self.conf.set_or_create(self.__type, self.__name, "installed", False):
             self.logger.error('erreur lors de "installed"')
             exit(1)
 
