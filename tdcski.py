@@ -88,9 +88,7 @@ def main():
     for s in list.skins:
         test = mod.Mod(s, "skin", "../repos/skins", list.skins[s])
         test.pull_repo()
-        print(test.should_be_installed)
-        if test.should_be_installed:
-            test.install()
+        test.install()
         # conf.create("skins", s, "path", test.local)
         # conf.create("skins", s, "desc", test.desc)
         # conf.create("skins", s, "installed", False)
