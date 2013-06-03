@@ -105,8 +105,8 @@ def main():
             test.install()
     except Exception as e:
         logger.error(e.__class__)
-        logger.error(e.__cause__)
-        logger.error(e.__context__)
+        logger.error(e.__module__)
+        logger.error(e.__traceback__)
         logger.error(e)
         exit(1)
         # conf.create("skins", s, "path", test.local)
