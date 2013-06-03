@@ -104,6 +104,9 @@ def main():
             test.pull_repo()
             test.install()
     except Exception as e:
+        logger.error(e.__class__)
+        logger.error(e.__cause__)
+        logger.error(e.__context__)
         logger.error(e)
         exit(1)
         # conf.create("skins", s, "path", test.local)
