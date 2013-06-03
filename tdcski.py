@@ -23,7 +23,7 @@ import ui_server
 from bobgit.git import Repo
 from _logging._logging import mkLogger, DEBUG, WARN
 
-logger = mkLogger(__name__, DEBUG, "../logs/{} - TDCSKI.log".format(strftime("%Y-%m-%d %Hh%Mm%S", gmtime())))
+logger = mkLogger(__name__, DEBUG, "../logs/{} - TDCSKI.log".format(strftime("%Y-%m-%d - %Hh%Mm%S", gmtime())))
 
 
 def main():
