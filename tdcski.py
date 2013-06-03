@@ -105,7 +105,7 @@ def main():
             test.install()
     except Exception as e:
         logger.error(e.__class__)
-        logger.error(e.__module__.__dict__["__name__"])
+        # logger.error(e.__module__.__dict__["__name__"])
         logger.error(e)
         logger.error(e.__dict__)
         logger.error(e.__traceback__)
