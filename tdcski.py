@@ -58,8 +58,12 @@ def main():
     logger.info("Lecture du fichier de configuration")
     try:
         conf = Config()
-    except:
+    except Exception as e:
         logger.error("Le fichier de configuration est corrompu, supprimez-le et j'en réinstallerai un nouveau")
+        logger.error(e.__class__)
+        logger.error(e)
+        logger.error("Traceback: {}".format("\n".join(traceback.format_tb(e.__traceback__))))
+        exit(1)
         exit(1)
 
     logger.info("Recherche du répertoire d'installation de DCS dans la base de registre")
