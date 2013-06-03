@@ -194,6 +194,10 @@ class ModFile():
             self.__install_to = self.__install_to.lstrip("DCS")
             self.__install_to = "{}{}".format(config.DCS_path, self.__install_to)
             self.__install_to = os.path.normpath((self.__install_to))
+        self.__dummy = "{}.tdcski.installed".format(self.__install_to)
+        self.logger.debug("dummy: {}".format(self.__dummy))
+        self.__backup = "{}.tdcski.original".format(self.__install_to)
+        self.logger.debug("backup: {}".format(self.__backup))
         self.logger.debug("ce fichier sera installé dans: {}".format(self.__install_to))
 
     @property
@@ -209,16 +213,16 @@ class ModFile():
         return compare_files(self.full_path, self.__install_to)
 
     @property
+    def is_installed(self):
+        return os.path.exists(self.__dummy)
+
+    @property
     def should_be_installed(self):
         return self.__parent.should_be_installed
 
     @property
     def different(self):
         return not self.__local_copy_identical
-
-    @property
-    def installed(self):
-        return self.__local_copy_identical
 
     @property
     def full_path(self):
@@ -237,9 +241,26 @@ class ModFile():
         self.logger.info("Désinstallation du fichier: {}")
         if self.__parent.should_be_installed:
             logger.info("Annulation de la désinstallation, le mod parent devrait être installé")
-            return False
-        os.remove(self.__full_path)
-        restore(self.__full_path)
+            return
+        if not os.path.exists(self.__dummy):
+            logger.error("Ce fichier n'est pas installé, annulation de la désinstallation")
+            return
+        self.logger.debug("suppression du fichier dummy")
+        os.remove(self.__dummy)
+        if os.path.exists(self.__dummy):
+            self.logger.error("échec de la suppression du fichier dummy")
+            exit(1)
+        self.logger.debug("suppression du fichier local")
+        os.remove(self.__install_to)
+        if os.path.exists(self.__install_to):
+            self.logger.error("échec de la suppression du fichier local")
+            exit(1)
+        if os.path.exists((self.__backup)):
+            self.logger.debug("un backup existe pour ce fichier, restauration")
+            shutil.copy2(self.__backup, self.__install_to)
+            if not compare_files(self.__backup, self.__install_to):
+                self.logger.error("le backup et la copie ne correspondent pas, échec de la restauration")
+                exit(1)
 
 
     @logged
@@ -247,16 +268,30 @@ class ModFile():
         self.logger.info("Installation du fichier: {}  --->   {}".format(self.__full_path, self.__install_to))
 
         if self.__parent.should_be_installed:
-            if not self.installed:
+            if not self.__local_copy_identical:
+                self.logger.debug("ce fichier va devoir être installé")
                 self.logger.debug("création des répertoires de destination")
                 os.makedirs(os.path.dirname(self.__install_to), exist_ok=True)
                 self.logger.debug("création du backup si nécessaire")
-                if not backup(self.__install_to):
-                    self.logger.error("Impossible de faire le backup")
-                    return False
-                self.logger.info("Copying: {}  --->   {}".format(self.__full_path, self.__install_to))
-                print("Copying: {}  --->   {}".format(self.__full_path, self.__install_to))
+                if os.path.exists(self.__install_to):
+                    self.logger.debug("le fichier local existe déjà")
+                    if not os.path.exists(self.__backup):
+                        self.logger.debug("aucun backup n'a été trouvé, création")
+                        shutil.copy2(self.__install_to, self.__backup)
+                    else:
+                        self.logger.debug("un backup existe déjà")
+                else:
+                    self.logger.debug("pas de fichier local trouvé, aucun backup nécessaire")
+                self.logger.debug("création du fichier dummy")
+                with open(self.__dummy,mode="w") as file:
+                    file.write(self.__parent.version)
+                if not os.path.exists(self.__dummy):
+                    self.logger.error("echec de la création du fichier dummy")
+                    exit(1)
+                self.logger.info("Copie: {}  --->   {}".format(self.__full_path, self.__install_to))
                 shutil.copy2(self.__full_path, self.__install_to)
+
+
                 return True
             else:
                 self.logger.debug("le fichier est déjà installé")
@@ -281,38 +316,3 @@ def md5(file):
         for chunk in iter(lambda: f.read(128), b''):
              _md5.update(chunk)
     return _md5.digest()
-
-
-def backup(file):
-    logger.info("backup du fichier: {}".format(file))
-    if not os.path.exists(file):
-        logger.debug("le fichier n'existe pas, rien à sauvegarder")
-        return True
-    dest = "{}.tdcski.original".format(file)
-    logger.debug("la destination du backup sera: {}".format(dest))
-    if os.path.exists(dest):
-        logger.debug("la destination existe déjà, backup annulé")
-        return True
-    shutil.copy2(file, dest)
-    if not os.path.exists(dest):
-        logger.error("la copie s'est mal passée: la destination n'existe pas")
-        exit(1)
-    if not compare_files(file, dest):
-        logger.error("la copie s'est mal passée: la source et la destination sont différentes (MD5)")
-        exit(1)
-    logger.debug("la copie s'est bien passée")
-    return True
-
-def restore(file):
-    logger.info("restauration du fichier: {}".format(file))
-    src = "{}.tdcski.original".format(file)
-    logger.debug("la source de la restauration sera: {}".format(src))
-    if not os.path.exists(src):
-        logger.error("la source n'existe pas, restauration annulée")
-        return
-    shutil.copy2(src, file)
-    if not compare_files(file, src):
-        logger.error("la copie s'est mal passée: la source et la destination sont différentes (MD5)")
-        exit(1)
-    logger.debug("la copie s'est bien passée")
-    return True

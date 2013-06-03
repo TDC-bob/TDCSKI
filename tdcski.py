@@ -96,14 +96,12 @@ def main():
             test = mod.Mod(m, "mod", "../repos/mods", list.mods[m])
             test.pull_repo()
             test.install()
-            # conf.create("mods", m, "path", test.local)
-            # conf.create("mods", m, "desc", test.desc)
-            # conf.create("mods", m, "installed", False)
 
         for s in list.skins:
             test = mod.Mod(s, "skin", "../repos/skins", list.skins[s])
             test.pull_repo()
             test.install()
+
     except Exception as e:
         logger.error(e.__class__)
         logger.error(e)
