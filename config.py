@@ -26,8 +26,6 @@ class Config():
             return base[args[0]]
         except KeyError:
             return None
-        # config["general"]["dcs_path"] = DCS_path
-        # config.write()
 
     @property
     def values(self):
