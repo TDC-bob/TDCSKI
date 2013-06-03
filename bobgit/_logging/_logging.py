@@ -57,11 +57,6 @@ def __setupLogger(name="main", lvl=logging.DEBUG, logFile="python.log"):
             remove(logFile)
     except WindowsError:
         import sys
-##        app = QtGui.QApplication(sys.argv)
-##        error = MsgBox("Impossible de lancer le TDCMEME !\n\nSoit le TDCMEME est dÃ©jÃ  en cours d'exÃ©cution, ou alors il n'a pas accÃ¨s Ã  son propre rÃ©pertoire.\n\nCela peut arriver si vous l'avez installÃ© dans un rÃ©pertoire dans lequel il n'est pas\
-##possible d'Ã©crire sans avoir les droits d'aministrateur (\"Program Files\", rÃ©pertoire Windows, etc...)")
-##        error.show()
-##        sys.exit(app.exec_())
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
     fh = logging.FileHandler(logFile)
