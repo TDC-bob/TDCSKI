@@ -1,13 +1,18 @@
 __author__ = 'bob'
 
 from lib.configobj import ConfigObj
-
+from _logging._logging import mkLogger, logged, DEBUG
+import os
+logger = mkLogger(__name__, DEBUG)
 git_exe = None
 DCS_path = None
 SaveGames_path = None
 
 class Config():
     def __init__(self, file='../tdcski.cfg'):
+        if not os.path.exists(file):
+            logger.error("impossible de trouver le fichier de configuration sur le chemin suivant: {}".format(os.path.abspath(file)))
+            exit(1)
         self.__config = ConfigObj(file)
 
     def get(self, *args):
