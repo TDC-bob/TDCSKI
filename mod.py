@@ -20,7 +20,8 @@ class Mod():
         try:
             self.conf = config.Config()
         except:
-            logger.error("votre fichier de configuration est corrompu")
+            logger.error("votre fichier de configuration est corrompu, supprimez le et j'en réinstallerai un nouveau")
+            input()
             exit(1)
         self.__name = name
         self.logger.debug("nom: {}".format(self.__name))
@@ -49,20 +50,25 @@ class Mod():
                 self.__version = args[arg]
             else:
                 self.error("paramètre inconnu trouvé: {} \t\t Valeur: {}".format(arg, args[arg]))
+                input()
                 exit(1)
 
         self.logger.debug("écriture du fichier de configuration")
         if not self.conf.set_or_create(self.__type,  self.__name, "path", self.__local):
             self.logger.error("erreur lors de l'écriture du nom")
+            input()
             exit(1)
         if not self.conf.set_or_create(self.__type, self.__name, "desc", self.__desc):
             self.logger.error("erreur lors de l'écriture de la description")
+            input()
             exit(1)
         if not self.conf.set_or_create(self.__type, self.__name, "version", self.__version):
             self.logger.error("erreur lors de l'écriture de la description")
+            input()
             exit(1)
         if not self.conf.set_or_create(self.__type, self.__name, "branch", self.__branch):
             self.logger.error("erreur lors de l'écriture de la description")
+            input()
             exit(1)
         self.conf.create(self.__type, self.__name, "installed", False)
 
@@ -211,6 +217,7 @@ class ModFile():
             self.__install_to = self.__install_to.lstrip("DCS")
             self.__install_to = "{}{}".format(config.DCS_path, self.__install_to)
             self.__install_to = os.path.normpath((self.__install_to))
+        self.__safe_to_delete = "{}.tdcski.safe_to_delete".format(self.__install_to)
         self.__dummy = "{}.tdcski.installed".format(self.__install_to)
         self.logger.debug("dummy: {}".format(self.__dummy))
         self.__backup = "{}.tdcski.original".format(self.__install_to)
@@ -266,17 +273,25 @@ class ModFile():
         os.remove(self.__dummy)
         if os.path.exists(self.__dummy):
             self.logger.error("échec de la suppression du fichier dummy")
+            input()
             exit(1)
+        if not os.path.exists((self.__backup)):
+            self.logger.debug("aucun fichier de backup présent")
+            if not os.path.exists(self.__safe_to_delete):
+                self.logger.error("safe_to_delete n'est pas présent non plus, dans le doute, je quitte")
+                return
         self.logger.debug("suppression du fichier local")
         os.remove(self.__install_to)
         if os.path.exists(self.__install_to):
             self.logger.error("échec de la suppression du fichier local")
+            input()
             exit(1)
         if os.path.exists((self.__backup)):
             self.logger.debug("un backup existe pour ce fichier, restauration")
             shutil.copy2(self.__backup, self.__install_to)
             if not compare_files(self.__backup, self.__install_to):
                 self.logger.error("le backup et la copie ne correspondent pas, échec de la restauration")
+                input()
                 exit(1)
 
 
@@ -298,12 +313,16 @@ class ModFile():
                     else:
                         self.logger.debug("un backup existe déjà")
                 else:
+                    self.logger.debug("le fichier local n'existe pas, écriture de safe_to_delete")
+                    with open(self.__safe_to_delete, mode="w") as file:
+                        file.write(self.__parent.version)
                     self.logger.debug("pas de fichier local trouvé, aucun backup nécessaire")
                 self.logger.debug("création du fichier dummy")
                 with open(self.__dummy,mode="w") as file:
                     file.write(str(self.__parent.version))
                 if not os.path.exists(self.__dummy):
                     self.logger.error("echec de la création du fichier dummy")
+                    input()
                     exit(1)
                 self.logger.info("Copie: {}  --->   {}".format(self.__full_path, self.__install_to))
                 shutil.copy2(self.__full_path, self.__install_to)
