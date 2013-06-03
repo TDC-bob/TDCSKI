@@ -112,6 +112,7 @@ def main():
     #     print('ok')
     #     print(type(bool(skins["TDC-Bob-huey"]["install"])))
     # print()
+    logger.info("tout s'est bien passé !")
     print("Press ENTER to close this window")
 
 if __name__ == '__main__':
