@@ -12,7 +12,12 @@ from _logging._logging import mkLogger, DEBUG, logged
 
 logger = mkLogger(__name__, DEBUG)
 
-conf = Config()
+
+try:
+    conf = Config()
+except:
+    logger.error("votre fichier de configuration est corrompu")
+    exit(1)
 
 class Mod():
     def __init__(self, name, _type, parent_dir, args):
