@@ -55,7 +55,9 @@ class Mod():
 
     @property
     def should_be_installed(self):
-        return bool(conf.get(self.type, self.name, "installed"))
+        if conf.get(self.type, self.name, "installed") == "True":
+            return True
+        return False
 
     @property
     def file_count(self):
