@@ -219,7 +219,8 @@ class Repo():
         #TODO: parse return ?
         self.logger.debug("output:\n{}\n{}\n{}".format(sep,rtn,sep))
         self.logger.debug
-        switch_dir(cur_dir)
+        if ch_dir:
+            switch_dir(cur_dir)
         self.logger.debug("la commande Git a été exécutée avec succès")
         return True, rtn, cmd
 
