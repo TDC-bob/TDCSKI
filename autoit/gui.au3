@@ -3,6 +3,8 @@
 #include <array.au3>
 #include <GUIConstantsEx.au3>
 #include <GuiRichEdit.au3>
+#include <ButtonConstants.au3>
+
 ;~ #include "strings.au3"
 ;~ _spawn("C:\Users\bob\Desktop\tests\tdcski.cfg")
 
@@ -31,10 +33,10 @@ Func _spawn($config_file)
 	For $mod In $mods
 		ConsoleWrite($mod & @LF)
 		Assign($mod[0], GUICtrlCreateCheckbox($mod[0], $left, $top, 180, $ch))
-		if $mod[1] == "True" Then
-			GUICtrlSetState(eval($mod[0]), $GUI_CHECKED)
+		If $mod[1] == "True" Then
+			GUICtrlSetState(Eval($mod[0]), $GUI_CHECKED)
 		EndIf
-		GUICtrlCreateLabel($mod[2], 200, $top+5, 570, $ch)
+		GUICtrlCreateLabel($mod[2], 200, $top + 5, 570, $ch)
 		$top += ($ch + 10)
 	Next
 	$top += 20
@@ -43,58 +45,58 @@ Func _spawn($config_file)
 	For $skin In $skins
 		ConsoleWrite($skin & @LF)
 		Assign($skin[0], GUICtrlCreateCheckbox($skin[0], $left, $top, 150, $ch))
-		if $skin[1] == "True" Then
-			GUICtrlSetState(eval($skin[0]), $GUI_CHECKED)
+		If $skin[1] == "True" Then
+			GUICtrlSetState(Eval($skin[0]), $GUI_CHECKED)
 		EndIf
 		GUICtrlCreateLabel($skin[2], 200, $top, 570, $ch)
 		$top += ($ch + 10)
 	Next
+	$quit_btn = GUICtrlCreateButton("Quitter", 20, $top + 20, 120, 60, $BS_DEFPUSHBUTTON)
+	$start_btn = GUICtrlCreateButton("Lancer", $w - 140, $top + 20, 120, 60)
+	GUISetState()
+	While 1
+		$msg = GUIGetMsg()
+		Select
+			Case $msg = $GUI_EVENT_CLOSE Or $msg = $quit_btn
+				ExitLoop
+			Case $msg = $start_btn
+				Local $content[1]
+				_FileReadToArray($config_file, $content)
+				For $m In $mods
+					$state = GUICtrlRead(Eval($m[0]))
+					_set_config($content, $m[0], $state)
+				Next
+				For $s In $skins
+					$state = GUICtrlRead(Eval($s[0]))
+					_set_config($content, $s[0], $state)
+				Next
+				$fh = FileOpen($config_file,130)
+				_FileWriteFromArray($fh, $content, 1)
+				FileClose($fh)
+				_run_tdcski()
+		EndSelect
+	WEnd
 
-	GUISetState(@SW_SHOWNORMAL)
-	Do
-	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 
-	local $content[1]
-;~ 	_FileReadToArray($config_file, $content)
-	for $m in $mods
-		$state = GUICtrlRead(eval($m[0]))
-;~ 		switch $state
-;~ 			case 1
-;~ 				IniWrite($config_file, "[" & $m[0] & "]", "installed", "True")
-;~ 			case 4
-;~ 				IniWrite($config_file, "[" & $m[0] & "]", "installed", "False")
-;~ 		EndSwitch
-;~ 		_set_config($content, $m[0], $state)
-	Next
-	for $s in $skins
-		$state = GUICtrlRead(eval($s[0]))
-;~ 		switch $state
-;~ 			case 1
-;~ 				IniWrite($config_file, "[" & $s[0] & "]", "installed", "True")
-;~ 			case 4
-;~ 				IniWrite($config_file, "[" & $s[0] & "]", "installed", "False")
-;~ 		EndSwitch
-;~ 		_set_config($content, $s[0], $state)
-	Next
-;~ 	_FileWriteFromArray($config_file, $content, 1)
+
 EndFunc   ;==>_spawn
 
 Func _set_config(ByRef $content, $name, $state)
 	$do = False
-	for $i = 1 to $content[0]
-		if $content[$i] = "[[" & $name & "]]" Then
+	For $i = 1 To $content[0]
+		If $content[$i] = "[[" & $name & "]]" Then
 			$do = True
 		EndIf
-		if $do and StringLeft($content[$i], 9) == "installed" then
-			switch $state
-				case 1
+		If $do And StringLeft($content[$i], 9) == "installed" Then
+			Switch $state
+				Case 1
 					$content[$i] = StringReplace($content[$i], "= False", "= True")
-				case 4
+				Case 4
 					$content[$i] = StringReplace($content[$i], "= True", "= False")
 			EndSwitch
 		EndIf
 	Next
-EndFunc
+EndFunc   ;==>_set_config
 
 Func _parse_config($file)
 	Local $content[1]
@@ -131,7 +133,7 @@ Func _parse_config($file)
 ;~ 		_ArrayDisplay($mod)
 ;~ 	Next
 ;~ 	_ArrayDisplay($mods)
-	local $return[2] = [ $mods, $skins ]
+	Local $return[2] = [$mods, $skins]
 	Return $return
 EndFunc   ;==>_parse_config
 
@@ -140,12 +142,12 @@ Func _strip($string)
 	$string = StringSplit($string, " = ", 1)
 	$string = $string[2]
 	$string = StringStripCR(StringStripWS($string, 3))
-	if StringLeft($string,1) = '"' Then
-		$string = StringTrimLeft($string,1)
+	If StringLeft($string, 1) = '"' Then
+		$string = StringTrimLeft($string, 1)
 	EndIf
-	if stringRight($string, 1) = '"' Then
-		$string = StringTrimRight($string,1)
+	If StringRight($string, 1) = '"' Then
+		$string = StringTrimRight($string, 1)
 	EndIf
-	return $string
+	Return $string
 EndFunc   ;==>_strip
 
