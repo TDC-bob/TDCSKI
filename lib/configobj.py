@@ -1380,10 +1380,8 @@ class ConfigObj(Section):
         ``infile`` must always be returned as a list of lines, but may be
         passed in as a single string.
         """
-        print(self.encoding)
-        input()
         if ((self.encoding is not None) and
-            (self.encoding.lower() not in BOM_LIST)):
+            (self.encoding.name.lower() not in BOM_LIST)):
             # No need to check for a BOM
             # the encoding specified doesn't have one
             # just decode
