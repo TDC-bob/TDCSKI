@@ -202,6 +202,8 @@ Func _pull_repo($branch = "master")
 	_git_run('config user.email "tdcski@tdcski.com"', $repo)
 	_git_run('config user.name tdcski', $repo)
 	_git_run("checkout " & $branch, $repo)
+	__log("Fetch origin", $func)
+	_git_run("fetch origin", $repo)
 	_git_run("pull origin " & $branch, $repo)
 EndFunc   ;==>_pull_repo
 
