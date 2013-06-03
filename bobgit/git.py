@@ -111,7 +111,7 @@ class Repo():
 
     def clone(self, init_remote):
         self.logger.debug("cloning remote: {}".format(init_remote))
-        success, output, cmd = self.__run(["clone","-v",init_remote, self.local], True)
+        success, output, cmd = self.__run(["clone","-v",init_remote, self.local], False)
         if not success:
             raise Exceptions.GitCloneError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
 
@@ -186,13 +186,14 @@ class Repo():
 
 
     @logged
-    def __run(self, args, no_ch_dir=False):
+    def __run(self, args, ch_dir=True):
         """
         Runs an arbitrary git command
         """
         self.logger.debug("lancement de la commande git: {}".format(args))
-        cur_dir = os.getcwd()
-        switch_dir(self.local)
+        if ch_dir:
+            cur_dir = os.getcwd()
+            switch_dir(self.local)
         # if not cur_dir == self.local and not no_ch_dir:
         #     self.logger.debug("switch du répertoire courant vers: {}".format(self.local))
         #     os.chdir(self.local)
@@ -288,7 +289,7 @@ class Remote():
                         )
 
 def switch_dir(new_dir):
-    logger.debug("changement de répertoire courant\nrépertoire courant: {}\répertoire sible: {}".format(os.getcwd(), new_dir))
+    logger.debug("changement de répertoire courant\nrépertoire courant: {}\nrépertoire cible: {}".format(os.getcwd(), new_dir))
     if os.getcwd() == new_dir:
         logger.debug("le répertoire courant et la cible sont identiques")
         return True
