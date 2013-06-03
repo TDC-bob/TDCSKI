@@ -201,9 +201,11 @@ Func _pull_repo($branch = "master")
 	__log("Réglages des options Git locales", $func)
 	_git_run('config user.email "tdcski@tdcski.com"', $repo)
 	_git_run('config user.name tdcski', $repo)
+	__log("Checkout de la branche " & $branch, $func)
 	_git_run("checkout " & $branch, $repo)
 	__log("Fetch origin", $func)
 	_git_run("fetch origin", $repo)
+	__log("Pulling repo", $func)
 	_git_run("pull origin " & $branch, $repo)
 EndFunc   ;==>_pull_repo
 
