@@ -13,7 +13,7 @@ class Config():
         if not os.path.exists(file):
             logger.error("impossible de trouver le fichier de configuration sur le chemin suivant: {}".format(os.path.abspath(file)))
             exit(1)
-        self.__config = ConfigObj(infile=file,encoding="latin-1", default_encoding="latin-1")
+        self.__config = ConfigObj(infile=file, default_encoding="latin-1")
 
     def get(self, *args):
         if not args:
