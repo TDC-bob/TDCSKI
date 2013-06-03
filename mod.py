@@ -100,6 +100,7 @@ class Mod():
     def install(self):
         logger.debug("installation du {}: {}".format(self.__type, self.__name))
         logger.warn("should_be_installed: {}".format(self.should_be_installed))
+        logger.warn("should_be_installed: {}".format(type(self.should_be_installed)))
         if not self.should_be_installed:
             logger.debug("ce mod ne devrait pas être installé")
             return False
