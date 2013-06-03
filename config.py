@@ -7,16 +7,13 @@ logger = mkLogger(__name__, DEBUG)
 git_exe = None
 DCS_path = None
 SaveGames_path = None
-from encodings import cp1250
-from encodings import mbcs
 
 class Config():
     def __init__(self, file='../tdcski.cfg'):
         if not os.path.exists(file):
             logger.error("impossible de trouver le fichier de configuration sur le chemin suivant: {}".format(os.path.abspath(file)))
             exit(1)
-        mbcs.name = "mbcs"
-        self.__config = ConfigObj(infile=file,encoding=mbcs)
+        self.__config = ConfigObj(infile=file)
 
     def get(self, *args):
         if not args:

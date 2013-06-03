@@ -3,6 +3,8 @@
 #include <array.au3>
 #include <GUIConstantsEx.au3>
 #include <GuiRichEdit.au3>
+#include "strings.au3"
+_spawn("C:\Users\bob\Desktop\tests\tdcski.cfg")
 
 Func _spawn($config_file)
 	$rtn = _parse_config($config_file)
@@ -53,16 +55,28 @@ Func _spawn($config_file)
 	Until GUIGetMsg() = $GUI_EVENT_CLOSE
 
 	local $content[1]
-	_FileReadToArray($config_file, $content)
+;~ 	_FileReadToArray($config_file, $content)
 	for $m in $mods
 		$state = GUICtrlRead(eval($m[0]))
-		_set_config($content, $m[0], $state)
+		switch $state
+			case 1
+				IniWrite($config_file, "[" & $m[0] & "]", "installed", "True")
+			case 4
+				IniWrite($config_file, "[" & $m[0] & "]", "installed", "False")
+		EndSwitch
+;~ 		_set_config($content, $m[0], $state)
 	Next
 	for $s in $skins
 		$state = GUICtrlRead(eval($s[0]))
-		_set_config($content, $s[0], $state)
+		switch $state
+			case 1
+				IniWrite($config_file, "[" & $s[0] & "]", "installed", "True")
+			case 4
+				IniWrite($config_file, "[" & $s[0] & "]", "installed", "False")
+		EndSwitch
+;~ 		_set_config($content, $s[0], $state)
 	Next
-	_FileWriteFromArray($config_file, $content, 1)
+;~ 	_FileWriteFromArray($config_file, $content, 1)
 EndFunc   ;==>_spawn
 
 Func _set_config(ByRef $content, $name, $state)
