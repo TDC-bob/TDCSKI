@@ -1381,7 +1381,7 @@ class ConfigObj(Section):
         passed in as a single string.
         """
         if ((self.encoding is not None) and
-            (self.encoding.name.lower() not in BOM_LIST)):
+            (self.encoding.lower() not in BOM_LIST)):
             # No need to check for a BOM
             # the encoding specified doesn't have one
             # just decode
