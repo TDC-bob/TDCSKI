@@ -237,6 +237,13 @@ class ModFile():
         return self.__basename
 
     @logged
+    def check(self):
+        if self.should_be_installed:
+            self.install()
+        else:
+            self.uninstall()
+
+    @logged
     def uninstall(self):
         self.logger.info("Désinstallation du fichier: {}")
         if self.__parent.should_be_installed:

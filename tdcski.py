@@ -95,12 +95,12 @@ def main():
         for m in list.mods:
             test = mod.Mod(m, "mod", "../repos/mods", list.mods[m])
             test.pull_repo()
-            test.install()
+            test.check()
 
         for s in list.skins:
             test = mod.Mod(s, "skin", "../repos/skins", list.skins[s])
             test.pull_repo()
-            test.install()
+            test.check()
 
     except Exception as e:
         logger.error(e.__class__)
