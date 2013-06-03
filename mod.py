@@ -74,9 +74,13 @@ class Mod():
         self.logger.debug("construction de la liste des fichiers")
         self.__files = []
         for root, dirs, files in os.walk(self.__local):
-            if '.git' in dirs:
-                self.logger.debug("répertoire .git trouvé, on zappe")
-                dirs.remove('.git')
+            for dir in dirs:
+                if not dir in ["DCS","SAVED_GAMES"]:
+                    logger.debug("répertoire ignoré: {}".dir)
+                    dirs.remove(dir)
+            # if '.git' in dirs:
+            #     self.logger.debug("répertoire .git trouvé, on zappe")
+            #     dirs.remove('.git')
             for file in files:
                 if file == '.gitignore':
                     self.logger.debug("fichier .gitignore trouvé, on zappe")
