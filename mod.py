@@ -75,7 +75,7 @@ class Mod():
         self.__files = []
         for root, dirs, files in os.walk(self.__local):
 
-            if not root in ["../repos/{}/{}/{}".format(self.__type, self.__name, f) for f in ["DCS","SAVED_GAMES"]]:
+            if not root in ["/{}".format(self.__local, f) for f in ["DCS","SAVED_GAMES"]]:
                 logger.debug("répertoire racine ignoré: {}".format(root))
                 continue
             # if '.git' in dirs:
