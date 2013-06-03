@@ -2,6 +2,10 @@ __author__ = 'bob'
 
 from lib.configobj import ConfigObj
 
+git_exe = None
+DCS_path = None
+SaveGames_path = None
+
 class Config():
     def __init__(self, file='../tdcski.cfg'):
         self.__config = ConfigObj(file)
@@ -43,6 +47,12 @@ class Config():
 
     def reload(self):
         self.__config.reload()
+
+    def set_or_create(self, *args):
+        if not self.set(*args):
+            if not self.create(*args):
+                return None
+        return True
 
     def create(self, *args):
         if self.get(*args[0:-1]):
