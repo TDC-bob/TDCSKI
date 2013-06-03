@@ -196,7 +196,7 @@ Func _check_repo()
 	EndIf
 EndFunc   ;==>_check_repo
 
-Func _pull_repo($branch)
+Func _pull_repo($branch = "master")
 	$func = "pull_repo"
 	__log("Pulling repo", $func)
 	_git_run('config --global user.email "tdcski@tdcski.com"')
