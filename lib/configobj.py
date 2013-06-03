@@ -1381,6 +1381,7 @@ class ConfigObj(Section):
         passed in as a single string.
         """
         print(self.encoding)
+        input()
         if ((self.encoding is not None) and
             (self.encoding.lower() not in BOM_LIST)):
             # No need to check for a BOM
