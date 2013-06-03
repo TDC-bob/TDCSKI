@@ -147,6 +147,13 @@ class Mod():
         self.buil_files_list()
 
     @logged
+    def check(self):
+        if self.should_be_installed:
+            self.install()
+        else:
+            self.uninstall()
+
+    @logged
     def uninstall(self):
         logger.debug("désinstallation du {}: {}".format(self.__type, self.__name))
         if self.should_be_installed:
@@ -235,13 +242,6 @@ class ModFile():
     @property
     def basename(self):
         return self.__basename
-
-    @logged
-    def check(self):
-        if self.should_be_installed:
-            self.install()
-        else:
-            self.uninstall()
 
     @logged
     def uninstall(self):
