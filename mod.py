@@ -73,24 +73,30 @@ class Mod():
     def buil_files_list(self):
         self.logger.debug("construction de la liste des fichiers")
         self.__files = []
-        for root, dirs, files in os.walk(self.__local):
-
-            if not root in ["/{}".format(self.__local, f) for f in ["DCS","SAVED_GAMES"]]:
-                logger.debug("répertoire racine ignoré: {}".format(root))
-                continue
-            # if '.git' in dirs:
-            #     self.logger.debug("répertoire .git trouvé, on zappe")
-            #     dirs.remove('.git')
-            for file in files:
-                if file == '.gitignore':
-                    self.logger.debug("fichier .gitignore trouvé, on zappe")
-                    continue
-                self.logger.debug("fichier trouvé")
-                full_path = os.path.join(root, file)
-                self.logger.debug("chemin complet: {}".format(full_path))
-                rel_path = full_path.replace(os.path.abspath(self.__local), "")
-                self.logger.debug("chemin relatif {}".format(rel_path))
-                self.__files.append(ModFile(full_path,rel_path, self))
+        if os.path.exists("{}/DCS".format(self.__local)):
+            for root, dirs, files in os.walk("{}/DCS".format(self.__local)):
+                for file in files:
+                    if file == '.gitignore':
+                        self.logger.debug("fichier .gitignore trouvé, on zappe")
+                        continue
+                    self.logger.debug("fichier trouvé")
+                    full_path = os.path.join(root, file)
+                    self.logger.debug("chemin complet: {}".format(full_path))
+                    rel_path = full_path.replace(os.path.abspath(self.__local), "")
+                    self.logger.debug("chemin relatif {}".format(rel_path))
+                    self.__files.append(ModFile(full_path,rel_path, self))
+        if os.path.exists("{}/SAVED_GAMES".format(self.__local)):
+            for root, dirs, files in os.walk("{}/SAVED_GAMES".format(self.__local)):
+                for file in files:
+                    if file == '.gitignore':
+                        self.logger.debug("fichier .gitignore trouvé, on zappe")
+                        continue
+                    self.logger.debug("fichier trouvé")
+                    full_path = os.path.join(root, file)
+                    self.logger.debug("chemin complet: {}".format(full_path))
+                    rel_path = full_path.replace(os.path.abspath(self.__local), "")
+                    self.logger.debug("chemin relatif {}".format(rel_path))
+                    self.__files.append(ModFile(full_path,rel_path, self))
 
     @property
     def should_be_installed(self):
