@@ -12,12 +12,11 @@ import config
 
 logger = mkLogger(__name__, DEBUG)
 
-conf = None
 
 class Mod():
     def __init__(self, name, _type, parent_dir, args):
         try:
-            conf = config.Config()
+            self.conf = config.Config()
         except:
             logger.error("votre fichier de configuration est corrompu")
             exit(1)
@@ -42,9 +41,9 @@ class Mod():
         self.buil_files_list()
 
 
-        conf.create(self.__type,  self.__name, "path", self.__local)
-        conf.create(self.__type, self.__name, "desc", self.desc)
-        conf.create(self.__type, self.__name, "installed", False)
+        self.conf.create(self.__type,  self.__name, "path", self.__local)
+        self.conf.create(self.__type, self.__name, "desc", self.desc)
+        self.conf.create(self.__type, self.__name, "installed", False)
 
     def buil_files_list(self):
         self.__files = []
@@ -60,7 +59,7 @@ class Mod():
 
     @property
     def should_be_installed(self):
-        if conf.get(self.type, self.name, "installed") == "True":
+        if self.conf.get(self.type, self.name, "installed") == "True":
             return True
         return False
 
