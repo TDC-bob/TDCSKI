@@ -54,7 +54,12 @@ def main():
     # exit(0)
 
     # os.environ["GIT_SSL_NO_VERIFY"] = "1"
-    conf = Config()
+    try:
+        conf = Config()
+    except:
+        logger.error("votre fichier de configuration est corrompu")
+        exit(1)
+
     try:
         dcs_path, caribou = winreg.QueryValueEx (winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Eagle Dynamics\DCS World"), "Path")
     except FileNotFoundError:
