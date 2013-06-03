@@ -70,38 +70,42 @@ def main():
     logger.info("Le répertoire d'installation DCS détecté est: \n\t\t{}".format(dcs_path))
     conf.create("general", "dcs_path", dcs_path)
 
-    logger.info("Détection du répertoire Saved Games")
-    saved_games_path = os.path.normpath(os.path.expanduser("~/saved games/dcs"))
-    logger.info("Le répertoire d'installation DCS détecté est: \n\t\t{}".format(saved_games_path))
-    conf.create("general", "saved_games_path", saved_games_path)
+    try:
+        logger.info("Détection du répertoire Saved Games")
+        saved_games_path = os.path.normpath(os.path.expanduser("~/saved games/dcs"))
+        logger.info("Le répertoire d'installation DCS détecté est: \n\t\t{}".format(saved_games_path))
+        conf.create("general", "saved_games_path", saved_games_path)
 
-    config.git_exe = conf.get("general", "git_path")
-    config.SaveGames_path = conf.get("general", 'saved_games_path')
-    config.DCS_path = conf.get("general", 'dcs_path')
+        config.git_exe = conf.get("general", "git_path")
+        config.SaveGames_path = conf.get("general", 'saved_games_path')
+        config.DCS_path = conf.get("general", 'dcs_path')
 
-    if not os.path.exists("../repos/skins"):
-        os.makedirs("../repos/skins")
-    if not os.path.exists("../repos/mods"):
-        os.makedirs("../repos/mods")
+        if not os.path.exists("../repos/skins"):
+            os.makedirs("../repos/skins")
+        if not os.path.exists("../repos/mods"):
+            os.makedirs("../repos/mods")
 
-    logger.info("Création du repository principal")
-    Repo("../repos/list", "https://github.com/TDC-bob/modlist.git").pull()
+        logger.info("Création du repository principal")
+        Repo("../repos/list", "https://github.com/TDC-bob/modlist.git").pull()
 
-    sys.path.append(os.path.abspath("../repos/list/"))
-    # noinspection PyUnresolvedReferences
-    import list
-    for m in list.mods:
-        test = mod.Mod(m, "mod", "../repos/mods", list.mods[m])
-        test.pull_repo()
-        test.install()
-        # conf.create("mods", m, "path", test.local)
-        # conf.create("mods", m, "desc", test.desc)
-        # conf.create("mods", m, "installed", False)
+        sys.path.append(os.path.abspath("../repos/list/"))
+        # noinspection PyUnresolvedReferences
+        import list
+        for m in list.mods:
+            test = mod.Mod(m, "mod", "../repos/mods", list.mods[m])
+            test.pull_repo()
+            test.install()
+            # conf.create("mods", m, "path", test.local)
+            # conf.create("mods", m, "desc", test.desc)
+            # conf.create("mods", m, "installed", False)
 
-    for s in list.skins:
-        test = mod.Mod(s, "skin", "../repos/skins", list.skins[s])
-        test.pull_repo()
-        test.install()
+        for s in list.skins:
+            test = mod.Mod(s, "skin", "../repos/skins", list.skins[s])
+            test.pull_repo()
+            test.install()
+    except Exception as e:
+        logger.error(e)
+        exit(1)
         # conf.create("skins", s, "path", test.local)
         # conf.create("skins", s, "desc", test.desc)
         # conf.create("skins", s, "installed", False)
