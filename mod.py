@@ -291,7 +291,7 @@ class ModFile():
                     self.logger.debug("pas de fichier local trouvé, aucun backup nécessaire")
                 self.logger.debug("création du fichier dummy")
                 with open(self.__dummy,mode="w") as file:
-                    file.write(self.__parent.version)
+                    file.write(str(self.__parent.version))
                 if not os.path.exists(self.__dummy):
                     self.logger.error("echec de la création du fichier dummy")
                     exit(1)
