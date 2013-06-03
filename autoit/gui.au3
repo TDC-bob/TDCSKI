@@ -4,7 +4,7 @@
 #include <GUIConstantsEx.au3>
 #include <GuiRichEdit.au3>
 ;~ #include "strings.au3"
-_spawn("C:\Users\bob\Desktop\tests\tdcski.cfg")
+;~ _spawn("C:\Users\bob\Desktop\tests\tdcski.cfg")
 
 Func _spawn($config_file)
 	$rtn = _parse_config($config_file)
