@@ -14,53 +14,82 @@ logger = mkLogger(__name__, DEBUG)
 
 
 class Mod():
+    @logged
     def __init__(self, name, _type, parent_dir, args):
+        self.logger.debug("création d'un Mod")
         try:
             self.conf = config.Config()
         except:
             logger.error("votre fichier de configuration est corrompu")
             exit(1)
         self.__name = name
+        self.logger.debug("nom: {}".format(self.__name))
         self.__type = _type
+        self.logger.debug("type: {}".format(self.__type))
         self.__local = "{}/{}".format(parent_dir, self.__name)
+        self.logger.debug("dossier local: {}".format(self.__local))
         self.__remote = args["remote"]
+        self.logger.debug("remote: {}".format(self.__remote))
+        self.logger.debug("initialisation du repository dans le dossier local")
         self.__repo = git.Repo(self.__local, self.__remote)
         self.__branch = "master"
         for arg in args:
             if arg in ["remote"]:
                 continue
             elif arg in ["branch"]:
+                self.logger.debug("paramètre branche trouvé: {}".format(args[arg]))
                 self.__branch = args[arg]
+                self.logger.debug("checkout du repository")
                 self.__repo.checkout(self.__branch)
             elif arg in ["desc"]:
+                self.logger.debug("paramètre descritpion trouvé: {}".format(args[arg]))
                 self.desc = args[arg]
             elif arg in ["version"]:
+                self.logger.debug("paramètre version trouvé: {}".format(args[arg]))
                 self.version = args[arg]
             else:
-                print("TODO: {}".format(arg))
+                self.error("paramètre inconnu trouvé: {} \t\t Valeur: {}".format(arg, args[arg]))
+                exit(1)
+
+        self.logger.debug("écriture du fichier de configuration")
+        if not self.conf.create(self.__type,  self.__name, "path", self.__local):
+            self.logger.error("erreur lors de l'écriture du nom")
+            exit(1)
+        if not self.conf.create(self.__type, self.__name, "desc", self.desc):
+            self.logger.error("erreur lors de l'écriture de la description")
+            exit(1)
+        if not self.conf.create(self.__type, self.__name, "installed", False):
+            self.logger.error('erreur lors de "installed"')
+            exit(1)
+
         self.buil_files_list()
 
-
-        self.conf.create(self.__type,  self.__name, "path", self.__local)
-        self.conf.create(self.__type, self.__name, "desc", self.desc)
-        self.conf.create(self.__type, self.__name, "installed", False)
-
+    @logged
     def buil_files_list(self):
+        self.logger.debug("construction de la liste des fichiers")
         self.__files = []
         for root, dirs, files in os.walk(self.__local):
             if '.git' in dirs:
+                self.logger.debug("répertoire .git trouvé, on zappe")
                 dirs.remove('.git')
             for file in files:
                 if file == '.gitignore':
+                    self.logger.debug("fichier .gitignore trouvé, on zappe")
                     continue
+                self.logger.debug("fichier trouvé")
                 full_path = os.path.join(root, file)
+                self.logger.debug("chemin complet: {}".format(full_path))
                 rel_path = full_path.replace(os.path.abspath(self.__local), "")
+                self.logger.debug("chemin relatif {}".format(rel_path))
                 self.__files.append(ModFile(full_path,rel_path, self))
 
     @property
     def should_be_installed(self):
+        self.logger.debug("test: ce mod doit-il être installé ?")
         if self.conf.get(self.type, self.name, "installed") == "True":
+            self.logger.debug("réponse: oui")
             return True
+        self.logger.debug("réponse: non")
         return False
 
     @property
@@ -100,6 +129,7 @@ class Mod():
         return self.__branch
 
     def pull_repo(self):
+        self.logger.debug("pull du repository local")
         self.__repo.pull(self.remote, self.branch)
         self.buil_files_list()
 
@@ -130,35 +160,39 @@ class Mod():
 
 
 class ModFile():
+    @logged
     def __init__(self, full_path, rel_path, parent_mod):
+        self.logger.debug("création d'un fichier de mod/skin")
         self.__full_path = os.path.abspath(full_path)
+        self.logger.debug("chemin complet: {}".format(self.__full_path))
         self.__rel_path = os.path.normpath(rel_path)
+        self.logger.debug("chemin relatif: {}".format(self.__rel_path))
         self.__basename = os.path.normpath(os.path.basename(self.__rel_path))
+        self.logger.debug("basename: {}".format(self.__basename))
         self.__parent = parent_mod
+        self.logger.debug("mod/skin parent: {}".format(self.__parent.name))
         strip = re.compile(".*{}".format(self.__parent.name))
         self.__install_to = re.sub(strip, '', self.__full_path).lstrip('\\')
         if self.__install_to[:11] == "SAVED_GAMES":
             self.__install_to = self.__install_to.lstrip("SAVED_GAMES")
-            # if conf.get("general","saved_games_path") == None:
-            #     logger.error("le répertoire des parties sauvegardées est inccorect")
-            #     exit(1)
             self.__install_to = "{}{}".format(config.SaveGames_path, self.__install_to)
             self.__install_to = os.path.normpath((self.__install_to))
-        if self.__install_to[:3] == "DCS":
+        elif self.__install_to[:3] == "DCS":
             self.__install_to = self.__install_to.lstrip("DCS")
             self.__install_to = "{}{}".format(config.DCS_path, self.__install_to)
             self.__install_to = os.path.normpath((self.__install_to))
+        self.logger.debug("ce fichier sera installé dans: {}".format(self.__install_to))
 
     @property
     def __local_copy_exists(self):
-        logger.debug("local copy exists: {}".format(os.path.exists(self.__install_to)))
+        logger.debug("une copie locale existe déjà: {}".format(os.path.exists(self.__install_to)))
         return os.path.exists(self.__install_to)
 
     @property
     def __local_copy_identical(self):
         if not self.__local_copy_exists:
             return False
-        logger.debug("local copy identical : {}".format(compare_files(self.full_path, self.__install_to)))
+        logger.debug("la copie locale est identique : {}".format(compare_files(self.full_path, self.__install_to)))
         return compare_files(self.full_path, self.__install_to)
 
     @property
@@ -191,7 +225,8 @@ class ModFile():
         if self.__parent.should_be_installed:
             logger.info("Annulation de la désinstallation, le mod parent devrait être installé")
             return False
-        restore(self.full_path)
+        os.remove(self.__full_path)
+        restore(self.__full_path)
 
 
     @logged
@@ -257,14 +292,11 @@ def backup(file):
 
 def restore(file):
     logger.info("restauration du fichier: {}".format(file))
-    if not os.path.exists(file):
-        logger.error("le fichier n'existe pas, rien à restaurer")
-        exit(1)
     src = "{}.tdcski.original".format(file)
-    logger.debug("la source de la restauration sera: {}".format(dest))
-    if os.path.exists(src):
+    logger.debug("la source de la restauration sera: {}".format(src))
+    if not os.path.exists(src):
         logger.error("la source n'existe pas, restauration annulée")
-        exit(1)
+        return
     shutil.copy2(src, file)
     if not compare_files(file, src):
         logger.error("la copie s'est mal passée: la source et la destination sont différentes (MD5)")

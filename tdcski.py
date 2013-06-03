@@ -54,19 +54,27 @@ def main():
     # exit(0)
 
     # os.environ["GIT_SSL_NO_VERIFY"] = "1"
+    logger.info("Lecture du fichier de configuration")
     try:
         conf = Config()
     except:
-        logger.error("votre fichier de configuration est corrompu")
+        logger.error("Le fichier de configuration est corrompu, supprimez-le et j'en réinstallerai un nouveau")
         exit(1)
 
+    logger.info("Recherche du répertoire d'installation de DCS dans la base de registre")
     try:
         dcs_path, caribou = winreg.QueryValueEx (winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Eagle Dynamics\DCS World"), "Path")
     except FileNotFoundError:
-        logger.error("impossible de trouver une installation de DCS")
+        logger.error("Impossible de trouver une installation de DCS")
         exit(1)
+    logger.info("Le répertoire d'installation DCS détecté est: \n\t\t{}".format(dcs_path))
     conf.create("general", "dcs_path", dcs_path)
-    conf.create("general", "saved_games_path", os.path.normpath(os.path.expanduser("~/saved games/dcs")))
+
+    logger.info("Détection du répertoire Saved Games")
+    saved_games_path = os.path.normpath(os.path.expanduser("~/saved games/dcs"))
+    logger.info("Le répertoire d'installation DCS détecté est: \n\t\t{}".format(saved_games_path))
+    conf.create("general", "saved_games_path", saved_games_path)
+
     config.git_exe = conf.get("general", "git_path")
     config.SaveGames_path = conf.get("general", 'saved_games_path')
     config.DCS_path = conf.get("general", 'dcs_path')
@@ -76,6 +84,7 @@ def main():
     if not os.path.exists("../repos/mods"):
         os.makedirs("../repos/mods")
 
+    logger.info("Création du repository principal")
     Repo("../repos/list", "https://github.com/TDC-bob/modlist.git").pull()
 
     sys.path.append(os.path.abspath("../repos/list/"))
