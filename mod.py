@@ -3,24 +3,24 @@ __author__ = 'bob'
 
 import os
 import re
-from config import Config
 import shutil
 import bobgit.git as git
 from hashlib import md5 as MD5
 from _logging._logging import mkLogger, DEBUG, logged
+import config
 
 
 logger = mkLogger(__name__, DEBUG)
 
 
-try:
-    conf = Config()
-except:
-    logger.error("votre fichier de configuration est corrompu")
-    exit(1)
 
 class Mod():
     def __init__(self, name, _type, parent_dir, args):
+        try:
+            conf = config.Config()
+        except:
+            logger.error("votre fichier de configuration est corrompu")
+            exit(1)
         self.__name = name
         self.__type = _type
         self.__local = "{}/{}".format(parent_dir, self.__name)
@@ -130,14 +130,14 @@ class ModFile():
         self.__install_to = re.sub(strip, '', self.__full_path).lstrip('\\')
         if self.__install_to[:11] == "SAVED_GAMES":
             self.__install_to = self.__install_to.lstrip("SAVED_GAMES")
-            if conf.get("general","saved_games_path") == None:
-                logger.error("le répertoire des parties sauvegardées est inccorect")
-                exit(1)
-            self.__install_to = "{}{}".format(conf.get("general","saved_games_path"), self.__install_to)
+            # if conf.get("general","saved_games_path") == None:
+            #     logger.error("le répertoire des parties sauvegardées est inccorect")
+            #     exit(1)
+            self.__install_to = "{}{}".format(config.SaveGames_path, self.__install_to)
             self.__install_to = os.path.normpath((self.__install_to))
         if self.__install_to[:3] == "DCS":
             self.__install_to = self.__install_to.lstrip("DCS")
-            self.__install_to = "{}{}".format(conf.get("general","dcs_path"), self.__install_to)
+            self.__install_to = "{}{}".format(config.DCS_path, self.__install_to)
             self.__install_to = os.path.normpath((self.__install_to))
 
     @property
