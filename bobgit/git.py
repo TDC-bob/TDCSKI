@@ -20,6 +20,7 @@ import re
 ##    import bobgit.Exceptions as Exceptions
 ##import bobgit.Exceptions as Exceptions
 ##from .Exceptions import *
+import config
 try:
     from . import Exceptions
 except (ImportError, SystemError):
@@ -37,7 +38,8 @@ class Repo():
     def __init__(self, local, init_remote=None):
         self.local = os.path.abspath(local)
         self.initiliazed = os.path.exists(os.path.abspath(os.path.join(self.local, ".git")))
-        self.git_exe = self.__get_git_exe()
+        self.git_exe = config.git_exe
+        # self.git_exe = self.__get_git_exe()
         self.cloned = False
         self.fetched = False
         self.up_to_date = False
