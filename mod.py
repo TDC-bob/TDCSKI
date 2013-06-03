@@ -105,6 +105,7 @@ class Mod():
             logger.debug("ce mod ne devrait pas être installé")
             return False
         for file in self.__files:
+            logger.debug("ce mod devrait être installé")
             file.install()
         return True
 
