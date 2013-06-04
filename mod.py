@@ -230,10 +230,14 @@ class ModFile():
         self.__safe_to_delete = False
         self.__config_file = "{}.tdcski".format(self.__install_to)
         self.__config = config.Config(self.__config_file, False)
-        self.logger.debug("config: {}".format(self.__config))
+        self.logger.debug("config: {}".format(self.__config_file))
         self.__backup = "{}.tdcski.backup".format(self.__install_to)
         self.logger.debug("backup: {}".format(self.__backup))
         self.logger.debug("ce fichier sera installé dans: {}".format(self.__install_to))
+
+    @property
+    def config_file(self):
+        return self.__config_file
 
     @property
     def config(self):
@@ -371,8 +375,6 @@ class ModFile():
                 self.logger.info("Copie: {}  --->   {}".format(self.__full_path, self.__install_to))
                 shutil.copy2(self.__full_path, self.__install_to)
 
-
-                return True
             else:
                 self.logger.debug("une copie identique de ce fichier existe déjà, je le marque 'identical' "
                                   "et je m'assure que safe_to_delete est à False")
