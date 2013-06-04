@@ -7,7 +7,7 @@ import winreg
 import traceback
 from time import strftime, gmtime
 from lib.configobj import ConfigObj
-import mod.Mod as Mod
+from mod import Mod
 import config
 from config import Config
 import ui_server
