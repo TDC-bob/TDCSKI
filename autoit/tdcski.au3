@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=TDCSKI
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.76
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.77
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_Run_After=signtool sign /v /n "Bob" /d "TDCSKI" /du "https://github.com/TDC-bob/TDCSKI.git" /t http://timestamp.verisign.com/scripts/timstamp.dll "%out%"
@@ -22,6 +22,7 @@
 #include <EditConstants.au3>
 #include <Misc.au3>
 #include <GuiEdit.au3>
+#include "Globals.au3"
 #include "MD5.au3"
 ;~ #include "zip.au3"
 #include "7z.au3"
@@ -29,26 +30,7 @@
 #include "gui.au3"
 
 
-
 _Singleton("TDCSKI")
-
-Global Const $Python33_x86_download_link = "http://www.python.org/ftp/python/3.3.2/python-3.3.2.msi"
-Global Const $Python33_x64_download_link = "http://www.python.org/ftp/python/3.3.2/python-3.3.2.amd64.msi"
-Global Const $PortableGit_download_link = "https://msysgit.googlecode.com/files/PortableGit-1.8.3-preview20130601.7z"
-
-Global Const $repo = @ScriptDir & "\tdcski"
-Global Const $repo_remote = "https://github.com/TDC-bob/TDCSKI.git"
-
-Global Const $updater_path = $repo & "\updater.exe"
-Global Const $new_version_path = $repo & "\tdcski.exe"
-
-Global Const $log_dir = @ScriptDir & "\logs"
-Global Const $log_file = $log_dir & "\" & @YEAR & @MON & @MDAY & " - " & @HOUR & "h" & @MIN & "m" & @SEC & " - Lanceur.log"
-Global $iMemo, $python_path, $git_path, $gui_handle
-
-Global Const $config_file = @ScriptDir & "\tdcski.cfg"
-
-Global $portable_git_folder = @ScriptDir & "\portable-git"
 
 
 
