@@ -1,15 +1,5 @@
 # coding=utf-8
-#-------------------------------------------------------------------------------
-# Name:        module1
-# Purpose:
-#
-# Author:      owner
-#
-# Created:     19/05/2013
-# Copyright:   (c) owner 2013
-# Licence:     <your licence>
-#-------------------------------------------------------------------------------
-#!/usr/bin/env python
+__author__ = 'bob'
 
 import os
 import sys
@@ -25,6 +15,10 @@ from bobgit.git import Repo
 from _logging._logging import mkLogger, DEBUG, WARN
 
 logger = mkLogger(__name__, DEBUG, "../logs/{} - TDCSKI.log".format(strftime("%Y%m%d - %Hh%Mm%S", gmtime())))
+
+
+mods = []
+skins = []
 
 
 def main():
@@ -95,15 +89,26 @@ def main():
         sys.path.append(os.path.abspath("../repos/list/"))
         # noinspection PyUnresolvedReferences
         import list
+        mods = []
+        skins = []
         for m in list.mods:
-            test = mod.Mod(m, "mod", "../repos/mods", list.mods[m])
-            test.pull_repo()
-            test.check()
+            mod = mod.Mod(m, "mod", "../repos/mods", list.mods[m])
+            mod.pull_repo()
+            mods.append(mod)
 
         for s in list.skins:
-            test = mod.Mod(s, "skin", "../repos/skins", list.skins[s])
-            test.pull_repo()
-            test.check()
+            skin = mod.Mod(s, "skin", "../repos/skins", list.skins[s])
+            skin.pull_repo()
+            skins.append(skin)
+
+        logger.info("Fin des mises à jour")
+        logger.info("List des mods disponibles: {}".format("\n".join(m.name for m in mods)))
+        logger.info("List des skins disponibles: {}".format("\n".join(s.name for s in skins)))
+        logger.info("Vérification de ce qu'il faut installer/désinstaller")
+        for mod in mods:
+            mod.check()
+        for skin in skins:
+            skin.check()
 
     except Exception as e:
         logger.error(e.__class__)
