@@ -68,6 +68,8 @@ Func _spawn($config_file)
 ;~ 	GUICtrlSetImage($question_mark_btn, "..\resources\question_mark.bmp")
 	$start_btn = GUICtrlCreateButton("Appliquer", $w - ($button_w+$left), $top + $h_group_sep, $button_w, $button_h)
 	GUISetState()
+	local $count = 0
+	local $timer = False
 	While 1
 		$msg = GUIGetMsg()
 		Select
@@ -76,6 +78,16 @@ Func _spawn($config_file)
 			Case $msg = $question_mark_btn
 				_cert_help()
 			Case $msg = $install_cert_btn
+				if not $timer then $timer = TimerInit()
+				if TimerDiff($timer) > 5000 then
+					$timer = TimerInit()
+					$count = 1
+				Else
+					$count += 1
+					if $count > 5 then
+						MsgBox(4096, "Hey!", "Inutile de cliquer comme un taré, s'il ne se passe rien, c'est parce que le certificat est déjà installé!")
+					EndIf
+				EndIf
 				_install_cert()
 			Case $msg = $start_btn
 				Local $content[1]
