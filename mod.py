@@ -87,7 +87,7 @@ class Mod():
     def buil_files_list(self):
         self.logger.debug("construction de la liste des fichiers")
         self.__files = []
-        self.__special = []
+        self.__special = {}
         self.__special_files = []
         if os.path.exists("{}/install.py".format(self.__local)):
             sys.path.append(os.path.abspath(self.__local))
@@ -96,12 +96,11 @@ class Mod():
             import install
             self.logger.debug("Install: {}".format(install))
             self.logger.debug("Install.special: {}".format(install.special))
-            for key in install.special:
-                self.logger.debug("Key: {}".format(key))
-                self.__special.append({'file': install.special[key], 'method': key})
-                self.logger.debug("appending file: {}".format(install.special[key]))
-                self.__special_files.append(os.path.basename(install.special[key]))
-            self.logger.debug("Special files: {}".format(self.__special_files))
+            for k in install.special:
+                self.__special_files.append(k)
+                self.__special[k] = install.special[k]
+            self.logger.debug("Special files: {}".format("\n".join([file for file in self.__special_files])))
+            self.logger.debug("Special: {}".format(str(self.__special)))
 
         if os.path.exists("{}/DCS".format(self.__local)):
             for root, dirs, files in os.walk("{}/DCS".format(self.__local)):
