@@ -217,10 +217,12 @@ class ModFile():
             self.__install_to = self.__install_to.lstrip("DCS")
             self.__install_to = "{}{}".format(config.DCS_path, self.__install_to)
             self.__install_to = os.path.normpath((self.__install_to))
+        self.logger.debug("chemin d'installation du fichier: {}".format(self.__install_to))
+
         self.__safe_to_delete = False
-        self.__config = "{}.tdcski.safe_to_delete".format(self.__install_to)
+        self.__config = config.Config("{}.tdcski".format(self.__install_to))
         self.logger.debug("config: {}".format(self.__config))
-        self.__backup = "{}.tdcski.original".format(self.__install_to)
+        self.__backup = "{}.tdcski.backup".format(self.__install_to)
         self.logger.debug("backup: {}".format(self.__backup))
         self.logger.debug("ce fichier sera installé dans: {}".format(self.__install_to))
 
@@ -327,9 +329,12 @@ class ModFile():
                         file.write(str(self.__parent.version))
                     self.logger.debug("pas de fichier local trouvé, aucun backup nécessaire")
                 self.logger.debug("création du fichier dummy")
-
-                with open(self.__dummy,mode="w") as file:
-                    file.write(str(self.__parent.version))
+                self.__config.set_or_create("install", "safe_to_delete", self.__safe_to_delete)
+                self.__config.set_or_create("install", "parent",self.__parent.name)
+                self.__config.set_or_create("install", "version",str(self.__parent.version))
+                self.__config.set_or_create("install","description",self.__parent.desc)
+                # with open(self.__dummy,mode="w") as file:
+                #     file.write(str(self.__parent.version))
                 if not os.path.exists(self.__dummy):
                     self.logger.error("echec de la création du fichier dummy")
                     input()
