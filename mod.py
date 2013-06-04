@@ -333,10 +333,10 @@ class ModFile():
                         self.logger.debug("un backup existe déjà")
                 else:
                     self.__safe_to_delete = True
-                    self.logger.debug("le fichier local n'existe pas, écriture de safe_to_delete")
-                    with open(self.__safe_to_delete, mode="w") as file:
-                        file.write(str(self.__parent.version))
-                    self.logger.debug("pas de fichier local trouvé, aucun backup nécessaire")
+                    # self.logger.debug("le fichier local n'existe pas, écriture de safe_to_delete")
+                    # with open(self.__safe_to_delete, mode="w") as file:
+                    #     file.write(str(self.__parent.version))
+                    self.logger.debug("pas de fichier local trouvé, aucun backup nécessaire, fichier noté 'safe_to_delete'")
                 self.logger.debug("création du fichier configuration")
                 self.__config.set_or_create("install", "safe_to_delete", self.__safe_to_delete)
                 self.__config.set_or_create("install", "parent",self.__parent.name)
