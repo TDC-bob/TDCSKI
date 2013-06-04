@@ -8,6 +8,7 @@ import bobgit.git as git
 from hashlib import md5 as MD5
 from _logging._logging import mkLogger, DEBUG, logged
 import config
+import sys
 
 
 logger = mkLogger(__name__, DEBUG)
@@ -86,11 +87,24 @@ class Mod():
     def buil_files_list(self):
         self.logger.debug("construction de la liste des fichiers")
         self.__files = []
+        self.__special = []
+        self.__special_files = []
+        if os.path.exists("{}/install.py".format(self.__local)):
+            sys.path.append(os.path.abspath(self.__local))
+            # noinspection PyUnresolvedReferences
+            import install.special as special
+            for key in special:
+                self.__special.append({'file': special[key], 'method': key})
+                self.__special_files.append(special[key])
+
         if os.path.exists("{}/DCS".format(self.__local)):
             for root, dirs, files in os.walk("{}/DCS".format(self.__local)):
                 for file in files:
                     if file == '.gitignore':
                         self.logger.debug("fichier .gitignore trouvé, on zappe")
+                        continue
+                    if file in self.__special_files:
+                        self.logger.debug("Ce fichier est un fichier spécial, on zappe")
                         continue
                     self.logger.debug("fichier trouvé")
                     full_path = os.path.abspath(os.path.join(root, file))
@@ -103,6 +117,9 @@ class Mod():
                 for file in files:
                     if file == '.gitignore':
                         self.logger.debug("fichier .gitignore trouvé, on zappe")
+                        continue
+                    if file in self.__special_files:
+                        self.logger.debug("Ce fichier est un fichier spécial, on zappe")
                         continue
                     self.logger.debug("fichier trouvé")
                     full_path = os.path.abspath(os.path.join(root, file))
