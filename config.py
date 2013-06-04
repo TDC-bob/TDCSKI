@@ -9,8 +9,8 @@ DCS_path = None
 SaveGames_path = None
 
 class Config():
-    def __init__(self, file='../tdcski.cfg'):
-        if not os.path.exists(file):
+    def __init__(self, file='../tdcski.cfg', must_exists=True):
+        if must_exists and not os.path.exists(file):
             logger.error("impossible de trouver le fichier de configuration sur le chemin suivant: {}".format(os.path.abspath(file)))
             exit(1)
         self.__config = ConfigObj(infile=file)
