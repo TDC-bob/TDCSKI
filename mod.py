@@ -359,6 +359,25 @@ class ModFile():
 
         if self.__parent.should_be_installed:
             if not self.__local_copy_identical:
+
+                # conflict detection
+                if os.path.exists(self.__config_file):
+                    this_mod_name = self.__parent.name
+                    other_mod_config = config.ConfigObj(self.__config_file)
+                    other_mod_name = other_mod_config.get("install", "parent")
+                    self.logger.debug("conflit potentiel trouvé ! Mod1: {} \t Mod2: {}".format(this_mod_name, other_mod_name))
+                    if this_mod_name == other_mod_name:
+                        self.logger.debug("les deux mods ont le même nom, c'est probablement une update ou une réinstallation")
+                        self.logger.debug("suppression de l'ancien fichier et réinstallation par dessus")
+                        file_delete(self.__install_to)
+                    else:
+                        self.logger.error("Conflit détecté avec un autre mod pour le fichier: {}".format(self.__install_to))
+                        self.log.error("J'écrit un fichier .CONFLIT à côté du fichier qui pose problème et je quitte")
+                        with open("{}.tdcski.CONFLIT".format(self.__install_to), mode="r") as f:
+                            f.write("Conflit avec le mod {}".format(other_mod_name))
+                        input()
+                        exit(1)
+
                 identical = False
                 self.logger.debug("ce fichier va devoir être installé")
                 self.logger.debug("création des répertoires de destination")
