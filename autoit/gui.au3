@@ -24,12 +24,13 @@ Func _spawn($config_file)
 	$h = 200
 	$w = 800
 	$ch = 20
-	$h += UBound($mods) * $ch
-	$h += UBound($skins) * $ch
-	$button_w = 120
-	$button_h = 60
 	$h_offset = 10
 	$w_offset = 10
+	$h += UBound($mods) * $ch
+	$h += UBound($skins) * $ch
+	$h += $h_offset
+	$button_w = 120
+	$button_h = 60
 	$h_checkbox_and_label = 30
 	$h_group_sep = 20
 	$w_group_sep = 10
