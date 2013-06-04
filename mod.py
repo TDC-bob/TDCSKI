@@ -248,7 +248,7 @@ class ModFile():
 
     @property
     def is_installed(self):
-        return os.path.exists(self.__dummy)
+        return os.path.exists(self.__config)
 
     @property
     def should_be_installed(self):
@@ -276,13 +276,13 @@ class ModFile():
         if self.__parent.should_be_installed:
             logger.info("Annulation de la désinstallation, le mod parent devrait être installé")
             return
-        if not os.path.exists(self.__dummy):
+        if not os.path.exists(self.__config):
             logger.error("Ce fichier n'est pas installé, annulation de la désinstallation")
             return
-        self.logger.debug("suppression du fichier dummy")
-        os.remove(self.__dummy)
-        if os.path.exists(self.__dummy):
-            self.logger.error("échec de la suppression du fichier dummy")
+        self.logger.debug("suppression du fichier configuration")
+        os.remove(self.__config)
+        if os.path.exists(self.__config):
+            self.logger.error("échec de la suppression du fichier configuration")
             input()
             exit(1)
         if not os.path.exists((self.__backup)):
@@ -328,15 +328,15 @@ class ModFile():
                     with open(self.__safe_to_delete, mode="w") as file:
                         file.write(str(self.__parent.version))
                     self.logger.debug("pas de fichier local trouvé, aucun backup nécessaire")
-                self.logger.debug("création du fichier dummy")
+                self.logger.debug("création du fichier configuration")
                 self.__config.set_or_create("install", "safe_to_delete", self.__safe_to_delete)
                 self.__config.set_or_create("install", "parent",self.__parent.name)
                 self.__config.set_or_create("install", "version",str(self.__parent.version))
                 self.__config.set_or_create("install","description",self.__parent.desc)
                 # with open(self.__dummy,mode="w") as file:
                 #     file.write(str(self.__parent.version))
-                if not os.path.exists(self.__dummy):
-                    self.logger.error("echec de la création du fichier dummy")
+                if not os.path.exists(self.__config):
+                    self.logger.error("echec de la création du fichier configuration")
                     input()
                     exit(1)
                 self.logger.info("Copie: {}  --->   {}".format(self.__full_path, self.__install_to))
