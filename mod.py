@@ -318,9 +318,14 @@ class ModFile():
         else:
             self.logger.debug("aucun fichier backup trouvé")
             if not safe_to_del:
-                self.logger.error("ce fichier n'est pas marqué safe_to_delete, dans le doute, je quitte")
-                input()
-                exit(1)
+                if identical:
+                    self.logger.debug("ce fichier et le fichier original sont identiques, je le laisse tel quel")
+                else:
+                    self.logger.error("Oops! Le fichier n'est pas marqué 'safe_to_delete', il n'est pas identique "
+                                      "au fichier original, et aucun backup n'a été trouvé. Je ne le supprime pas, "
+                                      "il y a un sérieux problème.")
+                    input()
+                    exit(1)
             if identical:
                 self.logger.debug("le fichier que j'ai installé et le fichier qui était déjà présent "
                                   "sont identiques, on peut considérer la désinstallation comme terminée")
