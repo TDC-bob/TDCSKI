@@ -93,51 +93,13 @@ class Mod():
             sys.path.append(os.path.abspath(self.__local))
             # noinspection PyUnresolvedReferences
             import install
-            self.logger.debug("Install: {}".format(install))
-            self.logger.debug("Install.special: {}".format(install.special))
             for k in install.special:
                 self.__special_files.append(os.path.normpath("/{}".format(k)))
                 self.__special[k] = install.special[k]
-            self.logger.debug("Special files: {}".format("\n".join([file for file in self.__special_files])))
-            self.logger.debug("Special: {}".format(str(self.__special)))
 
         for path in ["{}/DCS".format(self.__local), "{}/SAVED_GAMES".format(self.__local)]:
             if os.path.exists(path):
                 self.__add_file(path)
-        # if os.path.exists("{}/DCS".format(self.__local)):
-        #     for root, dirs, files in os.walk("{}/DCS".format(self.__local)):
-        #         for file in files:
-        #             if file == '.gitignore':
-        #                 self.logger.debug("fichier .gitignore trouvé, on zappe")
-        #                 continue
-        #             self.logger.debug("fichier trouvé")
-        #             full_path = os.path.abspath(os.path.join(root, file))
-        #             self.logger.debug("chemin complet: {}".format(full_path))
-        #             rel_path = full_path.replace(os.path.abspath(self.__local), "")
-        #             if rel_path in self.__special_files:
-        #                 self.logger.debug("Ce fichier est un fichier spécial, on zappe")
-        #                 continue
-        #             self.logger.debug("chemin relatif {}".format(rel_path))
-        #             self.__files.append(ModFile(full_path,rel_path, self))
-        # if os.path.exists("{}/SAVED_GAMES".format(self.__local)):
-        #     for root, dirs, files in os.walk("{}/SAVED_GAMES".format(self.__local)):
-        #         for file in files:
-        #             if file == '.gitignore':
-        #                 self.logger.debug("fichier .gitignore trouvé, on zappe")
-        #                 continue
-        #             if file in self.__special_files:
-        #                 self.logger.debug("Ce fichier est un fichier spécial, on zappe")
-        #                 continue
-        #             self.logger.debug("fichier trouvé")
-        #             self.logger.debug("SEARCH_ME File: {}".format(file))
-        #             full_path = os.path.abspath(os.path.join(root, file))
-        #             self.logger.debug("chemin complet: {}".format(full_path))
-        #             rel_path = full_path.replace(os.path.abspath(self.__local), "")
-        #             if rel_path in self.__special_files:
-        #                 self.logger.debug("Ce fichier est un fichier spécial, on zappe")
-        #                 continue
-        #             self.logger.debug("chemin relatif {}".format(rel_path))
-        #             self.__files.append(ModFile(full_path,rel_path, self))
 
     def __add_file(self, path):
         for root, dirs, files in os.walk("{}/SAVED_GAMES".format(self.__local)):
@@ -159,11 +121,7 @@ class Mod():
     @property
     def should_be_installed(self):
         rtn = conf.get(self.type, self.name, "installed")
-        self.logger.debug("test: ce mod doit-il être installé ? Réponse: {}".format(rtn))
-        # if conf.get(self.type, self.name, "installed") == "True":
-        #     self.logger.debug("réponse: oui")
-        #     return True
-        # self.logger.debug("réponse: non")
+        # self.logger.debug("test: ce mod doit-il être installé ? Réponse: {}".format(rtn))
         return rtn
 
     @property
@@ -331,12 +289,12 @@ class ModFile():
 
     @logged
     def uninstall(self):
-        self.logger.debug("Désinstallation du fichier: {}".format(self.__basename))
+        self.logger.debug("désinstallation du fichier: {}".format(self.__basename))
         if self.__parent.should_be_installed:
-            logger.debug("Annulation de la désinstallation, le mod parent devrait être installé")
+            logger.debug("annulation de la désinstallation, le mod parent devrait être installé")
             return
         if not os.path.exists(self.__config_file):
-            logger.error("Ce fichier n'est pas installé, annulation de la désinstallation")
+            logger.debug("ce fichier n'est pas installé, annulation de la désinstallation")
             return
         safe_to_del = self.__config.get("install", "safe_to_delete")
         self.logger.debug("safe to delete: {}".format(safe_to_del))
@@ -367,7 +325,7 @@ class ModFile():
                 if identical:
                     self.logger.debug("ce fichier et le fichier original sont identiques, je le laisse tel quel")
                 else:
-                    self.logger.error("Oops! Le fichier n'est pas marqué 'safe_to_delete', il n'est pas identique "
+                    self.logger.error("oops! Le fichier n'est pas marqué 'safe_to_delete', il n'est pas identique "
                                       "au fichier original, et aucun backup n'a été trouvé. Je ne le supprime pas, "
                                       "il y a un sérieux problème.")
                     input()
@@ -419,11 +377,11 @@ class ModFile():
                         self.logger.debug("suppression de l'ancien fichier et réinstallation par dessus")
                         file_delete(self.__install_to)
                     else:
-                        self.logger.error("Conflit détecté avec un autre mod pour le fichier: {}".format(self.__install_to))
-                        self.log.error("J'écrit un fichier .CONFLIT à côté du fichier qui pose problème et je quitte")
+                        self.logger.error("conflit détecté avec un autre mod pour le fichier: {}".format(self.__install_to))
+                        self.log.error("j'écris un fichier .CONFLIT à côté du fichier qui pose problème et je quitte")
                         if not os.path.exists(self.__conflict_file):
                             with open(self.__conflict_file, mode="r") as f:
-                                f.write("Conflit avec le mod {}".format(other_mod_name))
+                                f.write("conflit avec le mod {}".format(other_mod_name))
                         input()
                         exit(1)
 
@@ -445,7 +403,7 @@ class ModFile():
                     self.logger.debug("pas de fichier local trouvé, aucun backup nécessaire, fichier noté 'safe_to_delete'")
 
 
-                self.logger.debug("Copie: {}  --->   {}".format(self.__full_path, self.__install_to))
+                self.logger.debug("copie: {}  --->   {}".format(self.__full_path, self.__install_to))
                 shutil.copy2(self.__full_path, self.__install_to)
 
             else:
@@ -468,7 +426,7 @@ class ModFile():
                 input()
                 exit(1)
         else:
-            self.logger.error("le mod parent ne devrait pas être installé, donc ce fichier non plus")
+            self.logger.debug("le mod parent ne devrait pas être installé, donc ce fichier non plus")
 
     def __str__(self):
         return "Full path: {}\n" \
@@ -492,16 +450,17 @@ def md5(file):
 def file_delete(file):
     os.remove(file)
     if os.path.exists(file):
-        logger.error("Impossible de supprimer le fichier: {}".format(file))
-        input()
-        exit(1)
+        logger.error("impossible de supprimer le fichier: {}".format(file))
+        raise FileExistsError
 
 def file_copy(src, dest, overwrite=False):
     logger.debug("copie: {} ------> {}".format(src, dest))
     if os.path.exists(dest) and not overwrite:
+        logger.error("la destination existe, et je n'ai pas la permission d'écrire dessus")
         raise FileExistsError
     shutil.copy2(src, dest)
     if not os.path.exists(dest):
+        logger.error("la copie a échoué")
         raise FileNotFoundError
     if not file_compare(src, dest):
         logger.error("le fichier source et la destination ne correspondent pas")
