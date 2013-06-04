@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=TDCSKI
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.74
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.75
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_Run_After=signtool sign /v /n "Bob" /d "TDCSKI" /du "https://github.com/TDC-bob/TDCSKI.git" /t http://timestamp.verisign.com/scripts/timstamp.dll "%out%"
@@ -60,7 +60,6 @@ Func _main()
 	Local $func = "main"
 	_first_start()
 	_rotate_logs($log_dir)
-	; Create GUI
 	$w = @DesktopWidth * 0.40
 	$h = @DesktopHeight * 0.40
 	$gui_handle = GUICreate($str_app_name, $w, $h)
@@ -79,14 +78,6 @@ Func _main()
 	_run_tdcski()
 	_spawn($config_file)
 EndFunc   ;==>_main
-
-;~ Func _spawn_gui()
-;~ 	$sections = IniReadSectionNames($config_file)
-;~ 	If @error Then
-;~ 		ConsoleWrite(@error & @LF)
-;~ 	EndIf
-;~ 	ConsoleWrite($sections & @LF)
-;~ EndFunc   ;==>_spawn_gui
 
 Func _run_tdcski()
 	Local $func = "run_tdcski"

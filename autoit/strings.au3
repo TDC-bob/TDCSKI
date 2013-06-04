@@ -1,7 +1,7 @@
 Global Const $str_app_name = "TDCSKI"
 
 Global Const $str_start = "Lancement du TDCSKI"
-global const $str_first_start = "C'est la première fois que vous lancez le TDCSKI." & @CRLF & @CRLF & "Pour info, je vais installer une tripotée de fichiers/dossiers dans le répertoire" & _
+global const $str_first_start = "C'est la première fois que vous lancez le TDCSKI (fichier tdcski.cfg manquant)." & @CRLF & @CRLF & "Pour info, je vais installer une tripotée de fichiers/dossiers dans le répertoire" & _
 			" dans lequel je me trouve actuellement. Si vous souhaitez créer un dossier, et/ou déplacer le fichier 'tdcski.exe' c'est le moment !" & @CRLF & @CRLF & "On continue ?"
 Global Const $str_arch_detect = "Détection de l'architecture du système d'exploitation"
 Global Const $str_all_good = "Tout s'est bien passé ! =þ" & @CRLF & @CRLF & "Appuyez sur ECHAP ou fermez cette fenêtre pour quitter"
