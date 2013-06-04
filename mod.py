@@ -252,8 +252,8 @@ class ModFile():
     def __local_copy_identical(self):
         if not self.__local_copy_exists:
             return False
-        logger.debug("la copie locale est identique : {}".format(compare_files(self.full_path, self.__install_to)))
-        return compare_files(self.full_path, self.__install_to)
+        logger.debug("la copie locale est identique : {}".format(file_compare(self.full_path, self.__install_to)))
+        return file_compare(self.full_path, self.__install_to)
 
     @property
     def is_installed(self):
@@ -288,30 +288,60 @@ class ModFile():
         if not os.path.exists(self.__config_file):
             logger.error("Ce fichier n'est pas installé, annulation de la désinstallation")
             return
+        safe_to_del = self.__config.get("install", "safe_to_delete")
+        self.logger.Debug("safe to delete: {}".format(safe_to_del))
+        identical = self.__config.get("install","identical")
+        self.logger.debug("identical: {}".format(identical))
         self.logger.debug("suppression du fichier configuration")
-        os.remove(self.__config_file)
-        if os.path.exists(self.__config_file):
-            self.logger.error("échec de la suppression du fichier configuration")
-            input()
-            exit(1)
-        if not os.path.exists((self.__backup)):
-            self.logger.debug("aucun fichier de backup présent")
-            if not os.path.exists(self.__safe_to_delete):
-                self.logger.error("safe_to_delete n'est pas présent non plus, dans le doute, je quitte")
-                return
-        self.logger.debug("suppression du fichier local")
-        os.remove(self.__install_to)
-        if os.path.exists(self.__install_to):
-            self.logger.error("échec de la suppression du fichier local")
-            input()
-            exit(1)
-        if os.path.exists((self.__backup)):
-            self.logger.debug("un backup existe pour ce fichier, restauration")
-            shutil.copy2(self.__backup, self.__install_to)
-            if not compare_files(self.__backup, self.__install_to):
-                self.logger.error("le backup et la copie ne correspondent pas, échec de la restauration")
+        file_delete(self.__config)
+        if os.path.exists(self.__backup):
+            self.logger.debug("un fichier de backup existe, création du fichier temporaire")
+            temp_file = "{}.delete_me".format(self.__install_to)
+            file_copy(self.__install_to, temp_file)
+            self.logger.log("suppression du fichier original")
+            file_delete(self.__install_to)
+            self.logger.debug("restauration du backup")
+            try:
+                file_copy(self.__backup, self.__install_to)
+            except (FileNotFoundError, FileExistsError):
+                self.logger.error("échec de la restauration, annulation")
+                file_copy(temp_file, self.__install_to, overwrite=True)
                 input()
                 exit(1)
+            self.logger.debug("restauration effectuée, suppression du fichier temporaire")
+            file_delete(temp_file)
+
+        else:
+            self.logger.debug("aucun fichier backup trouvé")
+            if not safe_to_del:
+                self.logger.error("ce fichier n'est pas marqué safe_to_delete, dans le doute, je quitte")
+                input()
+                exit(1)
+            if identical:
+                self.logger.debug("le fichier que j'ai installé et le fichier qui était déjà présent "
+                                  "sont identiques, on peut considérer la désinstallation comme terminée")
+                return
+            self.logger.debug("le fichier est marqué safe_to_delete, suppression")
+            file_delete(self.__install_to)
+
+        # if not os.path.exists((self.__backup)):
+        #     self.logger.debug("aucun fichier de backup présent")
+        #     if not os.path.exists(self.__safe_to_delete):
+        #         self.logger.error("safe_to_delete n'est pas présent non plus, dans le doute, je quitte")
+        #         return
+        # self.logger.debug("suppression du fichier local")
+        # os.remove(self.__install_to)
+        # if os.path.exists(self.__install_to):
+        #     self.logger.error("échec de la suppression du fichier local")
+        #     input()
+        #     exit(1)
+        # if os.path.exists((self.__backup)):
+        #     self.logger.debug("un backup existe pour ce fichier, restauration")
+        #     shutil.copy2(self.__backup, self.__install_to)
+        #     if not file_compare(self.__backup, self.__install_to):
+        #         self.logger.error("le backup et la copie ne correspondent pas, échec de la restauration")
+        #         input()
+        #         exit(1)
 
 
     @logged
@@ -320,41 +350,45 @@ class ModFile():
 
         if self.__parent.should_be_installed:
             if not self.__local_copy_identical:
+                identical = False
                 self.logger.debug("ce fichier va devoir être installé")
                 self.logger.debug("création des répertoires de destination")
                 os.makedirs(os.path.dirname(self.__install_to), exist_ok=True)
                 self.logger.debug("création du backup si nécessaire")
+
                 if os.path.exists(self.__install_to):
                     self.logger.debug("le fichier local existe déjà")
                     if not os.path.exists(self.__backup):
                         self.logger.debug("aucun backup n'a été trouvé, création")
                         shutil.copy2(self.__install_to, self.__backup)
                     else:
-                        self.logger.debug("un backup existe déjà")
+                        self.logger.debug("un backup existe déjà, on continue")
                 else:
                     self.__safe_to_delete = True
-                    # self.logger.debug("le fichier local n'existe pas, écriture de safe_to_delete")
-                    # with open(self.__safe_to_delete, mode="w") as file:
-                    #     file.write(str(self.__parent.version))
                     self.logger.debug("pas de fichier local trouvé, aucun backup nécessaire, fichier noté 'safe_to_delete'")
-                self.logger.debug("création du fichier configuration")
-                self.__config.set_or_create("install", "safe_to_delete", self.__safe_to_delete)
-                self.__config.set_or_create("install", "parent",self.__parent.name)
-                self.__config.set_or_create("install", "version",str(self.__parent.version))
-                self.__config.set_or_create("install","description",self.__parent.desc)
-                # with open(self.__dummy,mode="w") as file:
-                #     file.write(str(self.__parent.version))
-                if not os.path.exists(self.__config_file):
-                    self.logger.error("echec de la création du fichier configuration")
-                    input()
-                    exit(1)
+
+
                 self.logger.info("Copie: {}  --->   {}".format(self.__full_path, self.__install_to))
                 shutil.copy2(self.__full_path, self.__install_to)
 
 
                 return True
             else:
-                self.logger.debug("le fichier est déjà installé")
+                self.logger.debug("une copie identique de ce fichier existe déjà, je le marque 'identical' "
+                                  "et je m'assure que safe_to_delete est à False")
+                identical = True
+                self.__safe_to_delete = False
+
+            self.logger.debug("création du fichier configuration")
+            self.__config.set_or_create("install", "safe_to_delete", self.__safe_to_delete)
+            self.__config.set_or_create("install", "parent",self.__parent.name)
+            self.__config.set_or_create("install", "version",str(self.__parent.version))
+            self.__config.set_or_create("install","description",self.__parent.desc)
+            self.__config.set_or_create("install", "identical", identical)
+            if not os.path.exists(self.__config_file):
+                self.logger.error("échec de la création du fichier configuration")
+                input()
+                exit(1)
         else:
             self.logger.error("le mod parent ne devrait pas être installé, donc ce fichier non plus")
 
@@ -364,7 +398,7 @@ class ModFile():
                "Basename: {}\n"\
                 "Install to: {}\n".format(self.__full_path,self.__rel_path,self.__basename, self.__install_to)
 
-def compare_files(file1, file2):
+def file_compare(file1, file2):
     md5_1 = md5(file1)
     md5_2 = md5(file2)
     logger.debug("MD5_1: {} \nMD5_2: {}".format(md5_1, md5_2))
@@ -376,3 +410,24 @@ def md5(file):
         for chunk in iter(lambda: f.read(128), b''):
              _md5.update(chunk)
     return _md5.digest()
+
+def file_delete(file):
+    os.remove(file)
+    if os.path.exists(file):
+        logger.error("Impossible de supprimer le fichier: {}".format(file))
+        input()
+        exit(1)
+
+def file_copy(src, dest, overwrite=False):
+    logger.debug("copie: {} ------> {}".format(src, dest))
+    if os.path.exists(dest) and not overwrite:
+        raise FileExistsError
+    shutil.copy2(src, dest)
+    if not os.path.exists(dest):
+        raise FileNotFoundError
+    if not file_compare(src, dest):
+        logger.error("le fichier source et la destination ne correspondent pas")
+        raise FileNotFoundError
+
+
+
