@@ -113,7 +113,6 @@ class Mod():
                         self.logger.debug("Ce fichier est un fichier spécial, on zappe")
                         continue
                     self.logger.debug("fichier trouvé")
-                    self.logger.debug("SEARCH_ME File: {}".format(file))
                     full_path = os.path.abspath(os.path.join(root, file))
                     self.logger.debug("chemin complet: {}".format(full_path))
                     rel_path = full_path.replace(os.path.abspath(self.__local), "")
@@ -129,6 +128,7 @@ class Mod():
                         self.logger.debug("Ce fichier est un fichier spécial, on zappe")
                         continue
                     self.logger.debug("fichier trouvé")
+                    self.logger.debug("SEARCH_ME File: {}".format(file))
                     full_path = os.path.abspath(os.path.join(root, file))
                     self.logger.debug("chemin complet: {}".format(full_path))
                     rel_path = full_path.replace(os.path.abspath(self.__local), "")
