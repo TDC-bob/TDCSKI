@@ -13,16 +13,23 @@ import config
 logger = mkLogger(__name__, DEBUG)
 
 
+try:
+    conf = config.Config()
+except:
+    logger.error("votre fichier de configuration est corrompu, supprimez le et j'en réinstallerai un nouveau")
+    input()
+    exit(1)
+
 class Mod():
     @logged
     def __init__(self, name, _type, parent_dir, args):
         self.logger.debug("création d'un Mod")
-        try:
-            self.conf = config.Config()
-        except:
-            logger.error("votre fichier de configuration est corrompu, supprimez le et j'en réinstallerai un nouveau")
-            input()
-            exit(1)
+        # try:
+        #     self.conf = config.Config()
+        # except:
+        #     logger.error("votre fichier de configuration est corrompu, supprimez le et j'en réinstallerai un nouveau")
+        #     input()
+        #     exit(1)
         self.__name = name
         self.logger.debug("nom: {}".format(self.__name))
         self.__type = _type
@@ -54,23 +61,23 @@ class Mod():
                 exit(1)
 
         self.logger.debug("écriture du fichier de configuration")
-        if not self.conf.set_or_create(self.__type,  self.__name, "path", self.__local):
+        if not conf.set_or_create(self.__type,  self.__name, "path", self.__local):
             self.logger.error("erreur lors de l'écriture du nom")
             input()
             exit(1)
-        if not self.conf.set_or_create(self.__type, self.__name, "desc", self.__desc):
+        if not conf.set_or_create(self.__type, self.__name, "desc", self.__desc):
             self.logger.error("erreur lors de l'écriture de la description")
             input()
             exit(1)
-        if not self.conf.set_or_create(self.__type, self.__name, "version", self.__version):
+        if not conf.set_or_create(self.__type, self.__name, "version", self.__version):
             self.logger.error("erreur lors de l'écriture de la description")
             input()
             exit(1)
-        if not self.conf.set_or_create(self.__type, self.__name, "branch", self.__branch):
+        if not conf.set_or_create(self.__type, self.__name, "branch", self.__branch):
             self.logger.error("erreur lors de l'écriture de la description")
             input()
             exit(1)
-        self.conf.create(self.__type, self.__name, "installed", False)
+        conf.create(self.__type, self.__name, "installed", False)
 
 
         self.buil_files_list()
@@ -106,12 +113,13 @@ class Mod():
 
     @property
     def should_be_installed(self):
-        self.logger.debug("test: ce mod doit-il être installé ?")
-        if self.conf.get(self.type, self.name, "installed") == "True":
-            self.logger.debug("réponse: oui")
-            return True
-        self.logger.debug("réponse: non")
-        return False
+        rtn = conf.get(self.type, self.name, "installed")
+        self.logger.debug("test: ce mod doit-il être installé ? Réponse: {}".format(rtn))
+        # if conf.get(self.type, self.name, "installed") == "True":
+        #     self.logger.debug("réponse: oui")
+        #     return True
+        # self.logger.debug("réponse: non")
+        return rtn
 
     @property
     def desc(self):
