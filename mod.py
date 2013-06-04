@@ -220,7 +220,7 @@ class ModFile():
         self.logger.debug("chemin d'installation du fichier: {}".format(self.__install_to))
 
         self.__safe_to_delete = False
-        self.__config = config.Config("{}.tdcski".format(self.__install_to))
+        self.__config = config.Config("{}.tdcski".format(self.__install_to), False)
         self.logger.debug("config: {}".format(self.__config))
         self.__backup = "{}.tdcski.backup".format(self.__install_to)
         self.logger.debug("backup: {}".format(self.__backup))
