@@ -92,10 +92,10 @@ class Mod():
         if os.path.exists("{}/install.py".format(self.__local)):
             sys.path.append(os.path.abspath(self.__local))
             # noinspection PyUnresolvedReferences
-            import install.special as special
-            for key in special:
-                self.__special.append({'file': special[key], 'method': key})
-                self.__special_files.append(special[key])
+            import install
+            for key in install.special:
+                self.__special.append({'file': install.special[key], 'method': key})
+                self.__special_files.append(install.special[key])
 
         if os.path.exists("{}/DCS".format(self.__local)):
             for root, dirs, files in os.walk("{}/DCS".format(self.__local)):
