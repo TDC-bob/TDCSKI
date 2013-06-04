@@ -293,7 +293,7 @@ class ModFile():
         identical = self.__config.get("install","identical")
         self.logger.debug("identical: {}".format(identical))
         self.logger.debug("suppression du fichier configuration")
-        file_delete(self.__config)
+        file_delete(self.__config_file)
         if os.path.exists(self.__backup):
             self.logger.debug("un fichier de backup existe, création du fichier temporaire")
             temp_file = "{}.delete_me".format(self.__install_to)
