@@ -145,7 +145,7 @@ class Mod():
                 if file == '.gitignore':
                     self.logger.debug("fichier .gitignore, on zappe")
                     continue
-                self.logger.debug("fichier trouvé")
+                self.logger.debug("fichier trouvé: {}".format(file))
                 full_path = os.path.abspath(os.path.join(root, file))
                 self.logger.debug("chemin complet: {}".format(full_path))
                 rel_path = full_path.replace(os.path.abspath(self.__local), "")
@@ -331,9 +331,9 @@ class ModFile():
 
     @logged
     def uninstall(self):
-        self.logger.info("Désinstallation du fichier: {}".format(self.__basename))
+        self.logger.debug("Désinstallation du fichier: {}".format(self.__basename))
         if self.__parent.should_be_installed:
-            logger.info("Annulation de la désinstallation, le mod parent devrait être installé")
+            logger.debug("Annulation de la désinstallation, le mod parent devrait être installé")
             return
         if not os.path.exists(self.__config_file):
             logger.error("Ce fichier n'est pas installé, annulation de la désinstallation")
@@ -401,7 +401,7 @@ class ModFile():
 
     @logged
     def install(self):
-        self.logger.info("Installation du fichier: {}  --->   {}".format(self.__full_path, self.__install_to))
+        self.logger.debug("Installation du fichier: {}  --->   {}".format(self.__full_path, self.__install_to))
 
 
 
@@ -445,7 +445,7 @@ class ModFile():
                     self.logger.debug("pas de fichier local trouvé, aucun backup nécessaire, fichier noté 'safe_to_delete'")
 
 
-                self.logger.info("Copie: {}  --->   {}".format(self.__full_path, self.__install_to))
+                self.logger.debug("Copie: {}  --->   {}".format(self.__full_path, self.__install_to))
                 shutil.copy2(self.__full_path, self.__install_to)
 
             else:
