@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=TDCSKI
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.72
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.73
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_Run_After=signtool sign /v /n "Bob" /d "TDCSKI" /du "https://github.com/TDC-bob/TDCSKI.git" /t http://timestamp.verisign.com/scripts/timstamp.dll "%out%"
@@ -75,7 +75,6 @@ Func _main()
 	__log("ON LANCE QUELQUE CHOSE !", $func)
 	__log("running: " & $python_path & '"' & FileGetLongName(".\tdcski\tdcski.py") & '"', $func)
 	__log($str_all_good, $func)
-	Sleep(2000)
 	GUIDelete($gui_handle)
 	_run_tdcski()
 	_spawn($config_file)
