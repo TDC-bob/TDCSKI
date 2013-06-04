@@ -111,6 +111,13 @@ class Mod():
                     full_path = os.path.abspath(os.path.join(root, file))
                     self.logger.debug("chemin complet: {}".format(full_path))
                     rel_path = full_path.replace(os.path.abspath(self.__local), "")
+                    ## Debug
+                    for file in self.__special_files:
+                        self.logger.debug("Special file: {}".format(file))
+                        self.logger.debug("Relative path: {}".format(rel_path))
+                        self.logger.debug("Test: {}".format(file == rel_path))
+
+                    ## End debug
                     if rel_path in self.__special_files:
                         self.logger.debug("Ce fichier est un fichier spécial, on zappe")
                         continue
