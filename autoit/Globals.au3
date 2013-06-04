@@ -1,5 +1,5 @@
 #NoTrayIcon
-
+#include-once
 
 
 Global Const $Python33_x86_download_link = "http://www.python.org/ftp/python/3.3.2/python-3.3.2.msi"
@@ -19,3 +19,5 @@ Global $iMemo, $python_path, $git_path, $gui_handle
 Global Const $config_file = @ScriptDir & "\tdcski.cfg"
 
 Global $portable_git_folder = @ScriptDir & "\portable-git"
+
+#include "strings.au3"

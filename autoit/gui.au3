@@ -4,9 +4,10 @@
 #include <GUIConstantsEx.au3>
 #include <GuiRichEdit.au3>
 #include <ButtonConstants.au3>
+;~ AutoItSetOption("GUICoordMode", 0)
 
-;~ #include "strings.au3"
-;~ _spawn("C:\Users\bob\Desktop\tests\tdcski.cfg")
+#include "Globals.au3"
+_spawn("C:\Users\bob\Desktop\tests\tdcski.cfg")
 
 Func _spawn($config_file)
 	$rtn = _parse_config($config_file)
@@ -21,53 +22,74 @@ Func _spawn($config_file)
 ;~ 	for $skin in $skins
 ;~ 		_ArrayDisplay($skin)
 ;~ 	next
+;~ 	$h += $h_offset
+;~ 	$h_checkbox_and_label = 30
+;~ 	$h_group_sep = 20
+;~ 	$w_group_sep = 10
+;~ 	$top = $h_offset + $h_group_sep
+;~ 	$left = $w_offset + $w_group_sep
+;~ 	$h_checkbox_offset = 5
+;~ 	$w_sep = 20
+;~ 	$h_sep = 10
+
+
 	$h = 200
-	$w = 800
-	$ch = 20
-	$h_offset = 10
-	$w_offset = 10
-	$h += UBound($mods) * $ch
-	$h += UBound($skins) * $ch
-	$h += $h_offset
+	if @DesktopWidth > 1000 then
+		$w = 1000
+	Else
+		$w = 800
+	EndIf
+	$h_margin = 25
+	$w_margin = 10
+	$checkbox_h = 25
+	$checkbox_h_sep = 5
+	$checkbox_w = $w - ( 4*$w_margin )
+	$checkbox_left = 2*$w_margin
+
+	$group_w = $w - ( 2*$w_margin )
+	$group_left = $w_margin
+	$group_sep = 25
+	$group_mods_h = ( UBound($mods) * $checkbox_h ) + ( $h_margin ) + $group_sep
+	$group_skins_h = ( UBound($skins) * $checkbox_h ) + ( $h_margin ) + $group_sep
+	$group_skins_top = $group_mods_h + ( 2*$h_margin )
+
 	$button_w = 120
 	$button_h = 60
-	$h_checkbox_and_label = 30
-	$h_group_sep = 20
-	$w_group_sep = 10
-	$top = $h_offset + $h_group_sep
-	$left = $w_offset + $w_group_sep
-	$w_checkbox = 180
-	$h_checkbox_offset = 5
-;~ 	$w_sep = 20
-	$h_sep = 10
+
+	$button_top = ( 3*$h_margin ) + $group_mods_h + $group_skins_h
+	$button_quit_left = $w_margin
+	$button_cert_left = ( $w/2 ) - ( $button_w/2 )
+	$button_question_left = ( $w/2 ) + ( $button_w/2 ) + $w_margin
+	$button_apply_left = $w - ( $button_w + $h_margin )
+
+	$h = ( 4*$h_margin ) + $button_h + $group_mods_h + $group_skins_h
+
 	GUICreate($str_app_name, $w, $h)
-	GUICtrlCreateGroup("Mods", $w_offset, $h_offset, $w - ($w_offset*2), (UBound($mods) * $h_checkbox_and_label) + $h_group_sep)
+	local $top = $h_margin
+	GUICtrlCreateGroup("Mods", $group_left, $top, $group_w, $group_mods_h)
+	$top += $group_sep
 	For $mod In $mods
-		ConsoleWrite($mod & @LF)
-		Assign($mod[0], GUICtrlCreateCheckbox($mod[0], $left, $top, $w_checkbox, $ch))
+		Assign($mod[0], GUICtrlCreateCheckbox($mod[0] & " -> " & $mod[2], $checkbox_left, $top, $checkbox_w, $checkbox_h))
+		$top += $checkbox_h
 		If $mod[1] == "True" Then
 			GUICtrlSetState(Eval($mod[0]), $GUI_CHECKED)
 		EndIf
-		GUICtrlCreateLabel($mod[2], ($w_offset*2) + $w_checkbox, $top + $h_checkbox_offset, $w - (($w_offset*3) + $w_checkbox), $ch)
-		$top += ($ch + $h_sep)
 	Next
-	$top += $h_group_sep
-	GUICtrlCreateGroup("Skins", $w_offset, $top, $w - ($w_offset*2), (UBound($skins) * $h_checkbox_and_label) + $h_group_sep)
-	$top += $h_group_sep
+	$top = $group_skins_top
+	GUICtrlCreateGroup("Skins", $group_left, $top, $group_w, $group_skins_h)
+	$top += $group_sep
 	For $skin In $skins
-		ConsoleWrite($skin & @LF)
-		Assign($skin[0], GUICtrlCreateCheckbox($skin[0], $left, $top, $w_checkbox, $ch))
+		Assign($skin[0], GUICtrlCreateCheckbox($skin[0] & " -> " & $skin[2], $checkbox_left, $top, $checkbox_w, $checkbox_h))
+		$top += $checkbox_h
 		If $skin[1] == "True" Then
 			GUICtrlSetState(Eval($skin[0]), $GUI_CHECKED)
 		EndIf
-		GUICtrlCreateLabel($skin[2], ($w_offset*2) + $w_checkbox, $top + $h_checkbox_offset, $w - (($w_offset*3) + $w_checkbox), $ch)
-		$top += ($ch + 10)
 	Next
-	$quit_btn = GUICtrlCreateButton("Quitter", $left, $top + $h_group_sep, $button_w, $button_h, $BS_DEFPUSHBUTTON)
-	$install_cert_btn = GUICtrlCreateButton("Installer le certificat de Bob", ($w / 2) - ($button_w/2), $top + $h_group_sep, $button_w, $button_h, $BS_MULTILINE)
-	$question_mark_btn = GUICtrlCreateButton("?", ($w / 2) + ($button_w/2) + $w_offset, $top + $h_group_sep, $button_h, $button_h)
-;~ 	GUICtrlSetImage($question_mark_btn, "..\resources\question_mark.bmp")
-	$start_btn = GUICtrlCreateButton("Appliquer", $w - ($button_w+$left), $top + $h_group_sep, $button_w, $button_h)
+	$top = $button_top
+	$quit_btn = GUICtrlCreateButton("Quitter", $button_quit_left, $button_top, $button_w, $button_h)
+	$install_cert_btn = GUICtrlCreateButton("Installer le certificat de Bob", $button_cert_left, $button_top, $button_w, $button_h, $BS_MULTILINE)
+	$question_mark_btn = GUICtrlCreateButton("Certificat ?", $button_question_left, $button_top, $button_h, $button_h, $BS_MULTILINE)
+	$start_btn = GUICtrlCreateButton("Lancer le TDCSKI", $button_apply_left, $button_top, $button_w, $button_h, $BS_DEFPUSHBUTTON)
 	GUISetState()
 	local $count = 0
 	local $timer = False
@@ -165,7 +187,6 @@ Func _parse_config($file)
 			$to_add[0] = $name
 			$to_add[1] = $param
 			$to_add[2] = $desc
-;~ 				_ArrayDisplay($to_add)
 			If $mode == "mod" Then
 				_ArrayAdd($mods, $to_add)
 			ElseIf $mode == "skin" Then
@@ -173,10 +194,6 @@ Func _parse_config($file)
 			EndIf
 		EndIf
 	Next
-;~ 	For $mod In $mods
-;~ 		_ArrayDisplay($mod)
-;~ 	Next
-;~ 	_ArrayDisplay($mods)
 	Local $return[2] = [$mods, $skins]
 	Return $return
 EndFunc   ;==>_parse_config
