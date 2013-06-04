@@ -52,7 +52,7 @@ Func _spawn($config_file)
 		$top += ($ch + 10)
 	Next
 	$quit_btn = GUICtrlCreateButton("Quitter", 20, $top + 20, 120, 60, $BS_DEFPUSHBUTTON)
-	$start_btn = GUICtrlCreateButton("Lancer", $w - 140, $top + 20, 120, 60)
+	$start_btn = GUICtrlCreateButton("Appliquer", $w - 140, $top + 20, 120, 60)
 	GUISetState()
 	While 1
 		$msg = GUIGetMsg()
