@@ -101,54 +101,60 @@ class Mod():
             self.logger.debug("Special files: {}".format("\n".join([file for file in self.__special_files])))
             self.logger.debug("Special: {}".format(str(self.__special)))
 
-        if os.path.exists("{}/DCS".format(self.__local)):
-            for root, dirs, files in os.walk("{}/DCS".format(self.__local)):
-                for file in files:
-                    if file == '.gitignore':
-                        self.logger.debug("fichier .gitignore trouvé, on zappe")
-                        continue
-                    self.logger.debug("fichier trouvé")
-                    full_path = os.path.abspath(os.path.join(root, file))
-                    self.logger.debug("chemin complet: {}".format(full_path))
-                    rel_path = full_path.replace(os.path.abspath(self.__local), "")
-                    ## Debug
-                    for file in self.__special_files:
-                        self.logger.debug("Special file: {}".format(file))
-                        self.logger.debug("Relative path: {}".format(rel_path))
-                        self.logger.debug("Test: {}".format(file == rel_path))
+        for path in ["{}/DCS".format(self.__local), "{}/SAVED_GAMES".format(self.__local)]:
+            if os.path.exists(path):
+                self.__add_file(path)
+        # if os.path.exists("{}/DCS".format(self.__local)):
+        #     for root, dirs, files in os.walk("{}/DCS".format(self.__local)):
+        #         for file in files:
+        #             if file == '.gitignore':
+        #                 self.logger.debug("fichier .gitignore trouvé, on zappe")
+        #                 continue
+        #             self.logger.debug("fichier trouvé")
+        #             full_path = os.path.abspath(os.path.join(root, file))
+        #             self.logger.debug("chemin complet: {}".format(full_path))
+        #             rel_path = full_path.replace(os.path.abspath(self.__local), "")
+        #             if rel_path in self.__special_files:
+        #                 self.logger.debug("Ce fichier est un fichier spécial, on zappe")
+        #                 continue
+        #             self.logger.debug("chemin relatif {}".format(rel_path))
+        #             self.__files.append(ModFile(full_path,rel_path, self))
+        # if os.path.exists("{}/SAVED_GAMES".format(self.__local)):
+        #     for root, dirs, files in os.walk("{}/SAVED_GAMES".format(self.__local)):
+        #         for file in files:
+        #             if file == '.gitignore':
+        #                 self.logger.debug("fichier .gitignore trouvé, on zappe")
+        #                 continue
+        #             if file in self.__special_files:
+        #                 self.logger.debug("Ce fichier est un fichier spécial, on zappe")
+        #                 continue
+        #             self.logger.debug("fichier trouvé")
+        #             self.logger.debug("SEARCH_ME File: {}".format(file))
+        #             full_path = os.path.abspath(os.path.join(root, file))
+        #             self.logger.debug("chemin complet: {}".format(full_path))
+        #             rel_path = full_path.replace(os.path.abspath(self.__local), "")
+        #             if rel_path in self.__special_files:
+        #                 self.logger.debug("Ce fichier est un fichier spécial, on zappe")
+        #                 continue
+        #             self.logger.debug("chemin relatif {}".format(rel_path))
+        #             self.__files.append(ModFile(full_path,rel_path, self))
 
-                    ## End debug
-                    if rel_path in self.__special_files:
-                        self.logger.debug("Ce fichier est un fichier spécial, on zappe")
-                        continue
-                    self.logger.debug("chemin relatif {}".format(rel_path))
-                    self.__files.append(ModFile(full_path,rel_path, self))
-        if os.path.exists("{}/SAVED_GAMES".format(self.__local)):
-            for root, dirs, files in os.walk("{}/SAVED_GAMES".format(self.__local)):
-                for file in files:
-                    if file == '.gitignore':
-                        self.logger.debug("fichier .gitignore trouvé, on zappe")
-                        continue
-                    if file in self.__special_files:
-                        self.logger.debug("Ce fichier est un fichier spécial, on zappe")
-                        continue
-                    self.logger.debug("fichier trouvé")
-                    self.logger.debug("SEARCH_ME File: {}".format(file))
-                    full_path = os.path.abspath(os.path.join(root, file))
-                    self.logger.debug("chemin complet: {}".format(full_path))
-                    rel_path = full_path.replace(os.path.abspath(self.__local), "")
-                    ## Debug
-                    for file in self.__special_files:
-                        self.logger.debug("Special file: {}".format(file))
-                        self.logger.debug("Relative path: {}".format(rel_path))
-                        self.logger.debug("Test: {}".format(file == rel_path))
-
-                    ## End debug
-                    if rel_path in self.__special_files:
-                        self.logger.debug("Ce fichier est un fichier spécial, on zappe")
-                        continue
-                    self.logger.debug("chemin relatif {}".format(rel_path))
-                    self.__files.append(ModFile(full_path,rel_path, self))
+    def __add_file(self, path):
+        for root, dirs, files in os.walk("{}/SAVED_GAMES".format(self.__local)):
+            for file in files:
+                if file == '.gitignore':
+                    self.logger.debug("fichier .gitignore, on zappe")
+                    continue
+                self.logger.debug("fichier trouvé")
+                full_path = os.path.abspath(os.path.join(root, file))
+                self.logger.debug("chemin complet: {}".format(full_path))
+                rel_path = full_path.replace(os.path.abspath(self.__local), "")
+                self.logger.debug("chemin relatif {}".format(rel_path))
+                if rel_path in self.__special_files:
+                    self.logger.debug("fichier spécial, on zappe")
+                    continue
+                self.logger("fichier régulier, instanciation et ajout à la liste")
+                self.__files.append(ModFile(full_path,rel_path, self))
 
     @property
     def should_be_installed(self):
