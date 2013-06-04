@@ -49,29 +49,29 @@ def main():
     # exit(0)
 
     # os.environ["GIT_SSL_NO_VERIFY"] = "1"
-    logger.info("Lecture du fichier de configuration")
+    logger.info("lecture du fichier tdcski.cfg")
     try:
         conf = Config()
     except Exception as e:
-        logger.error("Le fichier de configuration est corrompu, supprimez-le et j'en réinstallerai un nouveau")
-        logger.debug("Appuyez sur ENTER pour quitter")
+        logger.error("le fichier de configuration est corrompu, supprimez-le et j'en réinstallerai un nouveau")
+        logger.debug("appuyez sur ENTER pour quitter")
         input()
         exit(1)
 
-    logger.info("Recherche du répertoire d'installation de DCS dans la base de registre")
+    logger.info("recherche du répertoire d'installation de DCS")
     try:
         dcs_path, caribou = winreg.QueryValueEx (winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Eagle Dynamics\DCS World"), "Path")
     except FileNotFoundError:
-        logger.error("Impossible de trouver une installation de DCS")
-        logger.debug("Appuyez sur ENTER pour quitter")
+        logger.error("impossible de trouver une installation de DCS")
+        logger.debug("appuyez sur ENTER pour quitter")
         exit(1)
-    logger.info("Le répertoire d'installation DCS détecté est: \n\t\t{}".format(dcs_path))
+    logger.info("le répertoire d'installation DCS détecté est: \n\t\t{}".format(dcs_path))
     conf.create("general", "dcs_path", dcs_path)
 
     try:
-        logger.info("Détection du répertoire Saved Games")
+        logger.info("détection du répertoire Saved Games")
         saved_games_path = os.path.normpath(os.path.expanduser("~/saved games/dcs"))
-        logger.info("Le répertoire d'installation DCS détecté est: \n\t\t{}".format(saved_games_path))
+        logger.info("le répertoire d'installation DCS détecté est: \n\t\t{}".format(saved_games_path))
         conf.create("general", "saved_games_path", saved_games_path)
 
         config.git_exe = conf.get("general", "git_path")
@@ -83,7 +83,7 @@ def main():
         if not os.path.exists("../repos/mods"):
             os.makedirs("../repos/mods")
 
-        logger.info("Création du repository principal")
+        logger.info("mise à jour de la liste des mods/skins")
         Repo("../repos/list", "https://github.com/TDC-bob/modlist.git").pull()
 
         sys.path.append(os.path.abspath("../repos/list/"))
@@ -92,19 +92,21 @@ def main():
         mods = []
         skins = []
         for m in list.mods:
+            logger.info("mise à jour du mod: {}".format(m))
             m = Mod(m, "mod", "../repos/mods", list.mods[m])
             m.pull_repo()
             mods.append(m)
 
         for s in list.skins:
+            logger.info("mise à jour du mod: {}".format(s))
             s = Mod(s, "skin", "../repos/skins", list.skins[s])
             s.pull_repo()
             skins.append(s)
 
-        logger.info("Fin des mises à jour")
-        logger.info("List des mods disponibles: {}".format("\n".join(m.name for m in mods)))
-        logger.info("List des skins disponibles: {}".format("\n".join(s.name for s in skins)))
-        logger.info("Vérification de ce qu'il faut installer/désinstaller")
+        logger.info("fin des mises à jour")
+        # logger.info("list des mods disponibles: {}".format("\n".join(m.name for m in mods)))
+        # logger.info("list des skins disponibles: {}".format("\n".join(s.name for s in skins)))
+        logger.info("vérification de ce qu'il faut installer/désinstaller")
         for mod in mods:
             mod.check()
         for skin in skins:
@@ -113,8 +115,8 @@ def main():
     except Exception as e:
         logger.error(e.__class__)
         logger.error(e)
-        logger.error("Traceback: {}".format("\n".join(traceback.format_tb(e.__traceback__))))
-        logger.debug("Appuyez sur ENTER pour quitter")
+        logger.error("TRACEBACK: {}".format("\n".join(traceback.format_tb(e.__traceback__))))
+        logger.debug("appuyez sur ENTER pour quitter")
         input()
         exit(1)
         # conf.create("skins", s, "path", test.local)
