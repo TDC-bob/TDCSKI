@@ -7,7 +7,7 @@ import winreg
 import traceback
 from time import strftime, gmtime
 from lib.configobj import ConfigObj
-import mod
+import mod.Mod as Mod
 import config
 from config import Config
 import ui_server
@@ -92,14 +92,14 @@ def main():
         mods = []
         skins = []
         for m in list.mods:
-            mod = mod.Mod(m, "mod", "../repos/mods", list.mods[m])
-            mod.pull_repo()
-            mods.append(mod)
+            m = Mod(m, "mod", "../repos/mods", list.mods[m])
+            m.pull_repo()
+            mods.append(m)
 
         for s in list.skins:
-            skin = mod.Mod(s, "skin", "../repos/skins", list.skins[s])
-            skin.pull_repo()
-            skins.append(skin)
+            s = Mod(s, "skin", "../repos/skins", list.skins[s])
+            s.pull_repo()
+            skins.append(s)
 
         logger.info("Fin des mises à jour")
         logger.info("List des mods disponibles: {}".format("\n".join(m.name for m in mods)))
