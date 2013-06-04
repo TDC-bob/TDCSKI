@@ -100,7 +100,7 @@ class Mod():
                 self.logger.debug("Key: {}".format(key))
                 self.__special.append({'file': install.special[key], 'method': key})
                 self.logger.debug("appending file: {}".format(install.special[key]))
-                self.__special_files.append(install.special[key])
+                self.__special_files.append(os.path.basename(install.special[key]))
             self.logger.debug("Special files: {}".format(self.__special_files))
 
         if os.path.exists("{}/DCS".format(self.__local)):
