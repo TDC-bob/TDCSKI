@@ -91,7 +91,6 @@ class Mod():
         self.__special_files = []
         if os.path.exists("{}/install.py".format(self.__local)):
             sys.path.append(os.path.abspath(self.__local))
-            self.logger.debug("SEARCH_ME")
             # noinspection PyUnresolvedReferences
             import install
             self.logger.debug("Install: {}".format(install))
@@ -108,7 +107,7 @@ class Mod():
                     if file == '.gitignore':
                         self.logger.debug("fichier .gitignore trouvé, on zappe")
                         continue
-                    if file in self.__special_files:
+                    if os.path.join(root, file) in self.__special_files:
                         self.logger.debug("Ce fichier est un fichier spécial, on zappe")
                         continue
                     self.logger.debug("fichier trouvé")
