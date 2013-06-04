@@ -97,7 +97,7 @@ class Mod():
             self.logger.debug("Install: {}".format(install))
             self.logger.debug("Install.special: {}".format(install.special))
             for k in install.special:
-                self.__special_files.append(k)
+                self.__special_files.append(os.path.normcase("/{}".format(k)))
                 self.__special[k] = install.special[k]
             self.logger.debug("Special files: {}".format("\n".join([file for file in self.__special_files])))
             self.logger.debug("Special: {}".format(str(self.__special)))
