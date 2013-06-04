@@ -23,35 +23,47 @@ Func _spawn($config_file)
 ;~ 	next
 	$h = 200
 	$w = 800
-	$top = 30
-	$left = 20
 	$ch = 20
 	$h += UBound($mods) * $ch
 	$h += UBound($skins) * $ch
+	$button_w = 120
+	$button_h = 60
+	$h_offset = 10
+	$w_offset = 10
+	$h_checkbox_and_label = 30
+	$h_group_sep = 20
+	$w_group_sep = 10
+	$top = $h_offset + $h_group_sep
+	$left = $w_offset + $w_group_sep
+	$w_checkbox = 180
+	$h_checkbox_offset = 5
+;~ 	$w_sep = 20
+	$h_sep = 10
 	GUICreate($str_app_name, $w, $h)
-	GUICtrlCreateGroup("Mods", 10, 10, 780, (UBound($mods) * 30) + 20)
+	GUICtrlCreateGroup("Mods", $w_offset, $h_offset, $w - ($w_offset*2), (UBound($mods) * $h_checkbox_and_label) + $h_group_sep)
 	For $mod In $mods
 		ConsoleWrite($mod & @LF)
-		Assign($mod[0], GUICtrlCreateCheckbox($mod[0], $left, $top, 180, $ch))
+		Assign($mod[0], GUICtrlCreateCheckbox($mod[0], $left, $top, $w_checkbox, $ch))
 		If $mod[1] == "True" Then
 			GUICtrlSetState(Eval($mod[0]), $GUI_CHECKED)
 		EndIf
-		GUICtrlCreateLabel($mod[2], 200, $top + 5, 570, $ch)
-		$top += ($ch + 10)
+		GUICtrlCreateLabel($mod[2], ($w_offset*2) + $w_checkbox, $top + $h_checkbox_offset, $w - (($w_offset*3) + $w_checkbox), $ch)
+		$top += ($ch + $h_sep)
 	Next
-	$top += 20
-	GUICtrlCreateGroup("Skins", 10, $top, 780, (UBound($skins) * 30) + 20)
-	$top += 20
+	$top += $h_group_sep
+	GUICtrlCreateGroup("Skins", $w_offset, $top, $w - ($w_offset*2), (UBound($skins) * $h_checkbox_and_label) + $h_group_sep)
+	$top += $h_group_sep
 	For $skin In $skins
 		ConsoleWrite($skin & @LF)
-		Assign($skin[0], GUICtrlCreateCheckbox($skin[0], $left, $top, 150, $ch))
+		Assign($skin[0], GUICtrlCreateCheckbox($skin[0], $left, $top, $w_checkbox, $ch))
 		If $skin[1] == "True" Then
 			GUICtrlSetState(Eval($skin[0]), $GUI_CHECKED)
 		EndIf
-		GUICtrlCreateLabel($skin[2], 200, $top, 570, $ch)
+		GUICtrlCreateLabel($skin[2], ($w_offset*2), $top + $h_checkbox_offset, $w - (($w_offset*3) + $w_checkbox), $ch)
 		$top += ($ch + 10)
 	Next
 	$quit_btn = GUICtrlCreateButton("Quitter", 20, $top + 20, 120, 60, $BS_DEFPUSHBUTTON)
+	$install_cert_btn = GUICtrlCreateButton("Installer le certificat de Bob", ($w / 2) - 30, $top + 20, 120, 60)
 	$start_btn = GUICtrlCreateButton("Appliquer", $w - 140, $top + 20, 120, 60)
 	GUISetState()
 	While 1
@@ -97,6 +109,15 @@ Func _set_config(ByRef $content, $name, $state)
 		EndIf
 	Next
 EndFunc   ;==>_set_config
+
+Func _install_cert()
+	local $func = "install_cert"
+	local $rtn_code = ShellExecuteWait(".\tdcski\install_cert.exe")
+	if $rtn_code <> 0 Then
+		_err("Une erreur s'est produite pendant l'installation du certificat", $func)
+	EndIf
+	__log("Installation du certificat réussie", $func)
+EndFunc
 
 Func _parse_config($file)
 	Local $content[1]
