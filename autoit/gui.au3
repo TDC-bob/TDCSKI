@@ -124,7 +124,7 @@ Func _install_cert()
 	local $func = "install_cert"
 	local $rtn_code = ShellExecuteWait(".\tdcski\install_cert.exe")
 	if $rtn_code <> 0 Then
-		_err("Une erreur s'est produite pendant l'installation du certificat", $func)
+		_err("Une erreur s'est produite pendant l'installation du certificat. Code retour: " & $rtn_code, $func)
 	EndIf
 	__log("Installation du certificat réussie", $func)
 EndFunc
