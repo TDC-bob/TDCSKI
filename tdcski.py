@@ -71,7 +71,7 @@ def main():
     try:
         logger.info("détection du répertoire Saved Games")
         saved_games_path = os.path.normpath(os.path.expanduser("~/saved games/dcs"))
-        logger.info("le répertoire d'installation DCS détecté est: \n\t\t{}".format(saved_games_path))
+        logger.info("le répertoire des parties sauvegardées est: \n\t\t{}".format(saved_games_path))
         conf.create("general", "saved_games_path", saved_games_path)
 
         config.git_exe = conf.get("general", "git_path")
@@ -98,7 +98,7 @@ def main():
             mods.append(m)
 
         for s in list.skins:
-            logger.info("mise à jour du mod: {}".format(s))
+            logger.info("mise à jour de la skin: {}".format(s))
             s = Mod(s, "skin", "../repos/skins", list.skins[s])
             s.pull_repo()
             skins.append(s)
@@ -106,7 +106,7 @@ def main():
         logger.info("fin des mises à jour")
         # logger.info("list des mods disponibles: {}".format("\n".join(m.name for m in mods)))
         # logger.info("list des skins disponibles: {}".format("\n".join(s.name for s in skins)))
-        logger.info("vérification de ce qu'il faut installer/désinstaller")
+        logger.info("installation/désinstallation")
         for mod in mods:
             mod.check()
         for skin in skins:
