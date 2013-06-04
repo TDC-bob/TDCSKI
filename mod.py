@@ -220,7 +220,8 @@ class ModFile():
         self.logger.debug("chemin d'installation du fichier: {}".format(self.__install_to))
 
         self.__safe_to_delete = False
-        self.__config = config.Config("{}.tdcski".format(self.__install_to), False)
+        self.__config_file = "{}.tdcski".format(self.__install_to)
+        self.__config = config.Config(self.__config_file, False)
         self.logger.debug("config: {}".format(self.__config))
         self.__backup = "{}.tdcski.backup".format(self.__install_to)
         self.logger.debug("backup: {}".format(self.__backup))
@@ -248,7 +249,7 @@ class ModFile():
 
     @property
     def is_installed(self):
-        return os.path.exists(self.__config)
+        return os.path.exists(self.__config_file)
 
     @property
     def should_be_installed(self):
@@ -276,12 +277,12 @@ class ModFile():
         if self.__parent.should_be_installed:
             logger.info("Annulation de la désinstallation, le mod parent devrait être installé")
             return
-        if not os.path.exists(self.__config):
+        if not os.path.exists(self.__config_file):
             logger.error("Ce fichier n'est pas installé, annulation de la désinstallation")
             return
         self.logger.debug("suppression du fichier configuration")
-        os.remove(self.__config)
-        if os.path.exists(self.__config):
+        os.remove(self.__config_file)
+        if os.path.exists(self.__config_file):
             self.logger.error("échec de la suppression du fichier configuration")
             input()
             exit(1)
@@ -335,7 +336,7 @@ class ModFile():
                 self.__config.set_or_create("install","description",self.__parent.desc)
                 # with open(self.__dummy,mode="w") as file:
                 #     file.write(str(self.__parent.version))
-                if not os.path.exists(self.__config):
+                if not os.path.exists(self.__config_file):
                     self.logger.error("echec de la création du fichier configuration")
                     input()
                     exit(1)
