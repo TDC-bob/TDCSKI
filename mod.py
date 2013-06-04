@@ -91,9 +91,13 @@ class Mod():
         self.__special_files = []
         if os.path.exists("{}/install.py".format(self.__local)):
             sys.path.append(os.path.abspath(self.__local))
+            self.logger.log("SEARCH_ME")
             # noinspection PyUnresolvedReferences
             import install
+            self.logger.debug("Install: {}".format(install))
+            self.logger.debug("Install.special: {}".format(install.special))
             for key in install.special:
+                self.logger.debug("Key: {}".format(key))
                 self.__special.append({'file': install.special[key], 'method': key})
                 self.__special_files.append(install.special[key])
 
