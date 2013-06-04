@@ -59,18 +59,24 @@ Func _spawn($config_file)
 		If $skin[1] == "True" Then
 			GUICtrlSetState(Eval($skin[0]), $GUI_CHECKED)
 		EndIf
-		GUICtrlCreateLabel($skin[2], ($w_offset*2), $top + $h_checkbox_offset, $w - (($w_offset*3) + $w_checkbox), $ch)
+		GUICtrlCreateLabel($skin[2], ($w_offset*2) + $w_checkbox, $top + $h_checkbox_offset, $w - (($w_offset*3) + $w_checkbox), $ch)
 		$top += ($ch + 10)
 	Next
-	$quit_btn = GUICtrlCreateButton("Quitter", 20, $top + 20, 120, 60, $BS_DEFPUSHBUTTON)
-	$install_cert_btn = GUICtrlCreateButton("Installer le certificat de Bob", ($w / 2) - 30, $top + 20, 120, 60)
-	$start_btn = GUICtrlCreateButton("Appliquer", $w - 140, $top + 20, 120, 60)
+	$quit_btn = GUICtrlCreateButton("Quitter", $left, $top + $h_group_sep, $button_w, $button_h, $BS_DEFPUSHBUTTON)
+	$install_cert_btn = GUICtrlCreateButton("Installer le certificat de Bob", ($w / 2) - ($button_w/2), $top + $h_group_sep, $button_w, $button_h, $BS_MULTILINE)
+	$question_mark_btn = GUICtrlCreateButton("?", ($w / 2) + ($button_w/2) + $w_offset, $top + $h_group_sep, $button_h, $button_h)
+;~ 	GUICtrlSetImage($question_mark_btn, "..\resources\question_mark.bmp")
+	$start_btn = GUICtrlCreateButton("Appliquer", $w - ($button_w+$left), $top + $h_group_sep, $button_w, $button_h)
 	GUISetState()
 	While 1
 		$msg = GUIGetMsg()
 		Select
 			Case $msg = $GUI_EVENT_CLOSE Or $msg = $quit_btn
 				ExitLoop
+			Case $msg = $question_mark_btn
+				_cert_help()
+			Case $msg = $install_cert_btn
+				_install_cert()
 			Case $msg = $start_btn
 				Local $content[1]
 				_FileReadToArray($config_file, $content)
@@ -92,6 +98,10 @@ Func _spawn($config_file)
 
 
 EndFunc   ;==>_spawn
+
+Func _cert_help()
+	ShellExecute("http://tueurdechars.xooit.be/t1039-Comment-pourquoi-installer-un-certificat-SSL.htm")
+EndFunc
 
 Func _set_config(ByRef $content, $name, $state)
 	$do = False
