@@ -228,6 +228,7 @@ class ModFile():
         self.logger.debug("chemin d'installation du fichier: {}".format(self.__install_to))
 
         self.__safe_to_delete = False
+        self.__conflict_file = "{}.tdcski.CONFLIT".format(self.__install_to)
         self.__config_file = "{}.tdcski".format(self.__install_to)
         self.__config = config.Config(self.__config_file, False)
         self.logger.debug("config: {}".format(self.__config_file))
@@ -357,6 +358,8 @@ class ModFile():
     def install(self):
         self.logger.info("Installation du fichier: {}  --->   {}".format(self.__full_path, self.__install_to))
 
+
+
         if self.__parent.should_be_installed:
             if not self.__local_copy_identical:
 
@@ -373,8 +376,9 @@ class ModFile():
                     else:
                         self.logger.error("Conflit détecté avec un autre mod pour le fichier: {}".format(self.__install_to))
                         self.log.error("J'écrit un fichier .CONFLIT à côté du fichier qui pose problème et je quitte")
-                        with open("{}.tdcski.CONFLIT".format(self.__install_to), mode="r") as f:
-                            f.write("Conflit avec le mod {}".format(other_mod_name))
+                        if not os.path.exists(self.__conflict_file):
+                            with open(self.__conflict_file, mode="r") as f:
+                                f.write("Conflit avec le mod {}".format(other_mod_name))
                         input()
                         exit(1)
 
@@ -411,6 +415,9 @@ class ModFile():
             self.__config.set_or_create("install", "version",str(self.__parent.version))
             self.__config.set_or_create("install","description",self.__parent.desc)
             self.__config.set_or_create("install", "identical", identical)
+            if os.path.exists(self.__conflict_file):
+                self.logger.debug("j'ai trouvé un vieux fichier .CONFLIT, comme il n'ya pas eu de conflit détecté, je supprime")
+                file_delete(self.__conflict_file)
             if not os.path.exists(self.__config_file):
                 self.logger.error("échec de la création du fichier configuration")
                 input()
