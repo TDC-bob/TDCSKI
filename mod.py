@@ -289,7 +289,7 @@ class ModFile():
             logger.error("Ce fichier n'est pas installé, annulation de la désinstallation")
             return
         safe_to_del = self.__config.get("install", "safe_to_delete")
-        self.logger.Debug("safe to delete: {}".format(safe_to_del))
+        self.logger.debug("safe to delete: {}".format(safe_to_del))
         identical = self.__config.get("install","identical")
         self.logger.debug("identical: {}".format(identical))
         self.logger.debug("suppression du fichier configuration")
