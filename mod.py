@@ -212,7 +212,7 @@ class Mod():
 
     def pull_repo(self):
         self.logger.debug("pull du repository local")
-        self.__repo.pull(self.remote, self.branch)
+        self.__repo.pull("origin", self.branch)
         self.buil_files_list()
 
     @logged
