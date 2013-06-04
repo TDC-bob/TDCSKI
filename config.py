@@ -23,6 +23,10 @@ class Config():
             while len(args) > 1:
                 base = base[args[0]]
                 args = args [1:]
+            if base[args[0]] in ["True","true","oui","yes"]:
+                return True
+            if base[args[0]] in ["False","false","non","no"]:
+                return False
             return base[args[0]]
         except KeyError:
             return None
