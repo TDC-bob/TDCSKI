@@ -107,13 +107,13 @@ class Mod():
                     if file == '.gitignore':
                         self.logger.debug("fichier .gitignore trouvé, on zappe")
                         continue
-                    if os.path.join(root, file) in self.__special_files:
-                        self.logger.debug("Ce fichier est un fichier spécial, on zappe")
-                        continue
                     self.logger.debug("fichier trouvé")
                     full_path = os.path.abspath(os.path.join(root, file))
                     self.logger.debug("chemin complet: {}".format(full_path))
                     rel_path = full_path.replace(os.path.abspath(self.__local), "")
+                    if rel_path in self.__special_files:
+                        self.logger.debug("Ce fichier est un fichier spécial, on zappe")
+                        continue
                     self.logger.debug("chemin relatif {}".format(rel_path))
                     self.__files.append(ModFile(full_path,rel_path, self))
         if os.path.exists("{}/SAVED_GAMES".format(self.__local)):
