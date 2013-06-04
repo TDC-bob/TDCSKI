@@ -142,6 +142,7 @@ class Repo():
         if not branch in [branch.name for branch in self.branches]:
             raise Exceptions.GitBranchNotKnown("unknown branch: {}".format(branch))
         self.checkout(branch)
+        self.fetch(remote)
         success, output, cmd = self.__run(["pull",remote,branch])
         if not success:
            raise Exceptions.GitMergeError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
