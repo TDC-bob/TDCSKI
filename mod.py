@@ -153,7 +153,7 @@ class Mod():
                 if rel_path in self.__special_files:
                     self.logger.debug("fichier spécial, on zappe")
                     continue
-                self.logger("fichier régulier, instanciation et ajout à la liste")
+                self.logger.debug("fichier régulier, instanciation et ajout à la liste")
                 self.__files.append(ModFile(full_path,rel_path, self))
 
     @property
