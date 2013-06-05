@@ -221,33 +221,23 @@ class Mod():
                     with open(mod_file.full_path, mode='r') as file:
                         lines = file.readlines()
                         for line in lines:
-                            orig_line = line
-                            self.logger.debug("\tligne: {}".format(line))
-                            re_1 = re.compile(r"\$\$SAVED_GAMES\$\$")
-                            re_2 = re.compile(r"\$\$DCS\$\$")
-                            line = re.sub(re_1, config.SaveGames_path, line)
-                            line = re.sub(re_2, config.DCS_path, line)
-                            self.logger.debug("line: {}".format(line))
-                            self.logger.debug("UTF8: {}".format(line.encode()))
-                            lines_to_add.append(line)
-                            line = orig_line
-                            line = re.sub(re_1, re.escape(config.SaveGames_path), line)
-                            line = re.sub(re_2, re.escape(config.DCS_path), line)
-                            self.logger.debug("escaped line: {}".format(line))
-                            lines_to_add.append(line)
-                            line = orig_line
                             line = line.replace("$$SAVED_GAMES$$", config.SaveGames_path)
                             line = line.replace("$$DCS$$", config.DCS_path)
                             self.logger.debug("str.replace: {}".format(line))
                             lines_to_add.append(line)
                     self.logger.debug("lecture du fichier à éditer")
+                    # lines_to_write = []
                     with open(mod_file.install_to, mode='r', encoding="UTF-8") as file:
                         lines = file.readlines()
                         for line in lines:
                             self.logger.debug("\tligne: {}".format(line))
+                            # lines_to_write.append(line)
                             lines_to_add = list(filter(line.__ne__, lines_to_add))
                     self.logger.debug("lines_to_add: {}".format(lines_to_add))
-
+                    with open(mod_file.install_to, mode='a', encoding="UTF-8") as file:
+                        for line in lines_to_add:
+                            self.logger.debug("ecriture dans le fichier de la ligne: {}".format(line))
+                            file.writelines(lines_to_add)
 
                 else:
                     self.logger.error("méthode inconnue: {}".format(method))
