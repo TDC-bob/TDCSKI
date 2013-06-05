@@ -216,7 +216,7 @@ class Mod():
             else:
                 self.logger.debug("le fichier existe déjà, méthode d'édition: {}".format(method))
                 if method == "append":
-                    lines_to_add = []
+                    lines_to_add = ["\n"]
                     self.logger.debug("lecture du fichier à ajouter")
                     with open(mod_file.full_path, mode='r') as file:
                         lines = file.readlines()
