@@ -87,16 +87,15 @@ class Mod():
     def buil_files_list(self):
         self.logger.debug("construction de la liste des fichiers")
         self.__files = []
-        self.__special_list = {}
+        self.__special = {}
         self.__special_files = []
-        self.__special = []
         if os.path.exists("{}/install.py".format(self.__local)):
             sys.path.append(os.path.abspath(self.__local))
             # noinspection PyUnresolvedReferences
             import install
             for k in install.special:
                 self.__special_files.append(os.path.normpath("/{}".format(k)))
-                self.__special_list[k] = install.special[k]
+                self.__special[k] = install.special[k]
 
         for path in ["{}/DCS".format(self.__local), "{}/SAVED_GAMES".format(self.__local)]:
             if os.path.exists(path):
@@ -202,7 +201,7 @@ class Mod():
         for file in self.__files:
             logger.debug("ce mod devrait être installé")
             file.install()
-        for special in self.__special_list:
+        for special in self.__special:
             self.logger.debug(special)
             # self.logger.debug(method)
             pass
