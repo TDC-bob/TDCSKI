@@ -87,15 +87,16 @@ class Mod():
     def buil_files_list(self):
         self.logger.debug("construction de la liste des fichiers")
         self.__files = []
-        self.__special = {}
+        self.__special_list = {}
         self.__special_files = []
+        self.__special = []
         if os.path.exists("{}/install.py".format(self.__local)):
             sys.path.append(os.path.abspath(self.__local))
             # noinspection PyUnresolvedReferences
             import install
             for k in install.special:
                 self.__special_files.append(os.path.normpath("/{}".format(k)))
-                self.__special[k] = install.special[k]
+                self.__special_list[k] = install.special[k]
 
         for path in ["{}/DCS".format(self.__local), "{}/SAVED_GAMES".format(self.__local)]:
             if os.path.exists(path):
@@ -113,7 +114,8 @@ class Mod():
                 rel_path = full_path.replace(os.path.abspath(self.__local), "")
                 self.logger.debug("chemin relatif {}".format(rel_path))
                 if rel_path in self.__special_files:
-                    self.logger.debug("fichier spécial, on zappe")
+                    self.logger.debug("fichier spécial")
+                    self.__special.append(ModFile(full_path,rel_path, self))
                     continue
                 self.logger.debug("fichier régulier, instanciation et ajout à la liste")
                 self.__files.append(ModFile(full_path,rel_path, self))
@@ -196,11 +198,14 @@ class Mod():
         logger.debug("installation du {}: {}".format(self.__type, self.__name))
         if not self.should_be_installed:
             logger.debug("ce mod ne devrait pas être installé")
-            return False
+            return
         for file in self.__files:
             logger.debug("ce mod devrait être installé")
             file.install()
-        return True
+        for special in self.__special_list:
+            method = self.__special[special]["method"]
+            self.logger.debug(method)
+            pass
 
     def __str__(self):
         return "Name: {}\nRemote: {}\nLocal: {}\nRepo: {}".format(self.__name, self.__remote, self.__local,repr(self.__repo))
@@ -306,7 +311,7 @@ class ModFile():
             self.logger.debug("un fichier de backup existe, création du fichier temporaire")
             temp_file = "{}.delete_me".format(self.__install_to)
             file_copy(self.__install_to, temp_file)
-            self.logger.log("suppression du fichier original")
+            self.logger.debug("suppression du fichier original")
             file_delete(self.__install_to)
             self.logger.debug("restauration du backup")
             try:
@@ -360,8 +365,6 @@ class ModFile():
     @logged
     def install(self):
         self.logger.debug("Installation du fichier: {}  --->   {}".format(self.__full_path, self.__install_to))
-
-
 
         if self.__parent.should_be_installed:
             if not self.__local_copy_identical:
@@ -425,6 +428,7 @@ class ModFile():
                 self.logger.error("échec de la création du fichier configuration")
                 input()
                 exit(1)
+
         else:
             self.logger.debug("le mod parent ne devrait pas être installé, donc ce fichier non plus")
 
