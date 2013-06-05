@@ -204,11 +204,11 @@ class Mod():
         for k in self.__special.keys():
             self.logger.debug("installation du fichier spécial: {}".format(k))
             method = self.__special[k]['method']
-            can_create = self.__special[k]['can_create']
+            can_create_file = self.__special[k]['can_create_file']
             mod_file = self.__special[k]['mod_file']
             if not os.path.exists(mod_file.install_to):
                 self.logger.debug("le fichier n'existe pas encore sur le système")
-                if not can_create:
+                if not can_create_file:
                     self.logger.error("je n'ai pas la permission de le créer")
                     input()
                     exit(1)
