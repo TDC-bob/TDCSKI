@@ -114,7 +114,7 @@ class Mod():
                 self.logger.debug("chemin relatif {}".format(rel_path))
                 if rel_path in self.__special_files:
                     self.logger.debug("fichier spécial")
-                    self.__special.append(ModFile(full_path,rel_path, self))
+                    self.__special[rel_path] = (ModFile(full_path,rel_path, self))
                     continue
                 self.logger.debug("fichier régulier, instanciation et ajout à la liste")
                 self.__files.append(ModFile(full_path,rel_path, self))
