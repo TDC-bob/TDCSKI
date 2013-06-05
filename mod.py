@@ -237,7 +237,7 @@ class Mod():
                     self.logger.debug("lines_to_add: {}".format(lines_to_add))
                     if len(lines_to_add) > 1:
                         with open(mod_file.install_to, mode='a', encoding="UTF-8") as file:
-                            self.logger.debug("ecriture dans le fichier de la ligne: {}".format(line))
+                            self.logger.debug("ecriture dans le fichier des lignes: {}".format(lines_to_add))
                             file.writelines(lines_to_add)
 
                 else:
