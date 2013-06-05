@@ -222,6 +222,10 @@ class Mod():
                         lines = file.readlines()
                         for line in lines:
                             self.logger.debug("\tligne: {}".format(line))
+                            re_1 = re.compile("\$\$SAVED_GAMES\$\$")
+                            re_2 = re.compile("\$\$DCS\$\$")
+                            line = re.sub(re_1, config.SaveGames_path, line)
+                            line = re.sub(re_2, config.DCS_path, line)
                             lines_to_add.append(line)
                     self.logger.debug("lecture du fichier à éditer")
                     with open(mod_file.install_to, mode='r', encoding="UTF-8") as file:
