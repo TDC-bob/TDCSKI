@@ -198,11 +198,13 @@ class Mod():
         if not self.should_be_installed:
             logger.debug("ce mod ne devrait pas être installé")
             return
+        logger.debug("ce mod devrait être installé")
         for file in self.__files:
-            logger.debug("ce mod devrait être installé")
             file.install()
-        for special in self.__special:
-            self.logger.debug(special)
+        for k in self.__special.keys():
+            self.logger.debug("Key: {}".format(k))
+            self.logger.debug("Value: {}".format(self.__special[k]))
+            # self.logger.debug(special)
             # self.logger.debug(method)
             pass
 
