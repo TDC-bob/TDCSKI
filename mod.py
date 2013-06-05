@@ -231,7 +231,7 @@ class Mod():
                             lines_to_add.append(line)
                             line = re.sub(re_1, re.escape(config.SaveGames_path), line)
                             line = re.sub(re_2, re.escape(config.DCS_path), line)
-                            self.logger.log("escaped line: {}".format(line))
+                            self.logger.debug("escaped line: {}".format(line))
                             lines_to_add.append(line)
                     self.logger.debug("lecture du fichier à éditer")
                     with open(mod_file.install_to, mode='r', encoding="UTF-8") as file:
