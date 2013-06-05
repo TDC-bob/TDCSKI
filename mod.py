@@ -203,8 +203,8 @@ class Mod():
             logger.debug("ce mod devrait être installé")
             file.install()
         for special in self.__special_list:
-            method = self.__special[special]["method"]
-            self.logger.debug(method)
+            self.logger.debug(special)
+            # self.logger.debug(method)
             pass
 
     def __str__(self):
