@@ -224,7 +224,7 @@ class Mod():
                             self.logger.debug("\tligne: {}".format(line))
                             lines_to_add.append(line)
                     self.logger.debug("lecture du fichier à éditer")
-                    with open(mod_file.install_to, mode='a', encoding="UTF-8") as file:
+                    with open(mod_file.install_to, mode='r', encoding="UTF-8") as file:
                         lines = file.readlines()
                         for line in lines:
                             self.logger.debug("\tligne: {}".format(line))
