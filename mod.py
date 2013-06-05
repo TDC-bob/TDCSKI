@@ -216,7 +216,7 @@ class Mod():
             else:
                 self.logger.debug("le fichier existe déjà, méthode d'édition: {}".format(method))
                 if method == "append":
-                    lines_to_add = ["\n"]
+                    lines_to_add = []
                     self.logger.debug("lecture du fichier à ajouter")
                     with open(mod_file.full_path, mode='r') as file:
                         lines = file.readlines()
@@ -227,15 +227,16 @@ class Mod():
                             self.logger.debug("str.replace: {}".format(line))
                             lines_to_add.append(line)
                     self.logger.debug("lecture du fichier à éditer")
-                    # lines_to_write = []
                     with open(mod_file.install_to, mode='r', encoding="UTF-8") as file:
                         lines = file.readlines()
                         for line in lines:
                             self.logger.debug("\tligne: {}".format(line))
-                            # lines_to_write.append(line)
                             lines_to_add = list(filter(line.__ne__, lines_to_add))
+                        last_line = lines.pop()
+                        if not last_line[-1:] == "\n":
+                            lines_to_add.insert(0, "\n")
                     self.logger.debug("lines_to_add: {}".format(lines_to_add))
-                    if len(lines_to_add) > 1:
+                    if len(lines_to_add) > 0:
                         with open(mod_file.install_to, mode='a', encoding="UTF-8") as file:
                             self.logger.debug("ecriture dans le fichier des lignes: {}".format(lines_to_add))
                             file.writelines(lines_to_add)
