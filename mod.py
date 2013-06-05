@@ -202,8 +202,42 @@ class Mod():
         for file in self.__files:
             file.install()
         for k in self.__special.keys():
-            self.logger.debug("Key: {}".format(k))
-            self.logger.debug("Value: {}".format(self.__special[k]))
+            self.logger.debug("installation du fichier spécial: {}".format(k))
+            method = self.__special[k]['method']
+            can_create = self.__special[k]['can_create']
+            mod_file = self.__special[k]['mod_file']
+            if not os.path.exists(mod_file.install_to):
+                self.logger.debug("le fichier n'existe pas encore sur le système")
+                if not can_create:
+                    self.logger.error("je n'ai pas la permission de le créer")
+                    input()
+                    exit(1)
+                file_copy(mod_file.full_path, mod_file.install_to)
+            else:
+                self.logger.debug("le fichier existe déjà, méthode d'édition: {}".format(method))
+                if method == "append":
+                    lines_to_add = []
+                    self.logger.debug("lecture du fichier à ajouter")
+                    with open(mod_file.full_path, mode='r') as file:
+                        lines = file.readlines()
+                        for line in lines:
+                            self.logger.debug("\tligne: {}".format(line))
+                            lines_to_add.append(line)
+                    self.logger.debug("lecture du fichier à éditer")
+                    with open(mod_file.install_to, mode='a', encoding="UTF-8") as file:
+                        lines = file.readlines()
+                        for line in lines:
+                            self.logger.debug("\tligne: {}".format(line))
+                            lines_to_add = list(filter(line.__ne__, lines_to_add))
+                    self.logger.debug("lines_to_add: {}".format(lines_to_add))
+
+
+                else:
+                    self.logger.error("méthode inconnue: {}".format(method))
+                    input()
+                    exit(1)
+            # self.logger.debug("Key: {}".format(k))
+            # self.logger.debug("Value: {}".format(self.__special[k]))
             # self.logger.debug(special)
             # self.logger.debug(method)
             pass
@@ -292,6 +326,10 @@ class ModFile():
     @property
     def basename(self):
         return self.__basename
+
+    @property
+    def install_to(self):
+        return self.__install_to
 
     @logged
     def uninstall(self):
