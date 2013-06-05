@@ -95,7 +95,7 @@ class Mod():
             import install
             for k in install.special:
                 self.__special_files.append(os.path.normpath("/{}".format(k)))
-                self.__special[k] = install.special[k]
+                self.__special[os.path.normpath("/{}".format(k))] = install.special[k]
 
         for path in ["{}/DCS".format(self.__local), "{}/SAVED_GAMES".format(self.__local)]:
             if os.path.exists(path):
