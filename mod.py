@@ -234,9 +234,10 @@ class Mod():
                             # lines_to_write.append(line)
                             lines_to_add = list(filter(line.__ne__, lines_to_add))
                     self.logger.debug("lines_to_add: {}".format(lines_to_add))
-                    with open(mod_file.install_to, mode='a', encoding="UTF-8") as file:
-                        self.logger.debug("ecriture dans le fichier de la ligne: {}".format(line))
-                        file.writelines(lines_to_add)
+                    if len(lines_to_add) > 1:
+                        with open(mod_file.install_to, mode='a', encoding="UTF-8") as file:
+                            self.logger.debug("ecriture dans le fichier de la ligne: {}".format(line))
+                            file.writelines(lines_to_add)
 
                 else:
                     self.logger.error("méthode inconnue: {}".format(method))
