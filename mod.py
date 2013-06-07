@@ -9,6 +9,7 @@ from hashlib import md5 as MD5
 from _logging._logging import mkLogger, DEBUG, logged
 import config
 import sys
+import imp
 
 
 logger = mkLogger(__name__, DEBUG)
@@ -89,13 +90,15 @@ class Mod():
         self.__files = []
         self.__special = {}
         self.__special_files = []
-        if os.path.exists("{}/install.py".format(self.__local)):
+        install_py_file = "{}/install.py".format(self.__local)
+        if os.path.exists(install_py_file):
             sys.path.append(os.path.abspath(self.__local))
             # noinspection PyUnresolvedReferences
-            import install
+            install = imp.load_source('install', install_py_file)
             for k in install.special:
                 self.__special_files.append(os.path.normpath("/{}".format(k)))
                 self.__special[os.path.normpath("/{}".format(k))] = install.special[k]
+
 
         for path in ["{}/DCS".format(self.__local), "{}/SAVED_GAMES".format(self.__local)]:
             if os.path.exists(path):
