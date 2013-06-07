@@ -92,7 +92,7 @@ class Mod():
         self.__special_files = []
         install_py_file = "{}/install.py".format(self.__local)
         if os.path.exists(install_py_file):
-            sys.path.append(os.path.abspath(self.__local))
+            # sys.path.append(os.path.abspath(self.__local))
             # noinspection PyUnresolvedReferences
             install = imp.load_source('install', install_py_file)
             for k in install.special:
