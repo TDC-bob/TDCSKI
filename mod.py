@@ -98,6 +98,7 @@ class Mod():
             for k in install.special:
                 self.__special_files.append(os.path.normpath("/{}".format(k)))
                 self.__special[os.path.normpath("/{}".format(k))] = install.special[k]
+            # TODO: fix double new lines in autoexec.cfg in the mod repository not being recognized
 
 
         for path in ["{}/DCS".format(self.__local), "{}/SAVED_GAMES".format(self.__local)]:
