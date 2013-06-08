@@ -227,7 +227,9 @@ class Mod():
                         for line in lines:
                             line = line.replace("$$SAVED_GAMES$$", config.SaveGames_path)
                             line = line.replace("$$DCS$$", config.DCS_path)
+                            line = line.replace("\n", "")
                             line = "{}\n".format(line)
+                            line = line.replace("\\", "/")
                             self.logger.debug("str.replace: {}".format(line))
                             lines_to_add.append(line)
                     self.logger.debug("lecture du fichier à éditer")
