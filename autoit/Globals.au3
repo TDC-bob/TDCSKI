@@ -1,6 +1,7 @@
 #NoTrayIcon
 #include-once
 
+Global $first_start = false
 
 Global Const $Python33_x86_download_link = "http://www.python.org/ftp/python/3.3.2/python-3.3.2.msi"
 Global Const $Python33_x64_download_link = "http://www.python.org/ftp/python/3.3.2/python-3.3.2.amd64.msi"
