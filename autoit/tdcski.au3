@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=TDCSKI
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.84
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.85
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_Run_After=signtool sign /v /n "Bob" /d "TDCSKI" /du "https://github.com/TDC-bob/TDCSKI.git" /t http://timestamp.verisign.com/scripts/timstamp.dll "%out%"
@@ -30,8 +30,13 @@
 
 
 _Singleton("TDCSKI")
-
-
+Opt("WinTitleMatchMode", 2)
+Global $version
+If @Compiled Then
+	$version = FileGetVersion(@ScriptFullPath)
+Else
+	$version = 'NON COMPILED RUN'
+EndIf
 
 _main()
 
@@ -43,7 +48,7 @@ Func _main()
 	_rotate_logs($log_dir)
 	$w = @DesktopWidth * 0.40
 	$h = @DesktopHeight * 0.40
-	$gui_handle = GUICreate($str_app_name, $w, $h)
+	$gui_handle = GUICreate($str_app_name & " v" & $version, $w, $h)
 	$iMemo = _GUICtrlEdit_Create($gui_handle, "", 2, 2, $w - 2, $h, BitOR($ES_MULTILINE, $ES_WANTRETURN, $WS_VSCROLL, $WS_HSCROLL, $ES_AUTOVSCROLL, $ES_AUTOHSCROLL, $ES_READONLY))
 	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
 	GUISetState()
@@ -69,9 +74,11 @@ Func _run_tdcski($args = "")
 	__log("Lancement du TDCSKI", $func)
 ;~ 	$exit_code = RunWait('"' & $python_path & '" "' & FileGetLongName("tdcski.py") & '"', ".\tdcski")
 	$exit_code = ShellExecuteWait($python_path, '"' & FileGetLongName("tdcski.py") & '" ' & $args, ".\tdcski")
-	If @error Then
-		_err("Erreur pendant l'exécution du TDCSKI Python", $func)
-	EndIf
+	WinWait("Python.exe")
+	WinSetTitle("Python.exe", "", "TDCSKI v" & $version)
+;~ 	If @error Then
+;~ 		_err("Erreur pendant l'exécution du TDCSKI Python", $func)
+;~ 	EndIf
 	If $exit_code <> 0 Then
 		_err("Le TDCSKI Python a rencontré une erreur, vérifiez les fichiers journaux et prenez contact avec Bob en cas de souci", $func)
 	EndIf
