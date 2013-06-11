@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=TDCSKI
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.89
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.90
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_Run_After=signtool sign /v /n "Bob" /d "TDCSKI" /du "https://github.com/TDC-bob/TDCSKI.git" /t http://timestamp.verisign.com/scripts/timstamp.dll "%out%"
@@ -30,6 +30,8 @@
 
 
 _Singleton("TDCSKI")
+Opt("WinTitleMatchMode", 2)
+
 If @Compiled Then
 	$version = FileGetVersion(@ScriptFullPath)
 Else
@@ -68,15 +70,16 @@ Func _run_tdcski($args = "")
 	Local $func = "run_tdcski"
 	__log("Lancement du TDCSKI", $func)
 ;~ 	$exit_code = RunWait('"' & $python_path & '" "' & FileGetLongName("tdcski.py") & '"', ".\tdcski")
-	$exit_code = ShellExecuteWait($python_path, '"' & FileGetLongName("tdcski.py") & '" ' & $args, ".\tdcski")
-	WinWait("[REGEXPCLASS:.*python\.exe\z]", "", 10)
-	WinSetTitle("[REGEXPCLASS:.*python\.exe\z]", "", "TDCSKI v" & $version)
+	ShellExecute($python_path, '"' & FileGetLongName("tdcski.py") & '" ' & $args, ".\tdcski")
+	WinWait("python", "", 10)
+	WinSetTitle("python", "", "TDCSKI v" & $version)
+	ProcessWaitClose("python.exe")
 ;~ 	If @error Then
 ;~ 		_err("Erreur pendant l'exécution du TDCSKI Python", $func)
 ;~ 	EndIf
-	If $exit_code <> 0 Then
-		_err("Le TDCSKI Python a rencontré une erreur, vérifiez les fichiers journaux et prenez contact avec Bob en cas de souci", $func)
-	EndIf
+;~ 	If $exit_code <> 0 Then
+;~ 		_err("Le TDCSKI Python a rencontré une erreur, vérifiez les fichiers journaux et prenez contact avec Bob en cas de souci", $func)
+;~ 	EndIf
 	__log("L'exécution du TDCSKI Python s'est bien déroulée", $func)
 EndFunc   ;==>_run_tdcski
 
