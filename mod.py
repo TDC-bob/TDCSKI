@@ -440,7 +440,7 @@ class ModFile():
                         file_delete(self.__install_to)
                     else:
                         self.logger.error("conflit détecté avec un autre mod pour le fichier: {}".format(self.__install_to))
-                        self.log.error("j'écris un fichier .CONFLIT à côté du fichier qui pose problème et je quitte")
+                        self.logger.error("j'écris un fichier .CONFLIT à côté du fichier qui pose problème et je quitte")
                         if not os.path.exists(self.__conflict_file):
                             with open(self.__conflict_file, mode="r") as f:
                                 f.write("conflit avec le mod {}".format(other_mod_name))
