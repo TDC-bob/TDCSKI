@@ -238,7 +238,7 @@ class Mod():
                         lines = file.readlines()
                         for line in lines:
                             self.logger.debug("\tligne: {}".format(line))
-                            lines_to_add = list(filter(line.__ne__, lines_to_add))
+                            lines_to_add = list(filter(line.replace("\n", "").__ne__, lines_to_add))
                         last_line = lines.pop()
                         if not last_line[-1:] == "\n":
                             lines_to_add.insert(0, "\n")
