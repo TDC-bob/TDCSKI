@@ -84,7 +84,7 @@ def main():
             os.makedirs("../repos/mods")
 
         logger.info("mise à jour de la liste des mods/skins")
-        Repo("../repos/list", "https://github.com/TDC-bob/modlist.git").pull()
+        Repo("../repos/list", "https://github.com/TDC-bob/modlist.git")
 
         sys.path.append(os.path.abspath("../repos/list/"))
         # noinspection PyUnresolvedReferences
@@ -94,13 +94,11 @@ def main():
         for m in list.mods:
             logger.info("mise à jour du mod: {}".format(m))
             m = Mod(m, "mod", "../repos/mods", list.mods[m])
-            m.pull_repo()
             mods.append(m)
 
         for s in list.skins:
             logger.info("mise à jour de la skin: {}".format(s))
             s = Mod(s, "skin", "../repos/skins", list.skins[s])
-            s.pull_repo()
             skins.append(s)
 
         logger.info("fin des mises à jour")
