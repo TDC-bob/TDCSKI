@@ -66,6 +66,9 @@ Func _main()
 	__log($str_all_good, $func)
 	GUIDelete($gui_handle)
 	_run_tdcski()
+	If $CmdLine[0] > 0 Then
+		If $CmdLine[1] == "auto" Then Exit 0
+	EndIf
 	__log("spawning GUI", $func)
 	_spawn($config_file)
 EndFunc   ;==>_main
