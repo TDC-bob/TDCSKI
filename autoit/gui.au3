@@ -64,7 +64,7 @@ Func _spawn($config_file)
 
 	$h = ( 4*$h_margin ) + $button_h + $group_mods_h + $group_skins_h
 
-	GUICreate($str_app_name, $w, $h)
+	GUICreate($str_app_name & " v" & $version, $w, $h)
 	local $top = $h_margin
 	GUICtrlCreateGroup("Mods", $group_left, $top, $group_w, $group_mods_h)
 	$top += $group_sep

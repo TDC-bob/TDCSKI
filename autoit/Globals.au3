@@ -15,7 +15,7 @@ Global Const $new_version_path = $repo & "\tdcski.exe"
 
 Global Const $log_dir = @ScriptDir & "\logs"
 Global Const $log_file = $log_dir & "\" & @YEAR & @MON & @MDAY & " - " & @HOUR & "h" & @MIN & "m" & @SEC & " - Lanceur.log"
-Global $iMemo, $python_path, $git_path, $gui_handle
+Global $iMemo, $python_path, $git_path, $gui_handle, $version
 
 Global Const $config_file = @ScriptDir & "\tdcski.cfg"
 
