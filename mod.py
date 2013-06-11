@@ -82,10 +82,10 @@ class Mod():
         conf.create(self.__type, self.__name, "installed", False)
 
 
-        self.buil_files_list()
+        self.build_files_list()
 
     @logged
-    def buil_files_list(self):
+    def build_files_list(self):
         self.logger.debug("construction de la liste des fichiers")
         self.__files = []
         self.__special = {}
@@ -98,7 +98,6 @@ class Mod():
             for k in install.special:
                 self.__special_files.append(os.path.normpath("/{}".format(k)))
                 self.__special[os.path.normpath("/{}".format(k))] = install.special[k]
-            # TODO: fix double new lines in autoexec.cfg in the mod repository not being recognized
 
 
         for path in ["{}/DCS".format(self.__local), "{}/SAVED_GAMES".format(self.__local)]:
@@ -176,7 +175,7 @@ class Mod():
     def pull_repo(self):
         self.logger.debug("pull du repository local")
         self.__repo.pull("origin", self.branch)
-        self.buil_files_list()
+        self.build_files_list()
 
     @logged
     def check(self):
@@ -210,6 +209,7 @@ class Mod():
             method = self.__special[k]['method']
             can_create_file = self.__special[k]['can_create_file']
             mod_file = self.__special[k]['mod_file']
+            special_config = mod_file.config
             if not os.path.exists(mod_file.install_to):
                 self.logger.debug("le fichier n'existe pas encore sur le système")
                 if not can_create_file:
@@ -228,11 +228,12 @@ class Mod():
                             line = line.replace("$$SAVED_GAMES$$", config.SaveGames_path)
                             line = line.replace("$$DCS$$", config.DCS_path)
                             line = line.replace("\n", "")
-                            # line = "{}\n".format(line)
                             line = line.replace("\\", "/")
+                            line = "{} -- added by TDCSKI".format(line)
                             self.logger.debug("str.replace: {}".format(line))
                             lines_to_add.append(line)
                     self.logger.debug("lecture du fichier à éditer")
+                    identical = True
                     with open(mod_file.install_to, mode='r', encoding="UTF-8") as file:
                         lines = file.readlines()
                         for line in lines:
@@ -243,9 +244,16 @@ class Mod():
                             lines_to_add.insert(0, "\n")
                     self.logger.debug("lines_to_add: {}".format(lines_to_add))
                     if len(lines_to_add) > 0:
+                        identical = False
                         with open(mod_file.install_to, mode='a', encoding="UTF-8") as file:
                             self.logger.debug("ecriture dans le fichier des lignes: {}".format(lines_to_add))
                             file.writelines(lines_to_add)
+
+                    create = special_config.set_or_create("install", "safe_to_delete", self.__safe_to_delete)
+                    special_config.set_or_create("install", "parent",self.__parent.name)
+                    special_config.set_or_create("install", "version",str(self.__parent.version))
+                    special_config.set_or_create("install","description",self.__parent.desc)
+                    special_config.set_or_create("install", "identical", identical)
 
                 else:
                     self.logger.error("méthode inconnue: {}".format(method))
