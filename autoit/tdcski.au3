@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=TDCSKI
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.83
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.84
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_Run_After=signtool sign /v /n "Bob" /d "TDCSKI" /du "https://github.com/TDC-bob/TDCSKI.git" /t http://timestamp.verisign.com/scripts/timstamp.dll "%out%"
@@ -56,15 +56,19 @@ Func _main()
 	__log("running: " & $python_path & '"' & FileGetLongName(".\tdcski\tdcski.py") & '"', $func)
 	__log($str_all_good, $func)
 	GUIDelete($gui_handle)
-	If $first_start Then _run_tdcski()
+	If $first_start Then
+		_run_tdcski()
+	Else
+		_run_tdcski("-u")
+	EndIf
 	_spawn($config_file)
 EndFunc   ;==>_main
 
-Func _run_tdcski()
+Func _run_tdcski($args = "")
 	Local $func = "run_tdcski"
 	__log("Lancement du TDCSKI", $func)
 ;~ 	$exit_code = RunWait('"' & $python_path & '" "' & FileGetLongName("tdcski.py") & '"', ".\tdcski")
-	$exit_code = ShellExecuteWait($python_path, '"' & FileGetLongName("tdcski.py") & '"', ".\tdcski")
+	$exit_code = ShellExecuteWait($python_path, '"' & FileGetLongName("tdcski.py") & '" ' & $args, ".\tdcski")
 	If @error Then
 		_err("Erreur pendant l'exécution du TDCSKI Python", $func)
 	EndIf
