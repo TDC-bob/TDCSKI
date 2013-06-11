@@ -226,9 +226,9 @@ class Remote():
 def switch_dir(new_dir):
     logger.debug("changement de répertoire courant\n\trépertoire courant: {}\n\trépertoire cible: {}".format(os.getcwd(), new_dir))
     if os.getcwd() == new_dir:
-        logger.debug("le répertoire courant et la cible sont identiques, on passe")
+        logger.debug("le répertoire courant et la cible sont identiques, retour")
         return True
-    logger.debug("changement de répertoire courant nécessaire, go go")
+    logger.debug("changement de répertoire courant nécessaire")
     os.chdir(new_dir)
     if os.getcwd() == new_dir:
         logger.debug("changement de répertoire réussi !")
