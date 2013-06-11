@@ -176,6 +176,7 @@ class Mod():
         self.__repo.pull("origin", self.branch)
         self.build_files_list()
 
+    @logged
     def check(self):
         if self.should_be_installed:
             self.logger.info("Installation du mod {}".format(self.__name))
