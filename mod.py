@@ -516,11 +516,19 @@ def file_delete(file):
         logger.error("impossible de supprimer le fichier: {}".format(file))
         raise FileExistsError
 
-def file_copy(src, dest, overwrite=False):
+def file_copy(src, dest, overwrite=False, make_dirs=True):
     logger.debug("copie: {} ------> {}".format(src, dest))
     if os.path.exists(dest) and not overwrite:
         logger.error("la destination existe, et je n'ai pas la permission d'écrire dessus")
         raise FileExistsError
+    if not os.path.exists(os.path.dirname(dest)):
+        if make_dirs:
+            logger.debug("le répertoire cible n'existe pas, je le crée")
+            os.makedirs(os.path.dirname(dest))
+        else:
+            logger.error("le répertoire cible n'existe pas, et je n'ai pas la permission de le créer")
+            input()
+            exit(1)
     shutil.copy2(src, dest)
     if not os.path.exists(dest):
         logger.error("la copie a échoué")
