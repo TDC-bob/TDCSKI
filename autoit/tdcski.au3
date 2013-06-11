@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=TDCSKI
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.90
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.91
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_Run_After=signtool sign /v /n "Bob" /d "TDCSKI" /du "https://github.com/TDC-bob/TDCSKI.git" /t http://timestamp.verisign.com/scripts/timstamp.dll "%out%"
@@ -52,6 +52,10 @@ Func _main()
 	$iMemo = _GUICtrlEdit_Create($gui_handle, "", 2, 2, $w - 2, $h, BitOR($ES_MULTILINE, $ES_WANTRETURN, $WS_VSCROLL, $WS_HSCROLL, $ES_AUTOVSCROLL, $ES_AUTOHSCROLL, $ES_READONLY))
 	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
 	GUISetState()
+	If Ping("8.8.8.8", 5) == 0 Then
+		_err("Pas d'accès à internet ...", $func)
+		Exit 1
+	EndIf
 	_check_python()
 	_check_git()
 	_check_repo()
