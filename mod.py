@@ -249,11 +249,11 @@ class Mod():
                             self.logger.debug("ecriture dans le fichier des lignes: {}".format(lines_to_add))
                             file.writelines(lines_to_add)
 
-                    create = special_config.set_or_create("install", "safe_to_delete", self.__safe_to_delete)
-                    special_config.set_or_create("install", "parent",self.__parent.name)
-                    special_config.set_or_create("install", "version",str(self.__parent.version))
-                    special_config.set_or_create("install","description",self.__parent.desc)
-                    special_config.set_or_create("install", "identical", identical)
+                    # special_config.set_or_create("install", "safe_to_delete", self.__safe_to_delete)
+                    # special_config.set_or_create("install", "parent",self.__parent.name)
+                    # special_config.set_or_create("install", "version",str(self.__parent.version))
+                    # special_config.set_or_create("install","description",self.__parent.desc)
+                    # special_config.set_or_create("install", "identical", identical)
 
                 else:
                     self.logger.error("méthode inconnue: {}".format(method))
