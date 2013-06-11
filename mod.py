@@ -432,7 +432,7 @@ class ModFile():
                 if os.path.exists(self.__config_file):
                     this_mod_name = self.__parent.name
                     other_mod_config = config.ConfigObj(self.__config_file)
-                    other_mod_name = other_mod_config.get("install", "parent")
+                    other_mod_name = other_mod_config.get("install", "parent", "name")
                     self.logger.debug("conflit potentiel trouvé ! Mod1: {} \t Mod2: {}".format(this_mod_name, other_mod_name))
                     if this_mod_name == other_mod_name:
                         self.logger.debug("les deux mods ont le même nom, c'est probablement une update ou une réinstallation")
