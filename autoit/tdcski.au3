@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=TDCSKI
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.98
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.99
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_Run_After=signtool sign /v /n "Bob" /d "TDCSKI" /du "https://github.com/TDC-bob/TDCSKI.git" /t http://timestamp.verisign.com/scripts/timstamp.dll "%out%"
@@ -46,7 +46,6 @@ Func _main()
 	Local $func = "main"
 	_first_start()
 	_rotate_logs($log_dir)
-	__log("beta test", $func)
 	$w = @DesktopWidth * 0.40
 	$h = @DesktopHeight * 0.40
 	$gui_handle = GUICreate($str_app_name & " v" & $version, $w, $h)
