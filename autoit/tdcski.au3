@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=TDCSKI
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.91
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.92
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_Run_After=signtool sign /v /n "Bob" /d "TDCSKI" /du "https://github.com/TDC-bob/TDCSKI.git" /t http://timestamp.verisign.com/scripts/timstamp.dll "%out%"
@@ -99,7 +99,19 @@ Func _write_config()
 	Local $func = "write_config"
 	Local $to_write[3][2] = [["python_path", $python_path],["git_path", $git_path],["branch", "master"]]
 	__log("Ecriture du fichier de configuration", $func)
-	IniWriteSection($config_file, "general", $to_write, 0)
+	Local $tempfile = _TempFile(@ScriptDir)
+	Local $tmp_content[1]
+	_FileReadToArray($tempfile, $tmp_content)
+	_FileWriteFromArray($tempfile, $tmp_content, 1)
+
+	IniWriteSection($tempfile, "general", $to_write, 0)
+
+	Local $content[1]
+	_FileReadToArray($tempfile, $content)
+
+	Local $fh_dest = FileOpen($config_file, 258)
+	_FileWriteFromArray($fh_dest, $content, 1)
+
 	If @error Then
 		_err("Erreur pendant l'écriture du fichier de configuration", $func)
 	EndIf
