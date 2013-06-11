@@ -10,6 +10,10 @@
 ;~ _spawn("C:\Users\bob\Desktop\tests\tdcski.cfg")
 
 Func _spawn($config_file)
+	IniReadSection($config_file, "mods")
+	if @error Then
+		exit 1
+	EndIf
 	$rtn = _parse_config($config_file)
 ;~ 	_ArrayDisplay($rtn[0])
 	$mods = $rtn[0]
