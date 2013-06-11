@@ -37,12 +37,13 @@ class Repo():
         if not self.local_repo_exists:
             logger.debug("le repo local n'existe pas, lancement du clonage")
             self.clone(init_remote)
-        else:
-            logger.debug("mise à jour du repository (pulling)")
-            self.pull()
 
         self.__build_remotes_list()
         self.__build_branches_list()
+        logger.debug("mise à jour du repository (pulling)")
+        self.pull()
+
+
 
     @property
     def current_commit(self):
