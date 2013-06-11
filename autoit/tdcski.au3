@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=TDCSKI
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.99
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.108
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_Run_After=signtool sign /v /n "Bob" /d "TDCSKI" /du "https://github.com/TDC-bob/TDCSKI.git" /t http://timestamp.verisign.com/scripts/timstamp.dll "%out%"
@@ -104,16 +104,21 @@ Func _write_config()
 	__log("Ecriture du fichier de configuration", $func)
 	Local $tempfile = _TempFile(@ScriptDir)
 	Local $tmp_content[1]
-	_FileReadToArray($tempfile, $tmp_content)
+	_FileReadToArray($config_file, $tmp_content)
 	_FileWriteFromArray($tempfile, $tmp_content, 1)
+	Sleep(20000)
 
-	IniWriteSection($tempfile, "general", $to_write, 0)
+	IniWrite($tempfile, "general", "python_path", $python_path)
+	IniWrite($tempfile, "general", "git_path", $git_path)
+	Sleep(20000)
 	If IniRead($tempfile, "general", "branch", "NO_BRANCH") = "NO_BRANCH" Then
+		__log("switching back to branch master", $func)
 		IniWrite($tempfile, "general", "branch", "master")
 	EndIf
 
 	Local $content[1]
 	_FileReadToArray($tempfile, $content)
+	FileDelete($tempfile)
 
 	Local $fh_dest = FileOpen($config_file, 258)
 	_FileWriteFromArray($fh_dest, $content, 1)
@@ -121,7 +126,6 @@ Func _write_config()
 	If @error Then
 		_err("Erreur pendant l'écriture du fichier de configuration", $func)
 	EndIf
-	FileDelete($tempfile)
 	__log("Fichier de configuration écrit", $func)
 ;~ 	IniWrite($config_file, "general", "python_path", $python_path)
 EndFunc   ;==>_write_config
@@ -188,6 +192,7 @@ Func _check_repo()
 	Local $branch
 	If FileExists($config_file) Then
 		$branch = IniRead($config_file, "general", "branch", "master")
+		__log("branch: " & $branch, $func)
 	Else
 		$branch = "master"
 	EndIf
