@@ -67,7 +67,7 @@ def __setupLogger(name="main", lvl=logging.DEBUG, logFile="python.log"):
     fh = logging.FileHandler(logFile)
     fh.setLevel(logging.DEBUG)
     ch = logging.StreamHandler()
-    ch.setLevel(logging.DEBUG)
+    ch.setLevel(logging.INFO)
     logfileFormatter = logging.Formatter('%(asctime)s: %(levelname)s - %(name)s - %(message)s')
     consoleFormatter = logging.Formatter('%(levelname)s - %(name)s - %(message)s')
     fh.setFormatter(logfileFormatter)
