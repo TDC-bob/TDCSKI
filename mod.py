@@ -43,13 +43,14 @@ class Mod():
         self.logger.debug("initialisation du repository dans le dossier local")
         self.__repo = git.Repo(self.__local, self.__remote)
         self.__branch = "master"
+        self.logger.debug("lecture de la table de configuration du mod")
         for arg in args:
             if arg in ["remote"]:
                 continue
             elif arg in ["branch"]:
                 self.logger.debug("paramètre branche trouvé: {}".format(args[arg]))
                 self.__branch = args[arg]
-                self.logger.debug("checkout du repository")
+                self.logger.debug("checkout de la branche")
                 self.__repo.checkout(self.__branch)
             elif arg in ["desc"]:
                 self.logger.debug("paramètre descritpion trouvé: {}".format(args[arg]))
@@ -72,11 +73,11 @@ class Mod():
             input()
             exit(1)
         if not conf.set_or_create(self.__type, self.__name, "version", self.__version):
-            self.logger.error("erreur lors de l'écriture de la description")
+            self.logger.error("erreur lors de l'écriture de la version")
             input()
             exit(1)
         if not conf.set_or_create(self.__type, self.__name, "branch", self.__branch):
-            self.logger.error("erreur lors de l'écriture de la description")
+            self.logger.error("erreur lors de l'écriture de la branch")
             input()
             exit(1)
         conf.create(self.__type, self.__name, "installed", False)
@@ -92,7 +93,6 @@ class Mod():
         self.__special_files = []
         install_py_file = "{}/install.py".format(self.__local)
         if os.path.exists(install_py_file):
-            # sys.path.append(os.path.abspath(self.__local))
             # noinspection PyUnresolvedReferences
             install = imp.load_source('install', install_py_file)
             for k in install.special:
@@ -125,7 +125,6 @@ class Mod():
     @property
     def should_be_installed(self):
         rtn = conf.get(self.type, self.name, "installed")
-        # self.logger.debug("test: ce mod doit-il être installé ? Réponse: {}".format(rtn))
         return rtn
 
     @property
@@ -177,7 +176,6 @@ class Mod():
         self.__repo.pull("origin", self.branch)
         self.build_files_list()
 
-    @logged
     def check(self):
         if self.should_be_installed:
             self.install()
@@ -188,7 +186,7 @@ class Mod():
     def uninstall(self):
         logger.debug("désinstallation du {}: {}".format(self.__type, self.__name))
         if self.should_be_installed:
-            logger.debug("ce mod devrait être installé, annulation")
+            logger.debug("ANNULATION: ce mod devrait être installé")
             return False
         for file in self.__files:
             logger.debug("ce mod devrait être désinstallé")
@@ -199,9 +197,8 @@ class Mod():
     def install(self):
         logger.debug("installation du {}: {}".format(self.__type, self.__name))
         if not self.should_be_installed:
-            logger.debug("ce mod ne devrait pas être installé")
+            logger.debug("ANNULATION: ce mod ne devrait pas être installé")
             return
-        logger.debug("ce mod devrait être installé")
         for file in self.__files:
             file.install()
         for k in self.__special.keys():
