@@ -61,11 +61,8 @@ Func _main()
 	__log("running: " & $python_path & '"' & FileGetLongName(".\tdcski\tdcski.py") & '"', $func)
 	__log($str_all_good, $func)
 	GUIDelete($gui_handle)
-	If $first_start Then
-		_run_tdcski()
-	Else
-		_run_tdcski("-u")
-	EndIf
+	_run_tdcski()
+	if $CmdLine[0] > 0  and $CmdLine[1] == "auto" then exit 0
 	_spawn($config_file)
 EndFunc   ;==>_main
 
