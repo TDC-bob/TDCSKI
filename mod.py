@@ -245,9 +245,10 @@ class Mod():
                     self.logger.debug("lines_to_add: {}".format(lines_to_add))
                     if len(lines_to_add) > 0:
                         identical = False
-                        with open(mod_file.install_to, mode='a', encoding="UTF-8") as file:
-                            self.logger.debug("ecriture dans le fichier des lignes: {}".format(lines_to_add))
-                            file.writelines(lines_to_add)
+                        if not lines_to_add == ["\n"]:
+                            with open(mod_file.install_to, mode='a', encoding="UTF-8") as file:
+                                self.logger.debug("ecriture dans le fichier des lignes: {}".format(lines_to_add))
+                                file.writelines(lines_to_add)
 
                     # special_config.set_or_create("install", "safe_to_delete", self.__safe_to_delete)
                     # special_config.set_or_create("install", "parent",self.__parent.name)
