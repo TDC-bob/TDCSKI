@@ -1,25 +1,9 @@
 # -*- coding: UTF-8 -*-
-#-------------------------------------------------------------------------------
-# Author:      Bob Daribouca
-#
-# Copyright:   (c) Bob Daribouca 2013
-# Licence:     CC BY-NC-SA 3.0
-#
-#               Please refer to the "LICENSE" file distributed with the package,
-#               or to http://creativecommons.org/licenses/by-nc-sa/3.0/
-#
-#-------------------------------------------------------------------------------
-#!/usr/bin/env python
+__author__ = 'bob'
 
 import subprocess
 import os
 import re
-##try:
-##    from . import Exceptions
-##except (ImportError, SystemError):
-##    import bobgit.Exceptions as Exceptions
-##import bobgit.Exceptions as Exceptions
-##from .Exceptions import *
 import config
 try:
     from . import Exceptions
@@ -36,19 +20,13 @@ logger = mkLogger(__name__, DEBUG)
 class Repo():
     @logged
     def __init__(self, local, init_remote=None):
-        self.logger.debug("création d'un repo:\n\t\tlocal: {}\n\t\tinit_remote: {}".format(local, init_remote))
-        self.local = os.path.abspath(local)
-        self.logger.debug("détection de l'existence du repository")
-        self.initiliazed = os.path.exists(os.path.abspath(os.path.join(self.local, ".git")))
-        self.local_repo_exists = os.path.exists(local)
-
-        self.logger.debug("repository pré-existant: {}".format(self.initiliazed))
-        self.git_exe = config.git_exe
-        self.logger.debug("git exe: {}".format(self.git_exe))
+        self.logger.debug("création d'un objet repo:\n\t\tlocal: {}\n\t\tinit_remote: {}".format(local, init_remote))
         self.cloned = False
         self.fetched = False
-        self.up_to_date = False
-        self.merged = False
+
+        self.local = os.path.abspath(local)
+        self.local_repo_exists = os.path.exists(local)
+
         self.remotes = []
         self.branches = []
         self.__active_branch = None
@@ -57,11 +35,11 @@ class Repo():
                     "no local directory found, and no remote given")
 
         if not self.local_repo_exists:
-            logger.debug("le repo local n'existe pas")
+            logger.debug("le repo local n'existe pas, lancement du clonage")
             self.clone(init_remote)
-        elif not self.initiliazed:
-            logger.debug("le repo local n'a pas encore été initialisé")
-            self.init(init_remote)
+        else:
+            logger.debug("mise à jour du repository (pulling)")
+            self.pull()
 
         self.__build_remotes_list()
         self.__build_branches_list()
@@ -76,78 +54,55 @@ class Repo():
         logger.debug("branche active: {}".format(self.__active_branch))
         return self.__active_branch
 
-    # @logged
-    # def init(self, init_remote):
-    #     self.logger.debug("initialisation du repository")
-    #     success, output, cmd = self.__run(["init"])
-    #     if not success:
-    #         raise Exceptions.GitInitError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
-    #     success, output, cmd = self.__run(["add", ".", "-f"])
-    #     if not success:
-    #         raise Exceptions.GitInitError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
-    #     success, output, cmd = self.__run(["remote", "add", "origin", init_remote])
-    #     if not success:
-    #         raise Exceptions.GitInitError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
-    #     success, output, cmd = self.__run(["fetch", "origin"])
-    #     if not success:
-    #         raise Exceptions.GitInitError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
-    #     success, output, cmd = self.__run(["reset", "--hard", "origin/master"])
-    #     if not success:
-    #         raise Exceptions.GitInitError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
-
-    # def reset_to(self, ref="origin/master"):
-    #     success, output, cmd = self.__run(["reset", "--hard", ref])
-    #     if not success:
-    #         raise Exceptions.GitResetError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
-
     def checkout(self, branch):
         self.logger.debug("checking out branch: {}".format(branch))
+        if self.__active_branch.name == branch:
+            self.logger.debug("ce repo est déjà sur la branche demandée, on passe")
+            return self
         if not branch in [branch.name for branch in self.branches]:
             raise Exceptions.GitBranchNotKnown("unknown branch: {}".format(branch))
         success, output, cmd = self.__run(["checkout",branch])
         if not success:
             raise Exceptions.GitCheckoutError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
+        return self
 
 
     def clone(self, init_remote):
-        self.logger.debug("cloning remote: {}".format(init_remote))
+        self.logger.debug("clonage du remote: {}".format(init_remote))
+        if self.cloned:
+            self.logger.debug("ce repo a déjà été cloné")
+        self.cloned = True
         success, output, cmd = self.__run(["clone","-v",init_remote, self.local], False)
         if not success:
             raise Exceptions.GitCloneError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
+        return self
 
     def fetch(self, remote="origin"):
-        self.logger.debug("fetching remote: {}".format(remote))
+        self.logger.debug("fetch du remote: {}".format(remote))
+        if self.fetched:
+            self.logger.debug("ce repo a déjà été fetché")
+            return self
+        self.fetched = True
         if not remote in [remote.name for remote in self.remotes]:
-            raise Exceptions.GitRemoteNotKnown("unknown remote: {}".format(remote))
+            raise Exceptions.GitRemoteNotKnown("remote inconnu: {}".format(remote))
         success, output, cmd = self.__run(["fetch","-v",remote])
         if not success:
             raise Exceptions.GitFetchError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
-
-    def remote_add(self, name, remote):
-        self.logger.debug("adding remote: {} ---> {}".format(name, remote))
-        success, output, cmd = self.__run(["remote","add",name, remote])
-        if not success:
-            raise Exceptions.GitRemoteAddError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
-
-    def merge(self, branch="master"):
-        self.logger.debug("merging branch: {}".format(branch))
-        if not branch in [branch.name for branch in self.branches]:
-            raise Exceptions.GitBranchNotKnown("unknown branch: {}".format(branch))
-        success, output, cmd = self.__run(["merge","-v",branch])
-        if not success:
-           raise Exceptions.GitMergeError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
+        return self
 
     def pull(self, remote="origin", branch="master"):
-        self.logger.debug('pulling branch "{}" from remote "{}"'.format(branch, remote))
+        self.logger.debug('pull de la branche "{}" à partir du remote "{}"'.format(branch, remote))
+        self.logger.debug("vérification de l'existence de la branche dans le repo local")
         if not branch in [branch.name for branch in self.branches]:
-            raise Exceptions.GitBranchNotKnown("unknown branch: {}".format(branch))
-        self.checkout(branch)
-        self.fetch(remote)
+            self.logger.debug("la branche n'existe pas (encore), fetch pour vérifier")
+            self.fetch(remote=remote).pull(remote=remote, branch=branch)
+            return self
+        self.checkout(branch).fetch(remote)
+        self.logger.debug("pull du repo")
         success, output, cmd = self.__run(["pull",remote,branch])
         if not success:
-           raise Exceptions.GitMergeError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
-        # self.fetch(remote)
-        # self.merge(branch)
+           raise Exceptions.GitPullError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
+        return self
 
 
     def __build_remotes_list(self):
@@ -180,10 +135,6 @@ class Repo():
                 m = re.match(regular_branch, line)
                 if m:
                     self.branches.append(Branch(m.group('name'), m.group("SHA"), m.group("commit"), self))
-##            chunks = re.split('\s+', line)
-##            self.remotes.append(Remote(chunks[0],chunks[1],re.sub("[\(\)]","",chunks[2]),self))
-##            for chunk in chunks:
-##                print(chunk)
 
 
     @logged
@@ -195,12 +146,7 @@ class Repo():
         if ch_dir:
             cur_dir = os.getcwd()
             switch_dir(self.local)
-        # if not cur_dir == self.local and not no_ch_dir:
-        #     self.logger.debug("switch du répertoire courant vers: {}".format(self.local))
-        #     os.chdir(self.local)
-        #     if not os.getcwd() == self.local:
-        #         raise Exceptions.GitRunError("Echec du changement de répertoire courant")
-        cmd = [self.git_exe]
+        cmd = [config.git_exe]
         for a in args:
             cmd.append(a)
         self.logger.debug("lancement de la commande Git: {}".format(cmd[1:]))
@@ -219,7 +165,6 @@ class Repo():
             return False, e.output, e.cmd
         #TODO: parse return ?
         self.logger.debug("output:\n{}\n{}\n{}".format(sep,rtn,sep))
-        self.logger.debug
         if ch_dir:
             switch_dir(cur_dir)
         self.logger.debug("la commande Git a été exécutée avec succès")
@@ -245,19 +190,6 @@ class Repo():
                             [str(branch) for branch in self.branches]
                                 )
                     )
-
-
-    # @staticmethod
-    # def __get_git_exe():
-    #     paths = ["./bobgit/bin/git.exe",
-    #             "./bin/git.exe"
-    #             ]
-    #     for p in paths:
-    #         if os.path.exists(p):
-    #             return os.path.abspath(p)
-    #     if not self.git:
-    #         raise Exceptions.GitNotFound("Could not find git.exe in following paths: {}".format(
-    #                     repr(paths)), self.logger)
 
 class Branch():
     @logged
@@ -291,13 +223,13 @@ class Remote():
                         )
 
 def switch_dir(new_dir):
-    logger.debug("changement de répertoire courant\nrépertoire courant: {}\nrépertoire cible: {}".format(os.getcwd(), new_dir))
+    logger.debug("changement de répertoire courant\n\trépertoire courant: {}\n\trépertoire cible: {}".format(os.getcwd(), new_dir))
     if os.getcwd() == new_dir:
-        logger.debug("le répertoire courant et la cible sont identiques")
+        logger.debug("le répertoire courant et la cible sont identiques, on passe")
         return True
-    logger.debug("changement de répertoire courant")
+    logger.debug("changement de répertoire courant nécessaire, go go")
     os.chdir(new_dir)
     if os.getcwd() == new_dir:
-        logger.debug("changement de répertoire réussi")
+        logger.debug("changement de répertoire réussi !")
         return True
     raise Exceptions.GitRunError("échec du changement de répertoire courant")
