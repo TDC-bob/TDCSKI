@@ -12,6 +12,7 @@ import config
 from config import Config
 import ui_server
 from bobgit.git import Repo
+from optparse import OptionParser
 from _logging._logging import mkLogger, DEBUG, WARN
 
 logger = mkLogger(__name__, DEBUG, "../logs/{} - TDCSKI.log".format(strftime("%Y%m%d - %Hh%Mm%S", gmtime())))
@@ -49,6 +50,15 @@ def main():
     # exit(0)
 
     # os.environ["GIT_SSL_NO_VERIFY"] = "1"
+    logger.info("parsing des arguments")
+    parser = OptionParser()
+    parser.add_option("-u", "--update-list", action="store_true", dest="list_update_only",
+                  help="uniquement mettre à jour la liste des mods", default=False)
+    # parser.add_option("-q", "--quiet",
+    #               action="store_false", dest="verbose", default=True,
+    #               help="don't print status messages to stdout")
+
+    (options, args) = parser.parse_args()
     logger.info("lecture du fichier tdcski.cfg")
     try:
         conf = Config()
@@ -85,6 +95,10 @@ def main():
 
         logger.info("mise à jour de la liste des mods/skins")
         Repo("../repos/list", "https://github.com/TDC-bob/modlist.git")
+
+        if options.list_update_only:
+            logger.info("la mise à jour de la liste est terminée, je quitte")
+            exit(0)
 
         sys.path.append(os.path.abspath("../repos/list/"))
         # noinspection PyUnresolvedReferences
