@@ -79,14 +79,17 @@ def main():
     conf.create("general", "dcs_path", dcs_path)
 
     try:
-        logger.info("détection du répertoire Saved Games")
+        logger.info('détection du répertoire "Saved Games"')
         saved_games_path = os.path.normpath(os.path.expanduser("~/saved games/dcs"))
-        logger.info("le répertoire des parties sauvegardées est: \n\t\t{}".format(saved_games_path))
+        logger.info('le répertoire "Saved Games" détecté est: \n\t\t{}'.format(saved_games_path))
         conf.create("general", "saved_games_path", saved_games_path)
 
+        logger.info("lecture des répertoires à utiliser dans le fichier \"tdcski.cfg\"")
         config.git_exe = conf.get("general", "git_path")
         config.SaveGames_path = conf.get("general", 'saved_games_path')
         config.DCS_path = conf.get("general", 'dcs_path')
+        logger.info('répertoire "DCS" utilisé: {}'.format(config.DCS_path))
+        logger.info('répertoire "Saved Games" utilisé: {}'.format(config.SaveGames_path))
 
         if not os.path.exists("../repos/skins"):
             os.makedirs("../repos/skins")
