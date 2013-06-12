@@ -31,7 +31,7 @@
 
 _Singleton("TDCSKI")
 Opt("WinTitleMatchMode", 2)
-
+#RequireAdmin
 If @Compiled Then
 	$version = FileGetVersion(@ScriptFullPath)
 Else
