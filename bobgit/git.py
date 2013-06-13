@@ -90,7 +90,7 @@ class Repo():
     def update(self, branch="master"):
 
         self.logger.debug("fetch de la branche distante: {}".format(branch))
-        success, output, cmd = self.__run(["fetch", "origin", "{}:remotes/origin/{}".format(branch, branch)])
+        success, output, cmd = self.__run(["fetch", "-v", "origin", "{}:remotes/origin/{}".format(branch, branch)])
         if not success:
             raise Exceptions.GitFetchError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
 
