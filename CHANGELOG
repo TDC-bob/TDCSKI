@@ -1,0 +1,9 @@
+2013 - 06 - 13
+===============
+ - ajout de la version dans le fichier journal (lanceur.log)
+ - le TDCSKI consommera moins de bande passante lors de la mise à jour des repositories comprenant plusieurs branches
+ - correction du double affichage "Git run" dans le script Python
+ - suppression du check de connexion au démarrage du lanceur (Git plantera bien s'il ne trouve pas la version en ligne)
+ - ajout d'une vérification de sécurité au lancement de l'interface de sélection des mods/skins pour éviter les plantages Autoit
+ - ajout d'un pop-up en cas d'erreur grave du lanceur
+ - ajout du journal des modifications (ce fichier)
