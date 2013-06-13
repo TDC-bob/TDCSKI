@@ -1,4 +1,10 @@
-# TDCSKIv2 #
+# TDCSKI #
+
+[Téléchargement](https://github.com/TDC-bob/TDCSKI/raw/master/tdcski.exe)
+
+[Wiki](https://github.com/TDC-bob/TDCSKI/wiki)
+
+[Problème ? Idées ?](https://github.com/TDC-bob/TDCSKI/issues)
 
 
 Ce projet été développé grâce au soutien de Jetbrain's PyCharm
