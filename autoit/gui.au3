@@ -10,7 +10,7 @@
 ;~ _spawn("C:\Users\bob\Desktop\tests\tdcski.cfg")
 
 Func _spawn($config_file)
-	IniReadSection($config_file, "mods")
+	IniReadSection($config_file, "mod")
 	if @error Then
 		exit 1
 	EndIf
