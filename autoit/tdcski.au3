@@ -150,7 +150,7 @@ Func _check_for_new_version()
 		$other_hash = __MD5($new_version_path)
 		If StringCompare($self_hash, $other_hash) <> 0 Then
 			__log("Les hash MD5 sont différents, lancement de l'updater", $func)
-			$updater = '"' & $updater_path & '"'
+			$updater = '"' & $updater_path & '" ' & $CmdLine
 			$dest = '"' & @ScriptFullPath & '"'
 			$source = '"' & $new_version_path & '"'
 			__log("LE LANCEUR DU TDCSKI VA SE METTRE AUTOMATIQUEMENT A JOUR, NE PANIQUEZ PAS, LES FEMMES ET LES CARIBOUS D'ABORD !", $func)
