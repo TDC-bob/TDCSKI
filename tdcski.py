@@ -60,7 +60,7 @@ def main():
     #               help="don't print status messages to stdout")
 
     (options, args) = parser.parse_args()
-    offline_mode = options.offline_mode
+    config.offline_mode = options.offline_mode
     logger.info("lecture du fichier tdcski.cfg")
     # noinspection PyBroadException
     try:
