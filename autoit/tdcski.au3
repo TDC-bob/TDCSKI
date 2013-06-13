@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=TDCSKI
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.124
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.126
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_Run_After=signtool sign /v /n "Bob" /d "TDCSKI" /du "https://github.com/TDC-bob/TDCSKI.git" /t http://timestamp.verisign.com/scripts/timstamp.dll "%out%"
@@ -86,6 +86,9 @@ Func _parse_params()
 					_err("paramètre inconnu: " & $CmdLine[$i], $func)
 			EndSwitch
 		Next
+	EndIf
+	If $param_offline And $param_update_only Then
+		_err('les paramètres "auto" et "update-list-only" sont mutuellement exclusifs' & @CRLF & "(comment voulez-vous que je mette la liste à jour en mode offline ? ...)", $func)
 	EndIf
 EndFunc   ;==>_parse_params
 
