@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=TDCSKI
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.122
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.123
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_Run_After=signtool sign /v /n "Bob" /d "TDCSKI" /du "https://github.com/TDC-bob/TDCSKI.git" /t http://timestamp.verisign.com/scripts/timstamp.dll "%out%"
@@ -56,38 +56,38 @@ Func _main()
 	__log("VERSION: " & $version, $func)
 	_check_python()
 	_check_git()
-	if not $param_offline then _check_repo()
+	If Not $param_offline Then _check_repo()
 	_write_config()
-	if not $param_offline then _check_for_new_version()
+	If Not $param_offline Then _check_for_new_version()
 	__log($str_all_good, $func)
 	GUIDelete($gui_handle)
 	_run_tdcski()
-	if $param_auto then exit 0
+	If $param_auto Then Exit 0
 	__log("spawning GUI", $func)
 	_spawn($config_file)
 EndFunc   ;==>_main
 
 Func _parse_params()
 	If $CmdLine[0] > 0 Then
-		for $i = 1 to $CmdLine[0]
-			switch $CmdLine[$i]
-				case "auto"
+		For $i = 1 To $CmdLine[0]
+			Switch $CmdLine[$i]
+				Case "auto"
 					$param_auto = True
-				case "offline"
+				Case "offline"
 					$param_offline = True
-				case "update-list-only"
+				Case "update-list-only"
 					$param_update_only = True
-				case Else
+				Case Else
 					_err("paramètre inconnu: " & $CmdLine[$i], "parse_params")
-		EndSwitch
+			EndSwitch
 		Next
 	EndIf
-EndFunc
+EndFunc   ;==>_parse_params
 
 Func _run_tdcski()
 	Local $func = "run_tdcski"
 	__log("Lancement du TDCSKI", $func)
-	local $cmd = '"' & FileGetLongName("tdcski.py") & '"' & _Iif($param_offline, " --offline", "") & _Iif($param_update_only, " --update-list", "")
+	Local $cmd = '"' & FileGetLongName("tdcski.py") & '"' & _Iif($param_offline, " --offline", "") & _Iif($param_update_only, " --update-list", "")
 	__log("Lancement de Python avec les paramètres suivants: " & $cmd, $func)
 	ShellExecute($python_path, $cmd, $repo)
 	WinWait("python", "", 10)
@@ -346,7 +346,7 @@ Func _check_git()
 		__log("Git a été trouvé", $func)
 		Return
 	Else
-		if $param_offline Then
+		If $param_offline Then
 			_err("Git n'a pas été trouvé, et le TDCSKI s'exécute en mode offline: impossible d'installer Git. Relancez le TDCSKi en mode normal", $func)
 		EndIf
 		__log("Git n'a pas été trouvé, installation avec accord utilisateur", $func)
@@ -364,7 +364,7 @@ Func _check_python()
 		__log("Python a été trouvé", $func)
 		Return
 	Else
-		if $param_offline Then
+		If $param_offline Then
 			_err("Python n'a pas été trouvé, et le TDCSKI s'exécute en mode offline: impossible d'installer Python. Relancez le TDCSKi en mode normal", $func)
 		EndIf
 		__log("Python n'a pas été trouvé, installation avec accord utilisateur", $func)
