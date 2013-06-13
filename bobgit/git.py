@@ -5,7 +5,7 @@ import subprocess
 import os
 import re
 import config
-from tdcski import offline_mode
+
 try:
     from . import Exceptions
 except (ImportError, SystemError):
