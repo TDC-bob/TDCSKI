@@ -15,7 +15,6 @@ from _logging._logging import mkLogger, DEBUG
 
 logger = mkLogger(__name__, DEBUG, "../logs/{} - TDCSKI.log".format(strftime("%Y%m%d - %Hh%Mm%S", gmtime())))
 
-
 mods = []
 skins = []
 offline_mode = False
