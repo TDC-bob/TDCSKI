@@ -115,20 +115,21 @@ def main():
         if config.offline_mode:
             logger.info("programme en mode offline, aucune mise à jour à ligne")
         else:
-            for m in list.mods:
-                logger.info("mise à jour du mod: {}".format(m))
-                # noinspection PyUnresolvedReferences
-                m = Mod(m, "mod", "../repos/mods", list.mods[m])
-                mods.append(m)
-
+            logger.info("mise à jour des mods et des skins en ligne")
+        for m in list.mods:
+            logger.info("traitement du mod: {}".format(m))
             # noinspection PyUnresolvedReferences
-            for s in list.skins:
-                logger.info("mise à jour de la skin: {}".format(s))
-                # noinspection PyUnresolvedReferences
-                s = Mod(s, "skin", "../repos/skins", list.skins[s])
-                skins.append(s)
+            m = Mod(m, "mod", "../repos/mods", list.mods[m])
+            mods.append(m)
 
-            logger.info("fin des mises à jour")
+        # noinspection PyUnresolvedReferences
+        for s in list.skins:
+            logger.info("traitement de la skin: {}".format(s))
+            # noinspection PyUnresolvedReferences
+            s = Mod(s, "skin", "../repos/skins", list.skins[s])
+            skins.append(s)
+
+
         # logger.info("list des mods disponibles: {}".format("\n".join(m.name for m in mods)))
         # logger.info("list des skins disponibles: {}".format("\n".join(s.name for s in skins)))
         logger.info("(dés)installation des mods / skins")
