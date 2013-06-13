@@ -69,6 +69,9 @@ class _ManagedMission():
         self.logger.debug("délégation de la table de mission au parser SLPP")
         self.d = parser.decode(self.raw_text)
         self.check()
+        self.group_ids = []
+        self.unit_ids = []
+        self.parse_indexes()
 
     def finalize(self):
         pass
@@ -169,20 +172,40 @@ class _ManagedMission():
 ##            print("search_key: {}".format(search_key))
             return self.get_key_value(key, base=base[search_key])
 
-##
-##        try:
-##            if type(key[0]) == str:
-##                search_key = '"{}"'.format(key[0])
-##            else:
-##                search_key = key[0]
-##            if len(key) == 1:
-##                if type(key[0]) == str:
-##                    return base[search_key]
-##                else:
-##                    return base[search_key]
-##            else:
-##                return self.get_key(key[1:], base=base[search_key])
-##        except KeyError:
-##            raise Exceptions.Error("Clef non trouvée",
-##                "La clef suivante n'a pas été trouvée dans la table de mission: {}".format(search_key), self.logger)
+    def parse_indexes(self):
+        for coal in self.d['"coalition"']:
+            for country in self.d['"coalition"'][coal]['"country"']:
+                for unit_type in self.d['"coalition"'][coal]['"country"'][country]:
+                    # print(unit_type)
+                    # if unit_type in ['"vehicle"']:
+                    if unit_type in ['"plane"', '"helicopter"', '"vehicle"', '"static"']:
+                        for unit_group in self.d['"coalition"'][coal]['"country"'][country][unit_type]['"group"']:
+                            # print(unit_group)
+                            group = self.d['"coalition"'][coal]['"country"'][country][unit_type]['"group"'][unit_group]
+                            group_id = group['"groupId"']
+                            self.group_ids.append(group_id)
+                            for unit in group['"units"']:
+                                # print(unit)
+                                unit_id = group['"units"'][unit]['"unitId"']
+                                # print(unit_id)
+                                # print(type(unit_id))
+                                self.unit_ids.append(unit_id)
+
+    def next_unit_id(self):
+        for i in range(1, 10000):
+            i = str(i)
+            if i in self.unit_ids:
+                continue
+            self.unit_ids.append(i)
+            return i
+
+    def next_group_id(self):
+        for i in range(1, 10000):
+            i = str(i)
+            if i in self.group_ids:
+                continue
+            self.group_ids.append(i)
+            return i
+
+
 

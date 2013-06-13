@@ -5,6 +5,7 @@ import os
 import sys
 import winreg
 import traceback
+from mission import Mission
 from time import strftime, gmtime
 from mod import Mod
 import config
@@ -20,6 +21,14 @@ skins = []
 offline_mode = False
 
 def main():
+    test_path = r"C:\Users\bob\Saved Games\DCS\Missions\TDCSKI_test.miz"
+    with Mission(test_path) as mission:
+        print(mission.next_group_id())
+        print(mission.next_unit_id())
+        print(mission.unit_ids)
+        print(mission.group_ids)
+        pass
+    return
 
     # config = Config()
     # print(config.values)
