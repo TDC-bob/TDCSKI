@@ -1,19 +1,6 @@
-﻿# -*- coding: UTF-8 -*-
-#-------------------------------------------------------------------------------
-# Author:      Bob Daribouca
-#
-# Copyright:   (c) Bob Daribouca 2013
-# Licence:     CC BY-NC-SA 3.0
-#
-#               Please refer to the "LICENSE" file distributed with the package,
-#               or to http://creativecommons.org/licenses/by-nc-sa/3.0/
-#
-#-------------------------------------------------------------------------------
-#!/usr/bin/env python
-"""
-This module provides an environement to make
-module- and class-specific loggers
-"""
+﻿# -*- coding: utf-8 -*-
+__author__ = 'bob'
+
 import logging
 from os.path import exists
 from os import remove
