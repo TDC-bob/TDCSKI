@@ -190,7 +190,6 @@ class Repo():
         """
         Runs an arbitrary git command
         """
-        self.logger.debug("lancement de la commande git: {}".format(args))
         if ch_dir:
             cur_dir = os.getcwd()
             switch_dir(self.__local)
