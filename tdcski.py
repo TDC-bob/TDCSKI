@@ -17,7 +17,6 @@ logger = mkLogger(__name__, DEBUG, "../logs/{} - TDCSKI.log".format(strftime("%Y
 
 mods = []
 skins = []
-offline_mode = False
 
 def main():
 
@@ -113,7 +112,7 @@ def main():
         mods = []
         skins = []
         # noinspection PyUnresolvedReferences
-        if offline_mode:
+        if config.offline_mode:
             logger.info("programme en mode offline, aucune mise à jour à ligne")
         else:
             for m in list.mods:
