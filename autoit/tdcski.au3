@@ -53,10 +53,6 @@ Func _main()
 	$iMemo = _GUICtrlEdit_Create($gui_handle, "", 2, 2, $w - 2, $h, BitOR($ES_MULTILINE, $ES_WANTRETURN, $WS_VSCROLL, $WS_HSCROLL, $ES_AUTOVSCROLL, $ES_AUTOHSCROLL, $ES_READONLY))
 	GUICtrlSetFont($iMemo, 9, 400, 0, "Courier New")
 	GUISetState()
-	If Ping("8.8.8.8", 5) == 0 Then
-		_err("Pas d'accès à internet ...", $func)
-		Exit 1
-	EndIf
 	_check_python()
 	_check_git()
 	_check_repo()
