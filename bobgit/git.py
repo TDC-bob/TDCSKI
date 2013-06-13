@@ -5,6 +5,7 @@ import subprocess
 import os
 import re
 import config
+from tdcski import offline_mode
 try:
     from . import Exceptions
 except (ImportError, SystemError):
@@ -35,6 +36,8 @@ class Repo():
                     "no local directory found, and no remote given")
 
         if not self.local_repo_exists:
+            if offline_mode:
+                raise Exceptions.GitError("le programme tourne en mode offline mais le repository local n'existe pas", self.logger)
             logger.debug("le repo local n'existe pas, initialisation")
             self.init(remote, branch)
             # self.clone(init_remote, branch)
@@ -42,6 +45,9 @@ class Repo():
             if not os.path.exists(os.path.join(self.__local, ".git")) and not dir_is_empty(self.__local):
                 raise Exceptions.GitError("le dossier local existe déjà, mais ce n'est pas un repo, et il n'est pas vide")
             logger.debug("mise à jour du repository")
+            if offline_mode:
+                self.logger.debug("le programme tourne en mode offline, pas de mise à jour du repository")
+                return
             self.update(branch)
 
     @property

@@ -10,6 +10,17 @@
 ;~ _spawn("C:\Users\bob\Desktop\tests\tdcski.cfg")
 
 Func _spawn($config_file)
+	local $test[1]
+	local $mod_ok = False
+	local $skin_ok = False
+	_FileReadToArray($config_file, $test)
+	for $i = 0 to $test[0]
+		if $test[$i] = "[mod]" then $mod_ok = True
+		if $test[$i] = "[skin]" then $skin_ok = True
+	Next
+	if not ($mod_ok and $skin_ok) then
+		_err("le fichier de configuration n'est pas complet, il y a probablement eu un problème pendant l'exécution du script Python. Vérifiez le fichier journal", "spawn_gui")
+	EndIf
 ;~ 	IniReadSection($config_file, "mod")
 ;~ 	if @error Then
 ;~ 		exit 1

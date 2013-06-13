@@ -56,35 +56,43 @@ Func _main()
 	__log("VERSION: " & $version, $func)
 	_check_python()
 	_check_git()
-	_check_repo()
+	if not $param_offline then _check_repo()
 	_write_config()
-	_check_for_new_version()
-	__log("ON LANCE QUELQUE CHOSE !", $func)
-	__log("running: " & $python_path & '"' & FileGetLongName(".\tdcski\tdcski.py") & '"', $func)
+	if not $param_offline then _check_for_new_version()
 	__log($str_all_good, $func)
 	GUIDelete($gui_handle)
 	_run_tdcski()
-	If $CmdLine[0] > 0 Then
-		If $CmdLine[1] == "auto" Then Exit 0
-	EndIf
+	if $param_auto then exit 0
 	__log("spawning GUI", $func)
 	_spawn($config_file)
 EndFunc   ;==>_main
 
-Func _run_tdcski($args = "")
+Func _parse_params()
+	If $CmdLine[0] > 0 Then
+		for $i = 1 to $CmdLine[0]
+			switch $CmdLine[$i]
+				case "auto"
+					$param_auto = True
+				case "offline"
+					$param_offline = True
+				case "update-list-only"
+					$param_update_only = True
+				case Else
+					_err("paramètre inconnu: " & $CmdLine[$i], "parse_params")
+		EndSwitch
+		Next
+	EndIf
+EndFunc
+
+Func _run_tdcski()
 	Local $func = "run_tdcski"
 	__log("Lancement du TDCSKI", $func)
-;~ 	$exit_code = RunWait('"' & $python_path & '" "' & FileGetLongName("tdcski.py") & '"', ".\tdcski")
-	ShellExecute($python_path, '"' & FileGetLongName("tdcski.py") & '" ' & $args, ".\tdcski")
+	local $cmd = '"' & FileGetLongName("tdcski.py") & '"' & _Iif($param_offline, " --offline", "") & _Iif($param_update_only, " --update-list", "")
+	__log("Lancement de Python avec les paramètres suivants: " & $cmd, $func)
+	ShellExecute($python_path, $cmd, $repo)
 	WinWait("python", "", 10)
 	WinSetTitle("python", "", "TDCSKI v" & $version)
 	ProcessWaitClose("python.exe")
-;~ 	If @error Then
-;~ 		_err("Erreur pendant l'exécution du TDCSKI Python", $func)
-;~ 	EndIf
-;~ 	If $exit_code <> 0 Then
-;~ 		_err("Le TDCSKI Python a rencontré une erreur, vérifiez les fichiers journaux et prenez contact avec Bob en cas de souci", $func)
-;~ 	EndIf
 	__log("L'exécution du TDCSKI Python s'est bien déroulée", $func)
 EndFunc   ;==>_run_tdcski
 
@@ -338,6 +346,9 @@ Func _check_git()
 		__log("Git a été trouvé", $func)
 		Return
 	Else
+		if $param_offline Then
+			_err("Git n'a pas été trouvé, et le TDCSKI s'exécute en mode offline: impossible d'installer Git. Relancez le TDCSKi en mode normal", $func)
+		EndIf
 		__log("Git n'a pas été trouvé, installation avec accord utilisateur", $func)
 		$git_path = _ask_user($str_app_name, $str_git_ask_install)
 		__log("C'est parti, on installe", $func)
@@ -353,6 +364,9 @@ Func _check_python()
 		__log("Python a été trouvé", $func)
 		Return
 	Else
+		if $param_offline Then
+			_err("Python n'a pas été trouvé, et le TDCSKI s'exécute en mode offline: impossible d'installer Python. Relancez le TDCSKi en mode normal", $func)
+		EndIf
 		__log("Python n'a pas été trouvé, installation avec accord utilisateur", $func)
 		$install_python = _ask_user($str_app_name, $str_python_ask_install)
 		__log("C'est parti, on installe", $func)
@@ -607,6 +621,7 @@ Func __log($msg, $func, $TimeStamp = True)
 EndFunc   ;==>__log
 
 Func _err($msg, $func)
+	MsgBox(266288, $str_app_name & " " & $version, "Oops !" & @CRLF & @CRLF & $msg & @CRLF & @CRLF & "Je quitte ...")
 	__log($msg, $func & " - FATAL ERROR")
 	Exit 1
 EndFunc   ;==>_err

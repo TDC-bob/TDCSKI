@@ -6,21 +6,19 @@ import sys
 import winreg
 import traceback
 from time import strftime, gmtime
-from lib.configobj import ConfigObj
 from mod import Mod
 import config
 from config import Config
-import ui_server
 from bobgit.git import Repo
 from optparse import OptionParser
-from _logging._logging import mkLogger, DEBUG, WARN
+from _logging._logging import mkLogger, DEBUG
 
 logger = mkLogger(__name__, DEBUG, "../logs/{} - TDCSKI.log".format(strftime("%Y%m%d - %Hh%Mm%S", gmtime())))
 
 
 mods = []
 skins = []
-
+offline_mode = False
 
 def main():
 
@@ -53,16 +51,21 @@ def main():
     logger.info("parsing des arguments")
     parser = OptionParser()
     parser.add_option("-u", "--update-list", action="store_true", dest="list_update_only",
-                  help="uniquement mettre à jour la liste des mods", default=False)
+                  help="se contente de mettre à jour la liste des mods", default=False)
+    parser.add_option("-O", "--offline", action="store_true", dest="offline_mode",
+                  help="lancer le programme en mode offline (aucune mise à jour, "
+                       "seulement installation/désinstallation", default=False)
     # parser.add_option("-q", "--quiet",
     #               action="store_false", dest="verbose", default=True,
     #               help="don't print status messages to stdout")
 
     (options, args) = parser.parse_args()
+    offline_mode = options.offline_mode
     logger.info("lecture du fichier tdcski.cfg")
+    # noinspection PyBroadException
     try:
         conf = Config()
-    except Exception as e:
+    except Exception:
         logger.error("le fichier de configuration est corrompu, supprimez-le et j'en réinstallerai un nouveau")
         logger.debug("appuyez sur ENTER pour quitter")
         input()
@@ -75,7 +78,9 @@ def main():
         logger.error("impossible de trouver une installation de DCS")
         logger.debug("appuyez sur ENTER pour quitter")
         exit(1)
+    # noinspection PyUnboundLocalVariable
     logger.info("le répertoire d'installation DCS détecté est: \n\t\t{}".format(dcs_path))
+    # noinspection PyUnboundLocalVariable
     conf.create("general", "dcs_path", dcs_path)
 
     try:
@@ -108,13 +113,17 @@ def main():
         import list
         mods = []
         skins = []
+        # noinspection PyUnresolvedReferences
         for m in list.mods:
             logger.info("mise à jour du mod: {}".format(m))
+            # noinspection PyUnresolvedReferences
             m = Mod(m, "mod", "../repos/mods", list.mods[m])
             mods.append(m)
 
+        # noinspection PyUnresolvedReferences
         for s in list.skins:
             logger.info("mise à jour de la skin: {}".format(s))
+            # noinspection PyUnresolvedReferences
             s = Mod(s, "skin", "../repos/skins", list.skins[s])
             skins.append(s)
 
