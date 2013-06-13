@@ -68,17 +68,21 @@ Func _main()
 EndFunc   ;==>_main
 
 Func _parse_params()
+	Local $func = "parse_params"
 	If $CmdLine[0] > 0 Then
 		For $i = 1 To $CmdLine[0]
 			Switch $CmdLine[$i]
 				Case "auto"
+					__log("le programme s'exécute en mode auto", $func)
 					$param_auto = True
 				Case "offline"
+					__log("le programme s'exécute en mode offline", $func)
 					$param_offline = True
 				Case "update-list-only"
+					__log("le programme s'exécute en mode update-list-only", $func)
 					$param_update_only = True
 				Case Else
-					_err("paramètre inconnu: " & $CmdLine[$i], "parse_params")
+					_err("paramètre inconnu: " & $CmdLine[$i], $func)
 			EndSwitch
 		Next
 	EndIf
