@@ -5,6 +5,7 @@ Global $first_start = False
 Global $param_auto = False
 Global $param_offline = False
 Global $param_update_only = False
+Global $param_show_changelog = False
 
 Global Const $Python33_x86_download_link = "http://www.python.org/ftp/python/3.3.2/python-3.3.2.msi"
 Global Const $Python33_x64_download_link = "http://www.python.org/ftp/python/3.3.2/python-3.3.2.amd64.msi"
@@ -18,6 +19,7 @@ Global Const $new_version_path = $repo & "\tdcski.exe"
 
 Global Const $log_dir = @ScriptDir & "\logs"
 Global Const $log_file = $log_dir & "\" & @YEAR & @MON & @MDAY & " - " & @HOUR & "h" & @MIN & "m" & @SEC & " - Lanceur.log"
+Global Const $changelog_short = @ScriptDir & "\tdcski\CHANGELOG.short"
 Global $iMemo, $python_path, $git_path, $gui_handle, $version
 
 Global Const $config_file = @ScriptDir & "\tdcski.cfg"

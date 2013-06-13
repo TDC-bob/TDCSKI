@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=TDCSKI
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.128
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.130
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_Run_After=signtool sign /v /n "Bob" /d "TDCSKI" /du "https://github.com/TDC-bob/TDCSKI.git" /t http://timestamp.verisign.com/scripts/timstamp.dll "%out%"
@@ -55,6 +55,7 @@ Func _main()
 	GUISetState()
 	__log("VERSION: " & $version, $func)
 	_parse_params()
+	If $param_show_changelog Then _show_changelog()
 	_check_python()
 	_check_git()
 	If Not $param_offline Then _check_repo()
@@ -82,6 +83,8 @@ Func _parse_params()
 				Case "update-list-only"
 					__log("le programme s'exécute en mode update-list-only", $func)
 					$param_update_only = True
+				Case "show_changelog"
+					$param_show_changelog = True
 				Case Else
 					_err("paramètre inconnu: " & $CmdLine[$i], $func)
 			EndSwitch
@@ -91,6 +94,11 @@ Func _parse_params()
 		_err('les paramètres "auto" et "update-list-only" sont mutuellement exclusifs' & @CRLF & "(comment voulez-vous que je mette la liste à jour en mode offline ? ...)", $func)
 	EndIf
 EndFunc   ;==>_parse_params
+
+Func _show_changelog()
+	$s_LogText = FileRead($changelog_short)
+	MsgBox(4132, $str_app_name & " " & $version, "Nouveautés: " & @CRLF & @CRLF & $s_LogText)
+EndFunc   ;==>_show_changelog
 
 Func _run_tdcski()
 	Local $func = "run_tdcski"
