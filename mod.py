@@ -40,8 +40,6 @@ class Mod():
         self.logger.debug("dossier local: {}".format(self.__local))
         self.__remote = args["remote"]
         self.logger.debug("remote: {}".format(self.__remote))
-        self.logger.debug("initialisation du repository dans le dossier local")
-        self.__repo = git.Repo(self.__local, self.__remote)
         self.__branch = "master"
         self.logger.debug("lecture de la table de configuration du mod")
         for arg in args:
@@ -50,8 +48,6 @@ class Mod():
             elif arg in ["branch"]:
                 self.logger.debug("paramètre branche trouvé: {}".format(args[arg]))
                 self.__branch = args[arg]
-                self.logger.debug("checkout de la branche")
-                self.__repo.checkout(self.__branch)
             elif arg in ["desc"]:
                 self.logger.debug("paramètre descritpion trouvé: {}".format(args[arg]))
                 self.__desc = args[arg]
@@ -62,6 +58,8 @@ class Mod():
                 self.error("paramètre inconnu trouvé: {} \t\t Valeur: {}".format(arg, args[arg]))
                 input()
                 exit(1)
+        self.logger.debug("initialisation du repository dans le dossier local")
+        self.__repo = git.Repo(self.__local, self.__remote, self.__branch)
 
         self.logger.debug("écriture du fichier de configuration")
         if not conf.set_or_create(self.__type,  self.__name, "path", self.__local):
