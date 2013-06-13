@@ -88,18 +88,22 @@ class Repo():
 
     @logged
     def update(self, branch="master"):
+
         self.logger.debug("fetch de la branche distante: {}".format(branch))
-        success, output, cmd = self.__run(["fetch", "origin", branch])
+        success, output, cmd = self.__run(["fetch", "origin", "{}:remotes/origin/{}".format(branch, branch)])
         if not success:
             raise Exceptions.GitFetchError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
+
         self.logger.debug("checkout de la branche en local")
         success, output, cmd = self.__run(["checkout", branch])
         if not success:
             raise Exceptions.GitFetchError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
+
         self.logger.debug("fusion de la branche distante avec la branche locale")
         success, output, cmd = self.__run(["merge", "origin/{}".format(branch)])
         if not success:
             raise Exceptions.GitFetchError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
+
         self.logger.debug("le repository a été mis à jour avec succès")
         return self
 
