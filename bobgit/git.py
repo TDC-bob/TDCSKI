@@ -60,18 +60,27 @@ class Repo():
 
     @logged
     def init(self, remote, branch):
+
         self.logger.debug("initialisation du repository\ncréation du répertoire si nécessaire")
         os.makedirs(self.__local)
         if not dir_is_empty(self.__local):
             raise Exceptions.GitInitError("tentative d'initialisation d'un repository non vide: {}".format(self.__local), self.logger)
+
         self.logger.debug("initialisation du répertoire en repository Git")
         success, output, cmd = self.__run(["init"])
         if not success:
             raise Exceptions.GitInitError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
+
         self.logger("ajout et fetch du repository distant dans le répertoire local")
         success, output, cmd = self.__run(["remote", "add", "-t", branch, "-f", "origin", remote]) # "-f" switche makes Git fetch the remote immediately after the "remote add" command
         if not success:
             raise Exceptions.GitAddRemoteError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
+
+        self.logger.debug("checkout de la branche en local")
+        success, output, cmd = self.__run(["checkout", branch])
+        if not success:
+            raise Exceptions.GitCheckoutError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
+
         self.__build_branches_list()
         self.__build_remotes_list()
         self.logger.debug("le répertoire a été initialisé avec succès")

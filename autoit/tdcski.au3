@@ -198,30 +198,49 @@ Func _check_repo()
 		__log("Le repo existe", $func)
 		_pull_repo($branch)
 	Else
-		_clone_repo()
+		_clone_repo($branch)
 	EndIf
 EndFunc   ;==>_check_repo
 
 Func _pull_repo($branch = "master")
 	$func = "pull_repo"
+
+	__log("Checkout de la branche " & $branch, $func)
+	_git_run("checkout " & $branch, $repo)
+
+	__log("Fetch de la branche distante" & $branch, $func)
+	_git_run("fetch origin " & $branch, $repo)
+
+	__log("Fusion de la branche distante dans la branche locale", $func)
+	_git_run("merge origin/" & $branch, $repo)
+
+	__log("le repository local a été mis à jour avec succès", $func)
+EndFunc   ;==>_pull_repo
+
+Func _clone_repo($branch)
+	$func = "_clone_repo"
+	__log("Clonage du repository distant, branche " & $branch, $func)
+
+	__log("création du répertoire local", $func)
+	if DirCreate($repo) <> 1 Then _err("Impossible de créer le dossier: " & $repo, $func)
+
+	__log("initialisation du repository local", $func)
+	_git_run("init", $repo)
+
 	__log("Réglages des options Git locales", $func)
 	_git_run('config user.email "tdcski@tdcski.com"', $repo)
 	_git_run('config user.name tdcski', $repo)
-	__log("Checkout de la branche " & $branch, $func)
-	_git_run("checkout " & $branch, $repo)
-	__log("Fetch origin " & $branch, $func)
-	_git_run("fetch origin " & $branch, $repo)
-	__log("Fusion des changements", $func)
-	_git_run("merge origin " & $branch, $repo)
-;~ 	__log("Pulling repo", $func)
-;~ 	_git_run("pull origin " & $branch, $repo)
-EndFunc   ;==>_pull_repo
 
-Func _clone_repo()
-	$func = "_clone_repo"
-	__log("Cloning repo", $func)
+	__log("ajout du remote principal et premier fetch de la branche: " & $branch, $func)
+	_git_run("remote add -t " & $branch & " -f origin " & $repo_remote)
+
+	__log("checkout de la branche locale", $func)
+	_git_run("checkout " & $branch)
+
+	__log("repo initial cloné avec succès", $func)
+
 ;~ 	_cmd_and__log('"' & $git_path & '"' & "  " & $cmd, $wk)
-	_git_run("clone " & $repo_remote & ' "' & $repo & '"')
+;~ 	_git_run("clone " & $repo_remote & ' "' & $repo & '"')
 EndFunc   ;==>_clone_repo
 
 Func _git_run($cmd, $wk = '')
