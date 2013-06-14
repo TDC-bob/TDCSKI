@@ -236,4 +236,4 @@ def switch_dir(new_dir):
     raise Exceptions.GitRunError("échec du changement de répertoire courant")
 
 def dir_is_empty(path):
-    return os.listdir(path)==""
+    return os.listdir(path)==[]
