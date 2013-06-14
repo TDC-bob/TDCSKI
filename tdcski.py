@@ -49,6 +49,17 @@ def main():
                   help="mettre à jour la liste des mods uniquement", default=False)
     parser.add_option("-u", "--update", action="store_true", dest="update",
                   help="mettre les mods / skins à jour", default=False)
+
+    group = OptionGroup(parser, "Ajout des skins aux missions",
+                    "Spécifiez le fichier *.miz à éditer,  "
+                    "et le TDCSKI ajoutera toutes les skins "
+                    "connues à ce fichier automatiquement à "
+                    "tous les groupes d'appareils dont le nom "
+                    "commence par \"TDC-\".\n\nVous pouvez également "
+                    "spécifier le fichier de sortie; par défaut, "
+                    "le TDCSKI écrira un fichier TDCSKI_nom_original.miz "
+                    "à côté du fichier original")
+    group.add_option("-g", action="store_true", help="Group option.")
     parser.add_option("-i", "--in-file", action="callback", callback=callback_file_check, dest="in_file",
                   help="indiquer un fichier *.miz auquel ajouter les pilotes", default=None)
     parser.add_option("-o", "--out-file", action="callback", callback=callback_file_check, dest="out_file",
