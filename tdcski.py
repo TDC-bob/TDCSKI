@@ -83,7 +83,7 @@ def main():
         logger.info("mise à jour de la liste des mods/skins")
         Repo("../repos/list", "https://github.com/TDC-bob/modlist.git", "master", (config.update or config.update_list_only))
 
-        if options.list_update_only:
+        if config.update_list_only:
             logger.info("la mise à jour de la liste est terminée, je quitte")
             exit(0)
 
