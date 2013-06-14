@@ -76,7 +76,7 @@ class Repo():
         if not success:
             raise Exceptions.GitInitError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
 
-        self.logger("ajout et fetch du repository distant dans le répertoire local")
+        self.logger.debug("ajout et fetch du repository distant dans le répertoire local")
         success, output, cmd = self.__run(["remote", "add", "-t", branch, "-f", "origin", remote]) # "-f" switche makes Git fetch the remote immediately after the "remote add" command
         if not success:
             raise Exceptions.GitAddRemoteError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
