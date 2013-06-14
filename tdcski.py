@@ -44,7 +44,7 @@ def main():
             raise OptionError("le fichier donné en entrée (--in-file) n'existe pas")
         setattr(parser.values, option.dest, 1)
 
-    parser = OptionParser()
+    parser = OptionParser(version=version, description=description, prog=prog, epilog=epilog)
     parser.add_option("-U", "--update-list", action="store_true", dest="update_list_only",
                   help="mettre à jour la liste des mods uniquement", default=False)
     parser.add_option("-u", "--update", action="store_true", dest="update",
