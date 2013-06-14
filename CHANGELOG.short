@@ -22,5 +22,6 @@
  - auto: le TDCSKI n'affiche pas l'interface de sélection des mods/skins et se ferme tout seul une fois les mises à jours effectuées
  - update: le TDCSKI ne met RIEN à jour (ni le programme, ni les mods/skins). Le mode offline permet une exécution BEAUCOUP plus rapide (au détriment de la mises à jour initiale)
  - update-list-only: le TDCSKI se contente de mettre à jour la liste des mods/skins, puis affiche directement l'interface de sélection
-	Pour utiliser ces paramètres, faites un clic-droit sur "tdcski.exe", "créer un raccourci", puis clic-droit sur le raccourci, "propriétés", et ajoutez l'option qui vous intéresse
-	Exemple: "..\tdcski.exe offline"
+ 
+Pour utiliser ces paramètres, faites un clic-droit sur "tdcski.exe", "créer un raccourci", puis clic-droit sur le raccourci, "propriétés", et ajoutez l'option qui vous intéresse
+Exemple: "..\tdcski.exe offline"
