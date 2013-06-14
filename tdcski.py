@@ -29,7 +29,7 @@ def main():
     #     pass
     # return
     logger.info("parsing des arguments")
-    version = "0.0.1"
+    version = "%prog 0.0.1"
     description = "Ce programme permet d'installer et de tenir à jour les skins et les mods des TDC.\n" \
                   "Il permet également d'ajouter automatiquement les skins correspondant aux différents" \
                   "pilotes à une mission (*.miz)"
