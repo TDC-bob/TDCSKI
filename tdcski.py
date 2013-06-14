@@ -60,9 +60,9 @@ def main():
                     "TDCSKI_nom_original.miz "
                     "à côté du fichier original")
     group.add_option("-i", "--in-file", action="callback", callback=callback_file_check, dest="in_file",
-                  help="indiquer un fichier *.miz auquel ajouter les pilotes", default=None)
+                  help="indiquer un fichier *.miz auquel ajouter les pilotes", default=None, metavar="FICHIER.MIZ")
     group.add_option("-o", "--out-file", action="callback", callback=callback_file_check, dest="out_file",
-                  help="spécifier le fichier *.miz de sortie (pratique dans un script)", default=None)
+                  help="spécifier le fichier *.miz de sortie (pratique dans un script)", default=None, metavar="FICHIER.MIZ")
     parser.add_option_group(group)
 
     (options, args) = parser.parse_args()
