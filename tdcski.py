@@ -11,7 +11,7 @@ from mod import Mod
 import config
 from config import Config
 from bobgit.git import Repo
-from optparse import OptionParser
+from optparse import OptionParser, OptionValueError, OptionError
 from _logging._logging import mkLogger, DEBUG
 
 logger = mkLogger(__name__, DEBUG, "../logs/{} - TDCSKI.log".format(strftime("%Y%m%d - %Hh%Mm%S", gmtime())))
@@ -29,11 +29,30 @@ def main():
     #     pass
     # return
     logger.info("parsing des arguments")
+    version = "0.0.1"
+    description = "Ce programme permet d'installer et de tenir à jour les skins et les mods des TDC.\n" \
+                  "Il permet également d'ajouter automatiquement les skins correspondant aux différents" \
+                  "pilotes à une mission (*.miz)"
+    prog = "TDCSKI"
+    epilog = "Merci à tous ceux qui m'ont aidé à réaliser ce programme ! N'hésitez pas à rapporter " \
+             "les bugs et les problèmes que vous rencontrez, ainsi que vos idées ou suggestions pour " \
+             "améliorer le TDCSKI. Bons vols !"
+    def callback_file_check(option, opt_str, value, parser):
+        if opt_str == "--out-file" and not parser.values.in_file:
+            raise OptionValueError("l'option --out-file (-o) implique obligatoirement l'option --in-file (-i)")
+        if opt_str == "--in-file" and not os.path.exists(parser.values.in_file):
+            raise OptionError("le fichier donné en entrée (--in-file) n'existe pas")
+        setattr(parser.values, option.dest, 1)
+
     parser = OptionParser()
     parser.add_option("-U", "--update-list", action="store_true", dest="update_list_only",
-                  help="se contente de mettre à jour la liste des mods", default=False)
+                  help="mettre à jour la liste des mods uniquement", default=False)
     parser.add_option("-u", "--update", action="store_true", dest="update",
                   help="mettre les mods / skins à jour", default=False)
+    parser.add_option("-i", "--in-file", action="callback", callback=callback_file_check, dest="in_file",
+                  help="indiquer un fichier *.miz auquel ajouter les pilotes", default=None)
+    parser.add_option("-o", "--out-file", action="callback", callback=callback_file_check, dest="out_file",
+                  help="spécifier le fichier *.miz de sortie (pratique dans un script)", default=None)
 
     (options, args) = parser.parse_args()
     config.update = options.update
@@ -111,8 +130,6 @@ def main():
             skins.append(s)
 
 
-        # logger.info("list des mods disponibles: {}".format("\n".join(m.name for m in mods)))
-        # logger.info("list des skins disponibles: {}".format("\n".join(s.name for s in skins)))
         logger.info("(dés)installation des mods / skins")
         for mod in mods:
             mod.check()
