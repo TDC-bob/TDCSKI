@@ -192,7 +192,7 @@ class _ManagedMission():
                                 self.unit_ids.append(unit_id)
 
     def next_unit_id(self):
-        for i in range(1, 10000):
+        for i in range(1000, 10000):
             i = str(i)
             if i in self.unit_ids:
                 continue
@@ -200,7 +200,7 @@ class _ManagedMission():
             return i
 
     def next_group_id(self):
-        for i in range(1, 10000):
+        for i in range(1000, 10000):
             i = str(i)
             if i in self.group_ids:
                 continue
