@@ -11,7 +11,7 @@ from mod import Mod
 import config
 from config import Config
 from bobgit.git import Repo
-from optparse import OptionParser, OptionValueError, OptionError
+from optparse import OptionParser, OptionValueError, OptionError, OptionGroup
 from _logging._logging import mkLogger, DEBUG
 
 logger = mkLogger(__name__, DEBUG, "../logs/{} - TDCSKI.log".format(strftime("%Y%m%d - %Hh%Mm%S", gmtime())))
@@ -60,10 +60,11 @@ def main():
                     "le TDCSKI écrira un fichier TDCSKI_nom_original.miz "
                     "à côté du fichier original")
     group.add_option("-g", action="store_true", help="Group option.")
-    parser.add_option("-i", "--in-file", action="callback", callback=callback_file_check, dest="in_file",
+    group.add_option("-i", "--in-file", action="callback", callback=callback_file_check, dest="in_file",
                   help="indiquer un fichier *.miz auquel ajouter les pilotes", default=None)
-    parser.add_option("-o", "--out-file", action="callback", callback=callback_file_check, dest="out_file",
+    group.add_option("-o", "--out-file", action="callback", callback=callback_file_check, dest="out_file",
                   help="spécifier le fichier *.miz de sortie (pratique dans un script)", default=None)
+    parser.add_option_group(group)
 
     (options, args) = parser.parse_args()
     config.update = options.update
