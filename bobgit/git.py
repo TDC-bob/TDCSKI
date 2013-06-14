@@ -42,7 +42,7 @@ class Repo():
             if not update:
                 raise Exceptions.GitError("le programme tourne en mode offline mais le repository local n'existe pas", self.logger)
             logger.debug("le repo local n'existe pas, initialisation")
-            self.init(remote, branch)
+            self.init(init_remote, branch)
 
         self.__build_branches_list()
         self.__build_remotes_list()

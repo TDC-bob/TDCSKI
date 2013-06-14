@@ -174,21 +174,23 @@ class _ManagedMission():
 
     def parse_indexes(self):
         for coal in self.d['"coalition"']:
+            print("coal: {} ({})".format(coal, type(coal)))
             for country in self.d['"coalition"'][coal]['"country"']:
+                print("country: {} ({})".format(country, type(country)))
                 for unit_type in self.d['"coalition"'][coal]['"country"'][country]:
+                    print("unit_type: {} ({})".format(unit_type, type(unit_type)))
                     # print(unit_type)
                     # if unit_type in ['"vehicle"']:
                     if unit_type in ['"plane"', '"helicopter"', '"vehicle"', '"static"']:
                         for unit_group in self.d['"coalition"'][coal]['"country"'][country][unit_type]['"group"']:
+                            print("unit_group: {} ({})".format(unit_group, type(unit_group)))
                             # print(unit_group)
                             group = self.d['"coalition"'][coal]['"country"'][country][unit_type]['"group"'][unit_group]
                             group_id = group['"groupId"']
                             self.group_ids.append(group_id)
                             for unit in group['"units"']:
-                                # print(unit)
+                                print("unit: {} ({})".format(unit, type(unit)))
                                 unit_id = group['"units"'][unit]['"unitId"']
-                                # print(unit_id)
-                                # print(type(unit_id))
                                 self.unit_ids.append(unit_id)
 
     def next_unit_id(self):
@@ -208,4 +210,6 @@ class _ManagedMission():
             return i
 
 
-
+class Group():
+    def __init__(self, d, parent):
+        pass
