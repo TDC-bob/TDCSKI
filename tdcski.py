@@ -60,10 +60,12 @@ def main():
                     "de fichier de sortie, le TDCSKI écrira un fichier "
                     "TDCSKI_nom_original.miz "
                     "à côté du fichier original")
-    group.add_option("-i", "--in-file", action="callback", callback=callback_in_file_check,
-                  help="indiquer un fichier *.miz auquel ajouter les pilotes", default=None, metavar="MIZ")
-    group.add_option("-o", "--out-file", action="callback", callback=callback_out_file_check,
-                  help="spécifier le fichier *.miz de sortie (pratique dans un script)", default=None, metavar="FICHIER.MIZ")
+    group.add_option("-i", "--in-file",
+                     action="callback", callback=callback_in_file_check, metavar="MIZ",
+                  help="indiquer un fichier *.miz auquel ajouter les pilotes", default=None)
+    group.add_option("-o", "--out-file",
+                     action="callback", callback=callback_out_file_check, metavar="FICHIER.MIZ",
+                  help="spécifier le fichier *.miz de sortie (pratique dans un script)", default=None)
     parser.add_option("-f", "--filename",
                   metavar="FILE", help="write output to FILE")
     parser.add_option_group(group)
