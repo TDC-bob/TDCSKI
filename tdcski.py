@@ -38,6 +38,7 @@ def main():
              "les bugs et les problèmes que vous rencontrez, ainsi que vos idées ou suggestions pour " \
              "améliorer le TDCSKI. Bons vols !"
     def callback_file_check(option, opt_str, value, parser):
+        print(opt_str)
         if opt_str == "--out-file" and not parser.values.in_file:
             raise OptionValueError("l'option --out-file (-o) implique obligatoirement l'option --in-file (-i)")
         if opt_str == "--in-file" and not os.path.exists(parser.values.in_file):
