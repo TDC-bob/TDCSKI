@@ -28,7 +28,6 @@ def main():
     #     print(mission.group_ids)
     #     pass
     # return
-    logger.info("parsing des arguments")
     version = "%prog 0.0.1"
     description = "Ce programme permet d'installer et de tenir à jour les skins et les mods des TDC.\n" \
                   "Il permet également d'ajouter automatiquement les skins correspondant aux différents " \
@@ -37,13 +36,15 @@ def main():
     epilog = "Merci à tous ceux qui m'ont aidé à réaliser ce programme ! N'hésitez pas à rapporter " \
              "les bugs et les problèmes que vous rencontrez, ainsi que vos idées ou suggestions pour " \
              "améliorer le TDCSKI. Bons vols !"
-    def callback_file_check(option, opt_str, value, parser):
-        print(opt_str)
-        if opt_str == "--out-file" and not parser.values.in_file:
+    def callback_out_file_check(option, opt_str, value, parser):
+        if opt_str in ["-o", "--out-file"] and not parser.values.in_file:
             raise OptionValueError("l'option --out-file (-o) implique obligatoirement l'option --in-file (-i)")
+        parser.values.out_file = value
+
+    def callback_in_file_check(option, opt_str, value, parser):
         if opt_str == "--in-file" and not os.path.exists(parser.values.in_file):
             raise OptionError("le fichier donné en entrée (--in-file) n'existe pas")
-        setattr(parser.values, option.dest, value)
+        parser.values.in_file = value
 
     parser = OptionParser(version=version, description=description, prog=prog, epilog=epilog)
     parser.add_option("-U", "--update-list", action="store_true", dest="update_list_only",
@@ -59,10 +60,12 @@ def main():
                     "de fichier de sortie, le TDCSKI écrira un fichier "
                     "TDCSKI_nom_original.miz "
                     "à côté du fichier original")
-    group.add_option("-i", "--in-file", action="callback", callback=callback_file_check, dest="in_file",
+    group.add_option("-i", "--in-file", action="callback", callback=callback_in_file_check, dest="in_file",
                   help="indiquer un fichier *.miz auquel ajouter les pilotes", default=None, metavar="FICHIER.MIZ")
-    group.add_option("-o", "--out-file", action="callback", callback=callback_file_check, dest="out_file",
+    group.add_option("-o", "--out-file", action="callback", callback=callback_out_file_check, dest="out_file",
                   help="spécifier le fichier *.miz de sortie (pratique dans un script)", default=None, metavar="FICHIER.MIZ")
+    parser.add_option("-f", "--filename",
+                  metavar="FILE", help="write output to FILE")
     parser.add_option_group(group)
 
     (options, args) = parser.parse_args()
