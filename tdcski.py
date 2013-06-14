@@ -42,7 +42,7 @@ def main():
             raise OptionValueError("l'option --out-file (-o) implique obligatoirement l'option --in-file (-i)")
         if opt_str == "--in-file" and not os.path.exists(parser.values.in_file):
             raise OptionError("le fichier donné en entrée (--in-file) n'existe pas")
-        setattr(parser.values, option.dest, 1)
+        setattr(parser.values, option.dest, value)
 
     parser = OptionParser(version=version, description=description, prog=prog, epilog=epilog)
     parser.add_option("-U", "--update-list", action="store_true", dest="update_list_only",
