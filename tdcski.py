@@ -18,7 +18,6 @@ logger = mkLogger(__name__, DEBUG, "../logs/{} - TDCSKI.log".format(strftime("%Y
 
 mods = []
 skins = []
-offline_mode = False
 
 def main():
     test_path = r"C:\Users\bob\Saved Games\DCS\Missions\TDCSKI_test.miz"
@@ -122,23 +121,27 @@ def main():
         mods = []
         skins = []
         # noinspection PyUnresolvedReferences
+        if config.offline_mode:
+            logger.info("programme en mode offline, aucune mise à jour à ligne")
+        else:
+            logger.info("mise à jour des mods et des skins en ligne")
         for m in list.mods:
-            logger.info("mise à jour du mod: {}".format(m))
+            logger.info("traitement du mod: {}".format(m))
             # noinspection PyUnresolvedReferences
             m = Mod(m, "mod", "../repos/mods", list.mods[m])
             mods.append(m)
 
         # noinspection PyUnresolvedReferences
         for s in list.skins:
-            logger.info("mise à jour de la skin: {}".format(s))
+            logger.info("traitement de la skin: {}".format(s))
             # noinspection PyUnresolvedReferences
             s = Mod(s, "skin", "../repos/skins", list.skins[s])
             skins.append(s)
 
-        logger.info("fin des mises à jour")
+
         # logger.info("list des mods disponibles: {}".format("\n".join(m.name for m in mods)))
         # logger.info("list des skins disponibles: {}".format("\n".join(s.name for s in skins)))
-        logger.info("installation/désinstallation")
+        logger.info("(dés)installation des mods / skins")
         for mod in mods:
             mod.check()
         for skin in skins:

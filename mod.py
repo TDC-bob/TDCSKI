@@ -178,10 +178,10 @@ class Mod():
     @logged
     def check(self):
         if self.should_be_installed:
-            self.logger.info("Installation du mod {}".format(self.__name))
+            self.logger.info("Installation de {}".format(self.__name))
             self.install()
         else:
-            self.logger.info("Désinstallation du mod {}".format(self.__name))
+            self.logger.info("Désinstallation de {}".format(self.__name))
             self.uninstall()
 
     @logged
