@@ -19,10 +19,8 @@ logger = mkLogger(__name__, DEBUG)
 # noinspection PyUnresolvedReferences
 class Repo():
     @logged
-    def __init__(self, local, init_remote=None, branch="master"):
-        self.logger.debug("création d'un objet repo:\n\t\tlocal: {}\n\t\tinit_remote: {}".format(local, init_remote))
-        self.cloned = False
-        self.fetched = False
+    def __init__(self, local, init_remote=None, branch="master", update=False):
+        self.logger.debug("création d'un objet repo:\n\t\tlocal: {}\n\t\tinit_remote: {}\n\tOnline: {}".format(local, init_remote, update))
 
         self.__local = os.path.abspath(local)
         self.local_repo_exists = os.path.exists(local)
@@ -34,20 +32,20 @@ class Repo():
             raise Exceptions.GitRepoDoesNotExist(
                     "no local directory found, and no remote given")
 
-        if not self.local_repo_exists:
-            if config.offline_mode:
-                raise Exceptions.GitError("le programme tourne en mode offline mais le repository local n'existe pas", self.logger)
-            logger.debug("le repo local n'existe pas, initialisation")
-            self.init(remote, branch)
-            # self.clone(init_remote, branch)
-        else:
+        if self.local_repo_exists:
             if not os.path.exists(os.path.join(self.__local, ".git")) and not dir_is_empty(self.__local):
                 raise Exceptions.GitError("le dossier local existe déjà, mais ce n'est pas un repo, et il n'est pas vide")
             logger.debug("mise à jour du repository")
-            if config.offline_mode:
-                self.logger.debug("le programme tourne en mode offline, pas de mise à jour du repository")
-                return
-            self.update(branch)
+            if update:
+                self.update(branch)
+        else:
+            if not update:
+                raise Exceptions.GitError("le programme tourne en mode offline mais le repository local n'existe pas", self.logger)
+            logger.debug("le repo local n'existe pas, initialisation")
+            self.init(remote, branch)
+
+        self.logger.debug("branche active: {}".format(self.active_branch))
+        self.logger.debug("dernier commit: {}".format(self.current_commit))
 
     @property
     def local(self):
@@ -55,12 +53,12 @@ class Repo():
 
     @property
     def current_commit(self):
-        logger.debug("commit courant: {}".format(self.__active_branch.commit))
+        self.logger.debug("commit courant: {}".format(self.__active_branch.commit))
         return self.active_branch.commit
 
     @property
     def active_branch(self):
-        logger.debug("branche active: {}".format(self.__active_branch))
+        self.logger.debug("branche active: {}".format(self.__active_branch))
         return self.__active_branch
 
     @logged
@@ -111,56 +109,6 @@ class Repo():
 
         self.logger.debug("le repository a été mis à jour avec succès")
         return self
-
-    # def checkout(self, branch):
-    #     self.logger.debug("checking out branch: {}".format(branch))
-    #     if self.__active_branch.name == branch:
-    #         self.logger.debug("ce repo est déjà sur la branche demandée, on passe")
-    #         return self
-    #     if not branch in [branch.name for branch in self.branches]:
-    #         raise Exceptions.GitBranchNotKnown("unknown branch: {}".format(branch))
-    #     success, output, cmd = self.__run(["checkout",branch])
-    #     if not success:
-    #         raise Exceptions.GitCheckoutError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
-    #     return self
-    #
-    # def clone(self, init_remote, branch):
-    #     self.logger.debug("clonage du remote: {}".format(init_remote))
-    #     if self.cloned:
-    #         self.logger.debug("ce repo a déjà été cloné")
-    #     self.cloned = True
-    #     success, output, cmd = self.__run(["clone","-v",init_remote, self.__local], False)
-    #     if not success:
-    #         raise Exceptions.GitCloneError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
-    #     return self
-    #
-    # def fetch(self, remote="origin"):
-    #     self.logger.debug("fetch du remote: {}".format(remote))
-    #     if self.fetched:
-    #         self.logger.debug("ce repo a déjà été fetché")
-    #         return self
-    #     self.fetched = True
-    #     if not remote in [remote.name for remote in self.remotes]:
-    #         raise Exceptions.GitRemoteNotKnown("remote inconnu: {}".format(remote))
-    #     success, output, cmd = self.__run(["fetch","-v",remote])
-    #     if not success:
-    #         raise Exceptions.GitFetchError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
-    #     return self
-    #
-    # def pull(self, remote="origin", branch="master"):
-    #     self.logger.debug('pull de la branche "{}" à partir du remote "{}"'.format(branch, remote))
-    #     self.logger.debug("vérification de l'existence de la branche dans le repo local")
-    #     if not branch in [branch.name for branch in self.branches]:
-    #         self.logger.debug("la branche n'existe pas (encore), fetch pour vérifier")
-    #         self.fetch(remote=remote).pull(remote=remote, branch=branch)
-    #         return self
-    #     self.checkout(branch).fetch(remote)
-    #     self.logger.debug("pull du repo")
-    #     success, output, cmd = self.__run(["pull",remote,branch])
-    #     if not success:
-    #        raise Exceptions.GitPullError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
-    #     return self
-
 
     def __build_remotes_list(self):
         self.logger.debug("construction de la liste des remotes")
@@ -231,14 +179,10 @@ class Repo():
     def __str__(self):
         return ("\n\t".join(["REPO:",
                     "Local: {}",
-                    "Cloned: {}",
-                    "Merged: {}",
                     "Remotes: \n\t\t{}",
                     "Branches: \n\t\t{}"
                     ])).format(
                     self.__local,
-                    self.cloned,
-                    self.merged,
                     "\n\t\t".join(
                             [str(remote) for remote in self.remotes]
                                 ),

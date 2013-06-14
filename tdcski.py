@@ -20,54 +20,26 @@ mods = []
 skins = []
 
 def main():
-    test_path = r"C:\Users\bob\Saved Games\DCS\Missions\TDCSKI_test.miz"
-    with Mission(test_path) as mission:
-        print(mission.next_group_id())
-        print(mission.next_unit_id())
-        print(mission.unit_ids)
-        print(mission.group_ids)
-        pass
-    return
-
-    # config = Config()
-    # print(config.values)
-    # print(config.keys)
-    # print(config.items)
-    # # print(config.get("general", "python_path"))
-    # # config.create("test", "test2", "test3", "test43")
-    # # print(config.get("test", "test2", "test3"))
-    # # print(config.set("test", "test2", "test3", "test55"))
-    # # config.config["test"] = {}
-    # # config.config["test"]["test2"] = {}
-    # # config.config["test"]["test2"] = {}
-    # # config.config["test"]["test2"]["test3"] = {}
-    # # config.config["test"]["test2"]["test3"]["test43"] = "caribou"
-    # # config.config.write()
-    # exit(0)
-
-    # saved_games_path = os.path.normpath(os.path.expanduser("~/saved games/dcs"))
-    # print(os.path.exists(saved_games_path))
-    # print(saved_games_path)
-    # exit(0)
-
-    # ui = ui_server.UIServer()
-    # ui.start()
-    # exit(0)
-
-    # os.environ["GIT_SSL_NO_VERIFY"] = "1"
+    # test_path = r"C:\Users\bob\Saved Games\DCS\Missions\TDCSKI_test.miz"
+    # with Mission(test_path) as mission:
+    #     print(mission.next_group_id())
+    #     print(mission.next_unit_id())
+    #     print(mission.unit_ids)
+    #     print(mission.group_ids)
+    #     pass
+    # return
     logger.info("parsing des arguments")
     parser = OptionParser()
-    parser.add_option("-u", "--update-list", action="store_true", dest="list_update_only",
+    parser.add_option("-U", "--update-list", action="store_true", dest="update_list_only",
                   help="se contente de mettre à jour la liste des mods", default=False)
-    parser.add_option("-O", "--offline", action="store_true", dest="offline_mode",
-                  help="lancer le programme en mode offline (aucune mise à jour, "
-                       "seulement installation/désinstallation", default=False)
-    # parser.add_option("-q", "--quiet",
-    #               action="store_false", dest="verbose", default=True,
-    #               help="don't print status messages to stdout")
+    parser.add_option("-u", "--update", action="store_true", dest="update",
+                  help="mettre les mods / skins à jour", default=False)
 
     (options, args) = parser.parse_args()
-    config.offline_mode = options.offline_mode
+    config.update = options.update
+    config.update_list_only = options.update_list_only
+
+
     logger.info("lecture du fichier tdcski.cfg")
     # noinspection PyBroadException
     try:
@@ -83,7 +55,7 @@ def main():
         dcs_path, caribou = winreg.QueryValueEx (winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Eagle Dynamics\DCS World"), "Path")
     except FileNotFoundError:
         logger.error("impossible de trouver une installation de DCS")
-        logger.debug("appuyez sur ENTER pour quitter")
+        input()
         exit(1)
     # noinspection PyUnboundLocalVariable
     logger.info("le répertoire d'installation DCS détecté est: \n\t\t{}".format(dcs_path))
@@ -109,7 +81,7 @@ def main():
             os.makedirs("../repos/mods")
 
         logger.info("mise à jour de la liste des mods/skins")
-        Repo("../repos/list", "https://github.com/TDC-bob/modlist.git")
+        Repo("../repos/list", "https://github.com/TDC-bob/modlist.git", "master", (config.update or config.update_list_only))
 
         if options.list_update_only:
             logger.info("la mise à jour de la liste est terminée, je quitte")
@@ -121,21 +93,21 @@ def main():
         mods = []
         skins = []
         # noinspection PyUnresolvedReferences
-        if config.offline_mode:
-            logger.info("programme en mode offline, aucune mise à jour à ligne")
-        else:
+        if config.update:
             logger.info("mise à jour des mods et des skins en ligne")
+        else:
+            logger.info("programme en mode offline, lecture sur le disque dur local")
         for m in list.mods:
             logger.info("traitement du mod: {}".format(m))
             # noinspection PyUnresolvedReferences
-            m = Mod(m, "mod", "../repos/mods", list.mods[m])
+            m = Mod(m, "mod", "../repos/mods", list.mods[m], config.update)
             mods.append(m)
 
         # noinspection PyUnresolvedReferences
         for s in list.skins:
             logger.info("traitement de la skin: {}".format(s))
             # noinspection PyUnresolvedReferences
-            s = Mod(s, "skin", "../repos/skins", list.skins[s])
+            s = Mod(s, "skin", "../repos/skins", list.skins[s], config.update)
             skins.append(s)
 
 
@@ -154,25 +126,9 @@ def main():
         logger.debug("appuyez sur ENTER pour quitter")
         input()
         exit(1)
-        # conf.create("skins", s, "path", test.local)
-        # conf.create("skins", s, "desc", test.desc)
-        # conf.create("skins", s, "installed", False)
-        # for file in test.files:
-        #     print(file)
 
-        # print(test)
-        # for file in test.files:
-            # print(file)
-
-    # skins = conf.get("skins")
-    # for k in skins:
-    #     print(k)
-    #     for kk in skins[k]:
-    #         print("{}: {}".format(kk, skins[k][kk]))
-    # if bool(skins["TDC-Bob-huey"]["install"]):
-    #     print('ok')
-    #     print(type(bool(skins["TDC-Bob-huey"]["install"])))
-    # print()
+    if config.update:
+        conf.set_or_create("general", "initialized", "y")
     logger.info("tout s'est bien passé !")
     print("Press ENTER to close this window")
 

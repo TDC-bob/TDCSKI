@@ -11,10 +11,7 @@ import config
 import sys
 import imp
 
-
-
 logger = mkLogger(__name__, DEBUG)
-
 
 try:
     conf = config.Config()
@@ -25,7 +22,7 @@ except:
 
 class Mod():
     @logged
-    def __init__(self, name, _type, parent_dir, args):
+    def __init__(self, name, _type, parent_dir, args, update=False):
         self.logger.debug("création d'un Mod")
         # try:
         #     self.conf = config.Config()
@@ -60,7 +57,7 @@ class Mod():
                 input()
                 exit(1)
         self.logger.debug("initialisation du repository dans le dossier local")
-        self.__repo = git.Repo(self.__local, self.__remote, self.__branch)
+        self.__repo = git.Repo(self.__local, self.__remote, self.__branch, update)
 
         self.logger.debug("écriture du fichier de configuration")
         if not conf.set_or_create(self.__type,  self.__name, "path", self.__local):

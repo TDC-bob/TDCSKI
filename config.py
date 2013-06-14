@@ -8,7 +8,8 @@ logger = mkLogger(__name__, DEBUG)
 git_exe = None
 DCS_path = None
 SaveGames_path = None
-offline_mode = False
+update = False
+update_list_only = False
 
 class Config():
     def __init__(self, file='../tdcski.cfg', must_exists=True):

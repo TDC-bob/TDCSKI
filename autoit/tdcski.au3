@@ -58,9 +58,9 @@ Func _main()
 	If $param_show_changelog Then _show_changelog()
 	_check_python()
 	_check_git()
-	If Not $param_offline Then _check_repo()
+	_check_repo()
 	_write_config()
-	If Not $param_offline Then _check_for_new_version()
+	_check_for_new_version()
 	__log($str_all_good, $func)
 	GUIDelete($gui_handle)
 	_run_tdcski()
@@ -77,21 +77,18 @@ Func _parse_params()
 				Case "auto"
 					__log("le programme s'exécute en mode auto", $func)
 					$param_auto = True
-				Case "offline"
-					__log("le programme s'exécute en mode offline", $func)
-					$param_offline = True
+				Case "update"
+					__log("le programme s'exécute en mode update", $func)
+					$param_update = True
 				Case "update-list-only"
 					__log("le programme s'exécute en mode update-list-only", $func)
-					$param_update_only = True
+					$param_update_list_only = True
 				Case "show_changelog"
 					$param_show_changelog = True
 				Case Else
 					_err("paramètre inconnu: " & $CmdLine[$i], $func)
 			EndSwitch
 		Next
-	EndIf
-	If $param_offline And $param_update_only Then
-		_err('les paramètres "auto" et "update-list-only" sont mutuellement exclusifs' & @CRLF & "(comment voulez-vous que je mette la liste à jour en mode offline ? ...)", $func)
 	EndIf
 EndFunc   ;==>_parse_params
 
@@ -103,7 +100,7 @@ EndFunc   ;==>_show_changelog
 Func _run_tdcski()
 	Local $func = "run_tdcski"
 	__log("Lancement du TDCSKI", $func)
-	Local $cmd = '"' & FileGetLongName("tdcski.py") & '"' & _Iif($param_offline, " --offline", "") & _Iif($param_update_only, " --update-list", "")
+	Local $cmd = '"' & FileGetLongName("tdcski.py") & '"' & _Iif($param_update, " --update", "") & _Iif($param_update_list_only, " --update-list", "")
 	__log("Lancement de Python avec les paramètres suivants: " & $cmd, $func)
 	ShellExecute($python_path, $cmd, $repo)
 	WinWait("python", "", 10)
@@ -114,10 +111,15 @@ EndFunc   ;==>_run_tdcski
 
 Func _first_start()
 	If FileExists($config_file) Then
+		local $initialized = IniRead($config_file, "general", "initialized", "n")
+		if StringCompare($initialized, "y") <> 0 Then
+			$param_update = True
+		EndIf
 		Return False
 	EndIf
 	$first_start = True
 	_ask_user($str_app_name, $str_first_start)
+	$param_update = True
 EndFunc   ;==>_first_start
 
 Func _write_config()
@@ -362,9 +364,6 @@ Func _check_git()
 		__log("Git a été trouvé", $func)
 		Return
 	Else
-		If $param_offline Then
-			_err("Git n'a pas été trouvé, et le TDCSKI s'exécute en mode offline: impossible d'installer Git. Relancez le TDCSKi en mode normal", $func)
-		EndIf
 		__log("Git n'a pas été trouvé, installation avec accord utilisateur", $func)
 		$git_path = _ask_user($str_app_name, $str_git_ask_install)
 		__log("C'est parti, on installe", $func)
@@ -380,9 +379,6 @@ Func _check_python()
 		__log("Python a été trouvé", $func)
 		Return
 	Else
-		If $param_offline Then
-			_err("Python n'a pas été trouvé, et le TDCSKI s'exécute en mode offline: impossible d'installer Python. Relancez le TDCSKi en mode normal", $func)
-		EndIf
 		__log("Python n'a pas été trouvé, installation avec accord utilisateur", $func)
 		$install_python = _ask_user($str_app_name, $str_python_ask_install)
 		__log("C'est parti, on installe", $func)
