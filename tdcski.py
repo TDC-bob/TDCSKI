@@ -41,12 +41,14 @@ def main():
 
     def callback_out_file_check(option, opt_str, value, parser):
         if not parser.values.in_file:
-            raise OptionValueError("l'option --out-file (-o) implique obligatoirement l'option --in-file (-i)")
+            logger.error("l'option --out-file (-o) implique obligatoirement l'option --in-file (-i)")
+            exit(1)
         parser.values.out_file = value
 
     def callback_in_file_check(option, opt_str, value, parser):
         if not os.path.exists(value):
-            raise OptionError("ce fichier n'existe pas: {}".format(value), option)
+            logger.error("ce fichier n'existe pas: {}".format(value))
+            exit(1)
         parser.values.in_file = value
 
     parser = OptionParser(version=version, description=description, prog=prog, epilog=epilog)
