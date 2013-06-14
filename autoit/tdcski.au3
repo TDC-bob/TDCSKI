@@ -5,7 +5,7 @@
 #AutoIt3Wrapper_Outfile=..\tdcski.exe
 #AutoIt3Wrapper_Res_Comment=https://github.com/TDC-bob/TDCSKI.git
 #AutoIt3Wrapper_Res_Description=TDCSKI
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.131
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.132
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=http://creativecommons.org/licenses/by-nc-sa/3.0/
 #AutoIt3Wrapper_Run_After=signtool sign /v /n "Bob" /d "TDCSKI" /du "https://github.com/TDC-bob/TDCSKI.git" /t http://timestamp.verisign.com/scripts/timstamp.dll "%out%"
@@ -111,8 +111,8 @@ EndFunc   ;==>_run_tdcski
 
 Func _first_start()
 	If FileExists($config_file) Then
-		local $initialized = IniRead($config_file, "general", "initialized", "n")
-		if StringCompare($initialized, "y") <> 0 Then
+		Local $initialized = IniRead($config_file, "general", "initialized", "n")
+		If StringCompare($initialized, "y") <> 0 Then
 			$param_update = True
 		EndIf
 		Return False
