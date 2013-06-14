@@ -44,6 +44,8 @@ class Repo():
             logger.debug("le repo local n'existe pas, initialisation")
             self.init(remote, branch)
 
+        self.__build_branches_list()
+        self.__build_remotes_list()
         self.logger.debug("branche active: {}".format(self.active_branch))
         self.logger.debug("dernier commit: {}".format(self.current_commit))
 
@@ -84,8 +86,7 @@ class Repo():
         if not success:
             raise Exceptions.GitCheckoutError("\Output: {}\n\tCmd: {}".format(output, cmd), self.logger)
 
-        self.__build_branches_list()
-        self.__build_remotes_list()
+
         self.logger.debug("le répertoire a été initialisé avec succès")
         return self
 
