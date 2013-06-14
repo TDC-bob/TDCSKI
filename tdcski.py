@@ -58,7 +58,6 @@ def main():
                     "de fichier de sortie, le TDCSKI écrira un fichier "
                     "TDCSKI_nom_original.miz "
                     "à côté du fichier original")
-    group.add_option("-g", action="store_true", help="Group option.")
     group.add_option("-i", "--in-file", action="callback", callback=callback_file_check, dest="in_file",
                   help="indiquer un fichier *.miz auquel ajouter les pilotes", default=None)
     group.add_option("-o", "--out-file", action="callback", callback=callback_file_check, dest="out_file",
