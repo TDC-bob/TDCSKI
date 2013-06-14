@@ -229,11 +229,14 @@ EndFunc   ;==>_check_repo
 Func _pull_repo($branch = "master")
 	$func = "pull_repo"
 
+	__log("Checkout de la branche " & $branch, $func)
+	_git_run("checkout " & $branch, $repo)
+
 	__log("Fetch de la branche distante: " & $branch, $func)
 	_git_run("fetch -v origin " & $branch & ":remotes/origin/" & $branch, $repo)
 
-	__log("Checkout de la branche " & $branch, $func)
-	_git_run("checkout " & $branch, $repo)
+	__log("Reset", $func)
+	_git_run("reset --hard origin" & $branch, $repo)
 
 	__log("Fusion de la branche distante dans la branche locale", $func)
 	_git_run("merge remotes/origin/" & $branch, $repo)
