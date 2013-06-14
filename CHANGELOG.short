@@ -1,16 +1,26 @@
-2013 - 06 - 13
+2013 + 06 + 13
 ===============
- - ajout de la version dans le fichier journal (lanceur.log)
- - le TDCSKI consommera moins de bande passante lors de la mise à jour des repositories comprenant plusieurs branches
- - correction du double affichage "Git run" dans le script Python
- - suppression du check de connexion au démarrage du lanceur (Git plantera bien s'il ne trouve pas la version en ligne)
- - ajout d'une vérification de sécurité au lancement de l'interface de sélection des mods/skins pour éviter les plantages Autoit
- - ajout d'un pop-up en cas d'erreur grave du lanceur
- - ajout du journal des modifications (ce fichier)
- - le TDCSKI se lance maintenant d'office en mode admin (pour empêcher les erreurs d'installation de Git, et pour forcer l'affichage du certificat)
- - ajout de 3 paramètres:
-		- auto: le TDCSKI n'affiche pas l'interface de sélection des mods/skins et se ferme tout seul une fois les mises à jours effectuées
-		- offline: le TDCSKI ne met RIEN à jour (ni le programme, ni les mods/skins). Le mode offline permet une exécution BEAUCOUP plus rapide (au détriment de la mises à jour initiale)
-		- update-list-only: le TDCSKI se contente de mettre à jour la liste des mods/skins, puis affiche directement l'interface de sélection
+ + ajout de la version dans le fichier journal (lanceur.log)
+ 
+ + le TDCSKI consommera moins de bande passante lors de la mise à jour des repositories comprenant plusieurs branches
+ 
+ + correction du double affichage "Git run" dans le script Python
+ 
+ + suppression du check de connexion au démarrage du lanceur (Git plantera bien s'il ne trouve pas la version en ligne)
+ 
+ + ajout d'une vérification de sécurité au lancement de l'interface de sélection des mods/skins pour éviter les plantages Autoit
+ 
+ + ajout d'un pop-up en cas d'erreur grave du lanceur
+ 
+ + ajout du journal des modifications (ce fichier)
+ 
+ + le TDCSKI se lance maintenant d'office en mode admin (pour empêcher les erreurs d'installation de Git, et pour forcer l'affichage du certificat)
+ 
+ + par défaut, pour gagner du temps, le TDCSKI ne mettra plus les mods et les skins à jour automatiquement. Utilisez le paramètre 'update' décrit ci-dessous (un bouton arrive dans les prochaines versions)
+ 
+ + ajout de 3 paramètres:
+ - auto: le TDCSKI n'affiche pas l'interface de sélection des mods/skins et se ferme tout seul une fois les mises à jours effectuées
+ - update: le TDCSKI ne met RIEN à jour (ni le programme, ni les mods/skins). Le mode offline permet une exécution BEAUCOUP plus rapide (au détriment de la mises à jour initiale)
+ - update-list-only: le TDCSKI se contente de mettre à jour la liste des mods/skins, puis affiche directement l'interface de sélection
 	Pour utiliser ces paramètres, faites un clic-droit sur "tdcski.exe", "créer un raccourci", puis clic-droit sur le raccourci, "propriétés", et ajoutez l'option qui vous intéresse
 	Exemple: "..\tdcski.exe offline"
