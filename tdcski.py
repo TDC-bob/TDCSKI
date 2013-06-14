@@ -68,8 +68,6 @@ def main():
                     action="callback", callback=callback_in_file_check, default=None)
     group.add_option("-o", "--out-file", dest="out_file", metavar="MIZ", help="spécifier le fichier MIZ de sortie (pratique dans un script)",
                     action="callback", callback=callback_out_file_check, default=None)
-    parser.add_option("-f", "--filename",
-                  metavar="FILE", help="write output to FILE")
     parser.add_option_group(group)
 
     (options, args) = parser.parse_args()
