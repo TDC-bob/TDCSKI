@@ -62,10 +62,10 @@ def main():
                     "à côté du fichier original")
     group.add_option("-i", "--in-file",
                      action="callback", callback=callback_in_file_check, metavar="MIZ",
-                  help="indiquer un fichier *.miz auquel ajouter les pilotes", default=None)
+                  help="indiquer un fichier MIZ auquel ajouter les pilotes", default=None)
     group.add_option("-o", "--out-file",
-                     action="callback", callback=callback_out_file_check, metavar="FICHIER.MIZ",
-                  help="spécifier le fichier *.miz de sortie (pratique dans un script)", default=None)
+                     action="callback", callback=callback_out_file_check, metavar="MIZ",
+                  help="spécifier le fichier MIZ de sortie (pratique dans un script)", default=None)
     parser.add_option("-f", "--filename",
                   metavar="FILE", help="write output to FILE")
     parser.add_option_group(group)
