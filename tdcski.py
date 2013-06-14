@@ -31,7 +31,7 @@ def main():
     logger.info("parsing des arguments")
     version = "%prog 0.0.1"
     description = "Ce programme permet d'installer et de tenir à jour les skins et les mods des TDC.\n" \
-                  "Il permet également d'ajouter automatiquement les skins correspondant aux différents" \
+                  "Il permet également d'ajouter automatiquement les skins correspondant aux différents " \
                   "pilotes à une mission (*.miz)"
     prog = "TDCSKI"
     epilog = "Merci à tous ceux qui m'ont aidé à réaliser ce programme ! N'hésitez pas à rapporter " \
@@ -51,13 +51,12 @@ def main():
                   help="mettre les mods / skins à jour", default=False)
 
     group = OptionGroup(parser, "Ajout des skins aux missions",
-                    "Spécifiez le fichier *.miz à éditer,  "
-                    "et le TDCSKI ajoutera toutes les skins "
-                    "connues à ce fichier automatiquement à "
+                    "Le TDCSKI ajoutera les skins "
+                    "connues à "
                     "tous les groupes d'appareils dont le nom "
-                    "commence par \"TDC-\".\n\nVous pouvez également "
-                    "spécifier le fichier de sortie; par défaut, "
-                    "le TDCSKI écrira un fichier TDCSKI_nom_original.miz "
+                    "commence par \"TDC-\".\n\nSi vous nbe spécifiez pas "
+                    "de fichier de sortie, le TDCSKI écrira un fichier "
+                    "TDCSKI_nom_original.miz "
                     "à côté du fichier original")
     group.add_option("-g", action="store_true", help="Group option.")
     group.add_option("-i", "--in-file", action="callback", callback=callback_file_check, dest="in_file",
