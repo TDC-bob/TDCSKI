@@ -12,6 +12,7 @@ import config
 from config import Config
 from bobgit.git import Repo
 from optparse import OptionParser, OptionValueError, OptionError, OptionGroup
+from optparse import Option as optparseOption
 from _logging._logging import mkLogger, DEBUG
 
 logger = mkLogger(__name__, DEBUG, "../logs/{} - TDCSKI.log".format(strftime("%Y%m%d - %Hh%Mm%S", gmtime())))
@@ -28,6 +29,7 @@ def main():
     #     print(mission.group_ids)
     #     pass
     # return
+    optparseOption.ALWAYS_TYPED_ACTIONS += ('callback',)
     version = "%prog 0.0.1"
     description = "Ce programme permet d'installer et de tenir à jour les skins et les mods des TDC.\n" \
                   "Il permet également d'ajouter automatiquement les skins correspondant aux différents " \
