@@ -36,6 +36,7 @@ def main():
     epilog = "Merci à tous ceux qui m'ont aidé à réaliser ce programme ! N'hésitez pas à rapporter " \
              "les bugs et les problèmes que vous rencontrez, ainsi que vos idées ou suggestions pour " \
              "améliorer le TDCSKI. Bons vols !"
+
     def callback_out_file_check(option, opt_str, value, parser):
         if opt_str in ["-o", "--out-file"] and not parser.values.in_file:
             raise OptionValueError("l'option --out-file (-o) implique obligatoirement l'option --in-file (-i)")
@@ -60,7 +61,7 @@ def main():
                     "TDCSKI_nom_original.miz "
                     "à côté du fichier original")
     group.add_option("-i", "--in-file", action="callback", callback=callback_in_file_check,
-                  help="indiquer un fichier *.miz auquel ajouter les pilotes", default=None, metavar="FICHIER.MIZ")
+                  help="indiquer un fichier *.miz auquel ajouter les pilotes", default=None, metavar="MIZ")
     group.add_option("-o", "--out-file", action="callback", callback=callback_out_file_check,
                   help="spécifier le fichier *.miz de sortie (pratique dans un script)", default=None, metavar="FICHIER.MIZ")
     parser.add_option("-f", "--filename",
