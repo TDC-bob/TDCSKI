@@ -46,7 +46,7 @@ def main():
 
     def callback_in_file_check(option, opt_str, value, parser):
         if not os.path.exists(value):
-            raise OptionError("le fichier donné en entrée (--in-file) n'existe pas")
+            raise OptionError("le fichier donné en entrée (--in-file) n'existe pas", option)
         parser.values.in_file = value
 
     parser = OptionParser(version=version, description=description, prog=prog, epilog=epilog)
