@@ -9,7 +9,6 @@ from mission import Mission
 from time import strftime, gmtime
 from mod import Mod
 import config
-from config import Config
 from bobgit.git import Repo
 from optparse import OptionParser, OptionValueError, OptionError, OptionGroup
 from optparse import Option as optparseOption
@@ -56,21 +55,17 @@ def main():
                   help="mettre à jour la liste des mods uniquement", default=False)
     parser.add_option("-u", "--update", action="store_true", dest="update",
                   help="mettre les mods / skins à jour", default=False)
-
     group = OptionGroup(parser, "Ajout des skins aux missions",
-                    "Le TDCSKI ajoutera les skins connues à "
-                    "tous les groupes d'appareils dont le nom "
-                    "commence par \"TDC-\".\n\nSi vous nbe spécifiez pas "
-                    "de fichier de sortie, le TDCSKI écrira un fichier "
-                    "TDCSKI_nom_original.miz "
-                    "à côté du fichier original")
+                    "Le TDCSKI ajoutera les skins connues à tous les groupes d'appareils dont le nom "
+                    "commence par \"TDC-\".\n\nSi vous nbe spécifiez pas de fichier de sortie, le TDCSKI écrira un fichier "
+                    "TDCSKI_nom_original.miz à côté du fichier original")
     group.add_option("-i", "--in-file", dest="in_file", metavar="MIZ", help="indiquer un fichier MIZ auquel ajouter les pilotes",
                     action="callback", callback=callback_in_file_check, default=None)
     group.add_option("-o", "--out-file", dest="out_file", metavar="MIZ", help="spécifier le fichier MIZ de sortie (pratique dans un script)",
                     action="callback", callback=callback_out_file_check, default=None)
     parser.add_option_group(group)
-
     (options, args) = parser.parse_args()
+
     config.update = options.update
     config.update_list_only = options.update_list_only
 
@@ -78,7 +73,7 @@ def main():
     logger.info("lecture du fichier tdcski.cfg")
     # noinspection PyBroadException
     try:
-        conf = Config()
+        config_file = config.Config()
     except Exception:
         logger.error("le fichier de configuration est corrompu, supprimez-le et j'en réinstallerai un nouveau")
         logger.debug("appuyez sur ENTER pour quitter")
@@ -95,18 +90,18 @@ def main():
     # noinspection PyUnboundLocalVariable
     logger.info("le répertoire d'installation DCS détecté est: \n\t\t{}".format(dcs_path))
     # noinspection PyUnboundLocalVariable
-    conf.create("general", "dcs_path", dcs_path)
+    config_file.create("general", "dcs_path", dcs_path)
 
     try:
         logger.info('détection du répertoire "Saved Games"')
         saved_games_path = os.path.normpath(os.path.expanduser("~/saved games/dcs"))
         logger.info('le répertoire "Saved Games" détecté est: \n\t\t{}'.format(saved_games_path))
-        conf.create("general", "saved_games_path", saved_games_path)
+        config_file.create("general", "saved_games_path", saved_games_path)
 
         logger.info("lecture des répertoires à utiliser dans le fichier \"tdcski.cfg\"")
-        config.git_exe = conf.get("general", "git_path")
-        config.SaveGames_path = conf.get("general", 'saved_games_path')
-        config.DCS_path = conf.get("general", 'dcs_path')
+        config.git_exe = config_file.get("general", "git_path")
+        config.SaveGames_path = config_file.get("general", 'saved_games_path')
+        config.DCS_path = config_file.get("general", 'dcs_path')
         logger.info('répertoire "DCS" utilisé: {}'.format(config.DCS_path))
         logger.info('répertoire "Saved Games" utilisé: {}'.format(config.SaveGames_path))
 
@@ -125,8 +120,8 @@ def main():
         sys.path.append(os.path.abspath("../repos/list/"))
         # noinspection PyUnresolvedReferences
         import list
-        mods = []
-        skins = []
+        # mods = []
+        # skins = []
         # noinspection PyUnresolvedReferences
         if config.update:
             logger.info("mise à jour des mods et des skins en ligne")
@@ -161,7 +156,7 @@ def main():
         exit(1)
 
     if config.update:
-        conf.set_or_create("general", "initialized", "y")
+        config_file.set_or_create("general", "initialized", "y")
     logger.info("tout s'est bien passé !")
     print("Press ENTER to close this window")
 

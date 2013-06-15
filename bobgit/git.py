@@ -30,18 +30,20 @@ class Repo():
         self.__active_branch = None
         if not (init_remote or self.local_repo_exists):
             raise Exceptions.GitRepoDoesNotExist(
-                    "no local directory found, and no remote given")
+                    "le repository n'existe pas en local , et aucun repo distant n'a été donné pour initialisation")
 
         if self.local_repo_exists:
+            self.logger.debug("le repository local existe")
             if not os.path.exists(os.path.join(self.__local, ".git")) and not dir_is_empty(self.__local):
                 raise Exceptions.GitError("le dossier local existe déjà, mais ce n'est pas un repo, et il n'est pas vide")
-            logger.debug("mise à jour du repository")
             if update:
+                logger.debug("mise à jour du repository")
                 self.update(branch)
         else:
+            self.logger.debug("le repository local n'existe pas")
             if not update:
                 raise Exceptions.GitError("le programme tourne en mode offline mais le repository local n'existe pas", self.logger)
-            logger.debug("le repo local n'existe pas, initialisation")
+            logger.debug("initialisation du repo local sur base de: {}".format(init_remote))
             self.init(init_remote, branch)
 
         self.__build_branches_list()

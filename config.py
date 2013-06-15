@@ -5,6 +5,7 @@ from lib.configobj import ConfigObj
 from _logging._logging import mkLogger, logged, DEBUG
 import os
 logger = mkLogger(__name__, DEBUG)
+
 git_exe = None
 DCS_path = None
 SaveGames_path = None
