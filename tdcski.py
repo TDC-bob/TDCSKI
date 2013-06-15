@@ -25,7 +25,7 @@ def main():
     #     print(mission.next_group_id())
     #     print(mission.next_unit_id())
     #     print(mission.unit_ids)
-    #     print(mission.group_ids) TEST
+    #     print(mission.group_ids)
     #     pass
     # return
     optparseOption.ALWAYS_TYPED_ACTIONS += ('callback',)
