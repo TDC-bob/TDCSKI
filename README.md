@@ -1,10 +1,19 @@
 # TDCSKI #
 
+__BETA 1 EN COURS__
+
 [Téléchargement](https://github.com/TDC-bob/TDCSKI/raw/master/tdcski.exe)
 
 [Wiki](https://github.com/TDC-bob/TDCSKI/wiki)
 
 [Problème ? Idées ?](https://github.com/TDC-bob/TDCSKI/issues)
+
+
+Le programme permet de maintenir et d'installer une liste de mods et de skins pour DCS world. 
+
+À l'exception du lanceur, qui est au format 
+
+
 
 
 Ce projet été développé grâce au soutien de Jetbrain's PyCharm
