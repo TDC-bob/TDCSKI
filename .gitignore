@@ -33,7 +33,6 @@ nosetests.xml
 .pydevproject
 *.bat
 updateVersion.au3
-test*
 *.odg
 *.zip
 *.lnk
@@ -60,3 +59,4 @@ __pycache__
 *.psproj
 .idea/*
 /*.~py
+*.pyc
