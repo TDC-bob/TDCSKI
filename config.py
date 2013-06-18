@@ -28,9 +28,9 @@ class Config():
             while len(args) > 1:
                 base = base[args[0]]
                 args = args [1:]
-            if base[args[0]] in ["True","true","oui","yes"]:
+            if base[args[0]] in ["True","true","oui","yes", "o", "y"]:
                 return True
-            if base[args[0]] in ["False","false","non","no"]:
+            if base[args[0]] in ["False","false","non","no", "n"]:
                 return False
             return base[args[0]]
         except KeyError:
@@ -77,7 +77,13 @@ class Config():
                 base[args[0]] = {}
             base = base[args[0]]
             args = args[1:]
-        base[args[0]] = args[1]
+        if type(args[1]) == Bool:
+			if args[1]:
+				base[args[0]] = "True"
+			else:
+				base[args[0]] = "False"
+		else:
+			base[args[0]] = args[1]
         self.__config.write()
         return True
 
@@ -88,7 +94,13 @@ class Config():
         while len(args) > 2:
             base = base[args[0]]
             args = args[1:]
-        base[args[0]] = args[1]
+        if type(args[1]) == Bool:
+			if args[1]:
+				base[args[0]] = "True"
+			else:
+				base[args[0]] = "False"
+		else:
+			base[args[0]] = args[1]
         self.__config.write()
         return True
 
