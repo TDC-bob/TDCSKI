@@ -96,10 +96,11 @@ class testConfig(unittest.TestCase):
 	def test_setBool(self):
 		self.config.create("setBool_1", "False")
 		self.config.create("setBool_2", "True")
-		self.assertFalse("setBool_1")
-		self.assertTrue("setBool_2")
-		self.config.set("setBool_1", "y")
-		self.assertTrue("setBool_1")
+		self.assertFalse(self.config.get("setBool_1"))
+		self.assertTrue(self.config.get("setBool_2"))
+		r=self.config.set("setBool_1", True)
+		print(r)
+		self.assertTrue(self.config.get("setBool_1"))
 		
 	def test_readTooDeep(self):
 		with self.assertRaises(TypeError):
