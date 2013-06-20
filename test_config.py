@@ -98,13 +98,32 @@ class testConfig(unittest.TestCase):
 		self.config.create("setBool_2", "True")
 		self.assertFalse(self.config.get("setBool_1"))
 		self.assertTrue(self.config.get("setBool_2"))
-		r=self.config.set("setBool_1", True)
-		print(r)
+		self.config.set("setBool_1", True)
 		self.assertTrue(self.config.get("setBool_1"))
+		self.config.set("setBool_2", False)
+		self.assertFalse(self.config.get("setBool_2"))
+		
+	def test_setOrCreate(self):
+		self.config.set_or_create("setOrCreate_1", "init")
+		self.assertEqual(self.config.get("setOrCreate_1"), "init")
+		self.config.set_or_create("setOrCreate_1", "new_value")
+		self.assertEqual(self.config.get("setOrCreate_1"), "new_value")
 		
 	def test_readTooDeep(self):
 		with self.assertRaises(TypeError):
 			self.config.get("str1", "value1")
+			
+	def test_intricateSetAndRead(self):
+		lvl = ["l1", "l2", "l3", "l4", "l5", "l6", "l7"]
+		val = ["l1", "l2", "l3", "l4", "l5", "l6", "l7", False]
+		self.config.set_or_create(*val)
+		self.assertFalse(self.config.get(*lvl))
+		val = ["l1", "l2", "l3", "l4", "l5", "l6", "l7", True]
+		self.config.set_or_create(*val)
+		self.assertTrue(self.config.get(*lvl))
+		val = ["l1", "l2", "l3", "l4", "l5", "l6", "l7", "test_string"]
+		self.config.set_or_create(*val)
+		self.assertEqual(self.config.get(*lvl), "test_string")
 		
 def main():
 	

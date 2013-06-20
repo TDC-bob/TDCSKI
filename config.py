@@ -88,7 +88,7 @@ class Config():
 		return True
 
 	def set(self, *args):
-		if not self.get(*args[0:-1]):
+		if self.get(*args[0:-1]) == None:
 			return None
 		base = self.__config
 		while len(args) > 2:
