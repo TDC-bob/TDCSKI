@@ -1,0 +1,111 @@
+First start
+===========
+- avertissement utilisateur
+- première écriture du fichier de config
+- download ModList
+
+Conflits
+========
+- trouver un équivalent DIFF en Python pour pouvoir faire un merge des fichiers texte/lua/cfg/...
+
+Params
+======
+-a, --auto: pas de GUI, update & install only
+-D, --set-dcs-path PATH
+-S, --set-saved-gamed-path PATH
+-c, --config FILE
+-v, --verbose
+-q, --quiet
+-M, --set-master-list: REPO
+-V, --validate-mod PATH
+-L, --validate-modlist PATH
+
+Imports et fichiers de config
+=============================
+Plutôt que d'importer du Python, il serait plus facile et plus sûr de lire un fichier "install.cfg" via le module "config"
+Exemple:
+[main]
+name=
+author=
+description=
+maintainer=
+url=
+version=
+[file1] <- special file
+method=
+
+Connexion
+=========
+Détecter et avertir si le programme tourne sans connexion WAN
+
+Mise à jour
+===========
+Ajouter un repo ou une branche nettoyée qui contiendra les fichiers suivants:
+tdcski.exe
+tdcski.exe.md5
+updater.exe
+updater.exe.md5
+install_cert.exe
+install_cert.exe.md5
+
+Logfiles
+========
+Ajouter la rotation des fichiers logs, ainsi que des fichiers logs spécialisés (DEBUG, INFO, ERROR)
+Peut-être même des fichiers logs spécialisés par module ?
+
+
+Checks paramètres
+=================
+Vérifier tous les paramètres donnés en entrée, que ce soit via la ligne de commande ou via le fichier de config principal
+
+Interface Web
+=============
+Onglet Logs
+Onglet Config
+Onglet Aide
+Lien vers Github
+Options extras:
+	- création de raccourcis Windows pour les params en ligne de commande
+	- installation automatique de toutes les skins en mises à jour
+	- option "beta"
+Onglet Changelog
+
+Changelog
+=========
+Ecrire le changelog sous forme de fichier de config, pour permettre la forme suivante:
+[timestamp]
+version=
+description=
+[[added]]
+titre=description
+[[fixed]]
+titre=description
+[[known(bugs)]]
+titre=description
+
+Installation
+============
+Créer le script Innosetup
+
+Langues
+=======
+Commencer à réfléchir pour les traductions ultérieures
+
+Droits admin
+============
+Détecter et avertir en cas d'OSError dûe aux droits admins manquants
+
+Mods
+====
+Exemple de fichier install.cfg
+[main]
+name
+author
+maintainer
+version
+description
+[changelog]
+[[version1]]
+description=
+[[version2]]
+description=
