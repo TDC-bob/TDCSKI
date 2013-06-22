@@ -22,6 +22,8 @@
 
 import os
 from _logging._logging import mkLogger, logged, DEBUG
+import shutil
+from hashlib import md5 as MD5
 
 logger = mkLogger(__name__)
 
@@ -48,12 +50,27 @@ class FileCopyError(FileException):
 class File():
     def __init__(self, path, must_exist=True):
         self.path = path
+        self.__md5 = None
         if must_exist and not self.exists:
             raise FileDoesNotExist(self)
 
     @property
     def exists(self):
         return os.path.exists(self.path)
+
+    @property
+    def md5(self):
+        if not self.__md5:
+            self.__md5 = self.__hash(self.path)
+        return self.__md5
+
+    @staticmethod
+    def __hash(path):
+        hasher = MD5()
+        with open(path,'rb') as f:
+            for chunk in iter(lambda: f.read(128), b''):
+                 hasher.update(chunk)
+        return hasher.digest()
 
     def remove(self):
         os.remove(self.path)
@@ -64,9 +81,21 @@ class File():
         if os.path.exists(dest) and not overwrite:
             raise FileCopyError(self, dest, "la destination existe déjà")
 
+    def compare(self, other, force_reload=False):
+        if type(other) == str:
+            other = File(other)
+        if force_reload:
+            self.__md5 = self.__hash(self.path)
+            other.__md5 = self.__hash(other.path)
+        return self.md5 == other.md5
+
+    def backup(self, prefix="", suffix=".tdcski"):
+        #~ self.
+        pass
+
 
 def main():
-    test = File("caribou")
+
     return 0
 
 if __name__ == '__main__':
