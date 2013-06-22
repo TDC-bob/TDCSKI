@@ -2,6 +2,9 @@ __author__ = 'bob'
 
 import cherrypy
 import os
+import sys
+import threading
+import webbrowser
 from cherrypy import expose
 from mako.template import Template
 from mako.lookup import TemplateLookup
@@ -60,6 +63,12 @@ class Root:
         return "Hello world!"
 
     @expose
+    def exit(self):
+        tmpl = lookup.get_template("exit.html")
+        threading.Timer(1, lambda: os._exit(0)).start()
+        return tmpl.render(version="0.0.1")
+
+    @expose
     def user(self, name=""):
         return "You asked for user '%s'" % name
 
@@ -75,28 +84,10 @@ class Root:
         return "Caribou ! Lien invalide: {}".format("/".join(args))
 
 def main():
-    #~ current_dir = os.path.dirname(os.path.abspath(__file__)) + "/html/"
-    #~ cherrypy.config.update({
-        #~ 'log.screen': True,
-        #~ 'server.socket_host': '127.0.0.1',
-        #~ 'server.socket_port': 10307,
-        #~ 'server.shutdown_timeout': 0,
-        #~ 'engine.autoreload_on': True,
-        #~ '/':{
-            #~ 'tools.staticdir.debug': True,
-            #~ 'log.screen': True,
-            #~ 'tools.staticdir.root' : current_dir,
-            #~ },
-        #~ '/css':{
-            #~ 'tools.staticdir.debug': True,
-            #~ 'log.screen': True,
-            #~ 'tools.staticdir.on' : True,
-            #~ 'tools.staticdir.dir' : "css",
-        #~ },
-    #~ })
     server = UIServer()
+    threading.Timer(5, lambda: webbrowser.open("http://127.0.0.1:10307", new=2, autoraise=True)).start()
     server.start()
     return 0
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
