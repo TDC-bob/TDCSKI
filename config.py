@@ -30,25 +30,6 @@ class Config():
     @property
     def file(self):
         return self.__file
-    def values(self):
-        return self.__config.values()
-
-    @property
-    def keys(self):
-        return self.__config.keys()
-
-    @property
-    def items(self):
-        return self.__config.items()
-
-    def iteritems(self):
-        self.__config.iteritems()
-
-    def iterkeys(self):
-        self.__config.iterkeys()
-
-    def itervalues(self):
-        self.__config.itervalues()
 
     def reload(self):
         self.__config.reload()
@@ -112,11 +93,4 @@ class Config():
             base[args[0]] = args[1]
         self.__config.write()
         return True
-
-    def delete(self, *args):
-        if not self.get(*args[0:-1]):
-            return True
-
-
-
 
