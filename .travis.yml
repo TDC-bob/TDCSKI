@@ -3,7 +3,7 @@ python:
   - "3.3"
 # command to install dependencies
 install:
-  - echo "doing nothing"
+  - cd tests
 #  - python setup.py sdist --formats=zip -k
 #  - find ./dist -iname "*.zip" -print0 | xargs -0 pip install
 #  - mkdir ./tests/slpp_tests
