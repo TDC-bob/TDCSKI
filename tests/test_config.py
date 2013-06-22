@@ -61,6 +61,8 @@ class testConfig(unittest.TestCase):
         self.assertEqual(self.config.get("str1"), "value1")
         self.assertEqual(self.config.get("str2"), "value2")
 
+    def test_config_properties(self):
+        self.assertEqual(self.config.file.path, "config.test_file")
 
     def test_config_noneValues(self):
         self.assertIsNone(self.config.get("non_existent_key"))
