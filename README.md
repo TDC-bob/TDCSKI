@@ -1,13 +1,15 @@
 # TDCSKI #
 
-<a href="https://travis-ci.org/TDC-bob/TDCSKI">
-<img src="https://travis-ci.org/TDC-bob/TDCSKI.png" alt="Go to the Travis page" border="0">
-</a>
 
-BETA
+BETA: 
 [![Build Status](https://travis-ci.org/TDC-bob/TDCSKI.png?branch=beta)](https://travis-ci.org/TDC-bob/TDCSKI)
-MASTER
+
+
+
+MASTER: 
 [![Build Status](https://travis-ci.org/TDC-bob/TDCSKI.png?branch=master)](https://travis-ci.org/TDC-bob/TDCSKI)
+
+
 
 __BETA 1 EN COURS__
 
