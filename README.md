@@ -1,12 +1,16 @@
 # TDCSKI #
 
 
-BETA: 
+BETA
+
+
 [![Build Status](https://travis-ci.org/TDC-bob/TDCSKI.png?branch=beta)](https://travis-ci.org/TDC-bob/TDCSKI)
 
 
 
-MASTER: 
+MASTER
+
+
 [![Build Status](https://travis-ci.org/TDC-bob/TDCSKI.png?branch=master)](https://travis-ci.org/TDC-bob/TDCSKI)
 
 
