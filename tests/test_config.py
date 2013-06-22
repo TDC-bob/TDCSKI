@@ -64,6 +64,14 @@ class testConfig(unittest.TestCase):
     def test_config_properties(self):
         self.assertEqual(self.config.file.path, "config.test_file")
 
+    def test_config_reload(self):
+        self.assertTrue(self.config.get("boolt_2"))
+        with open(self.file, mode="a")as f:
+            f.write("reload_test = true")
+        self.assertIsNone(self.config.get("reload_test"))
+        self.config.reload()
+        self.assertTrue(self.config.get("reload_test"))
+
     def test_config_noneValues(self):
         self.assertIsNone(self.config.get("non_existent_key"))
 
