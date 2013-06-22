@@ -138,8 +138,8 @@ class testConfig(unittest.TestCase):
         self.assertEqual(self.config.get(*lvl), "test_string")
 
     def test_config_fileDoesNotExist(self):
-        with self.assertRaises(config.ConfigFileDoesnotExist):
-            config.Config("caribou")
+        with self.assertRaises(config.ConfigFileDoesNotExist):
+            config.Config("i_do_not_exist")
 
     def test_config_fileCreation(self):
         f = config.Config("tchoutchou", False)
