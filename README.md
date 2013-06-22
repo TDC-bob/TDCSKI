@@ -15,7 +15,9 @@ __BETA 1 EN COURS__
 
 Le programme permet de maintenir et d'installer une liste de mods et de skins pour DCS world. 
 
-À l'exception du lanceur, qui est au format 
+Le projet est actuellement en passe d'être complètement transposé vers un build Python via cxFreeze.
+
+La version actuellent n'est donc plus d'application, référez-vous à la branche BETA pour les dernières mises à jour.
 
 
 
