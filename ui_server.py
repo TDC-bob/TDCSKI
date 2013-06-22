@@ -17,13 +17,27 @@ class UIServer():
         def fake_wait_for_occupied_port(host, port): return
         cherrypy.process.servers.wait_for_occupied_port = fake_wait_for_occupied_port
         cherrypy.engine.timeout_monitor.unsubscribe()
-        static_dir = os.path.dirname(os.path.abspath(__file__)) + "/html/"
-        config = {'/static':
+        html_dir = os.path.dirname(os.path.abspath(__file__)) + "/html/"
+        css_dir = html_dir + "css/"
+        img_dir = html_dir + "img/"
+        js_dir = html_dir + "js/"
+        config = {'/css':
                 {'tools.staticdir.on': True,
-                 'tools.staticdir.dir': static_dir,
+                 'tools.staticdir.dir': css_dir,
+                },
+                '/img':
+                {'tools.staticdir.on': True,
+                 'tools.staticdir.dir': img_dir,
+                },
+                '/js':
+                {'tools.staticdir.on': True,
+                 'tools.staticdir.dir': js_dir,
+                },
+                '/static':
+                {'tools.staticdir.on': True,
+                 'tools.staticdir.dir': html_dir,
                 }
         }
-        print(static_dir)
         #~ cherrypy.tree.mount(Root(), '/', config=config)
         cherrypy.quickstart(Root(), '/', config=config)
         #~ cherrypy.quickstart(Root())
@@ -32,15 +46,17 @@ class UIServer():
 class Root:
 
     @expose
-    #~ @cherrypy.tools.mako(filename = "html/index.html")
     def index(self):
-        # Let's link to another method here.
         tmpl = lookup.get_template("index.html")
         return tmpl.render(salutation="Hello", target="World", version="0.0.1")
 
     @expose
+    def config(self):
+        tmpl = lookup.get_template("config.html")
+        return tmpl.render(version="0.0.1")
+
+    @expose
     def showMessage(self):
-        # Here's the important message!
         return "Hello world!"
 
     @expose
@@ -50,10 +66,12 @@ class Root:
     @expose
     def test_receive(self, user='', pwd=''):
         print("user: {}".format(user), "pwd: {}".format(pwd))
-        raise cherrypy.HTTPRedirect("/")
+        return self.user(user)
+        #~ raise cherrypy.HTTPRedirect("/")
 
     @expose
     def default(self, *args):
+        raise cherrypy.HTTPRedirect("/")
         return "Caribou ! Lien invalide: {}".format("/".join(args))
 
 def main():
