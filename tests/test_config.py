@@ -102,6 +102,8 @@ class testConfig(unittest.TestCase):
         self.assertFalse(self.config.get("createBool_2"))
         self.config.create("createBool_1", "False")
         self.assertTrue(self.config.get("createBool_1"))
+        self.config.create("createBool_3", True)
+        self.assertTrue(self.config.get("createBool_3"))
 
     def test_config_setBool(self):
         self.config.create("setBool_1", "False")
