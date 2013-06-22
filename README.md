@@ -1,5 +1,9 @@
 # TDCSKI #
 
+<a href="https://travis-ci.org/TDC-bob/TDCSKI">
+<img src="https://travis-ci.org/TDC-bob/TDCSKI.png" alt="Go to the Travis page" border="0">
+</a>
+
 __BETA 1 EN COURS__
 
 [Téléchargement](https://github.com/TDC-bob/TDCSKI/raw/master/tdcski.exe)
