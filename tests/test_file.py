@@ -41,6 +41,10 @@ class testFile(unittest.TestCase):
         for f in self.file_list:
             if os.path.exists(f):
                 os.remove(f)
+        extra_remove = ["test7_2", "test6.tdcski"]
+        for x in extra_remove:
+            if os.path.exists(x):
+                os.remove(x)
 
     def test_file_init(self):
         file.File("test1")
@@ -66,6 +70,28 @@ class testFile(unittest.TestCase):
         with open(f2.path, mode="w") as f:
             f.write("pouet")
         self.assertFalse(f1.compare(f2, True))
+
+    def test_file_backup(self):
+        f = file.File("test6")
+        backup = f.backup()
+        f.backup()
+        self.assertTrue(os.path.exists("test6.tdcski"))
+        self.assertTrue(f.compare(backup))
+        backup.remove()
+        self.assertFalse(os.path.exists("test6.tdcski"))
+
+    def test_file_copy(self):
+        f = file.File("test7")
+        copy = f.copy("test7_2")
+        self.assertTrue(os.path.exists("test7_2"))
+        self.assertTrue(f.compare(copy))
+        with self.assertRaises(file.FileCopyError):
+            f.copy("test7_2")
+        f.copy("test7_2", overwrite=True)
+        self.assertTrue(os.path.exists("test7_2"))
+        self.assertTrue(f.compare(copy))
+        copy.remove()
+
 
 
 

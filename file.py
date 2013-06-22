@@ -78,20 +78,39 @@ class File():
             raise FileRemoveError(self)
 
     def copy(self, dest, overwrite=False):
+        logger.debug("copie: {} -> {}".format(self.path, dest))
         if os.path.exists(dest) and not overwrite:
             raise FileCopyError(self, dest, "la destination existe déjà")
+        shutil.copy2(self.path, dest)
+        if not os.path.exists(dest):
+            raise FileCopyError(self, dest,
+             "il y a eu une erreur pendant la copie, la destination n'existe pas")
+        return File(dest)
 
     def compare(self, other, force_reload=False):
         if type(other) == str:
             other = File(other)
+        logger.debug("comparaison: {} <-> {}".format(self.path, other.path))
         if force_reload:
+            logger.debug("calcul forcé des hash md5")
             self.__md5 = self.__hash(self.path)
             other.__md5 = self.__hash(other.path)
-        return self.md5 == other.md5
+        result = self.md5 == other.md5
+        logger.debug("résultat de la comparaison: {}".format(result))
+        return result
 
     def backup(self, prefix="", suffix=".tdcski"):
-        #~ self.
-        pass
+        logger.debug("back up du fichier: {}".format(self.path))
+        dest = "{}{}{}".format(
+                    prefix,
+                    os.path.abspath(self.path),
+                    suffix)
+        logger.debug("chemin du backup: {}".format(dest))
+        if os.path.exists(dest):
+            logger.debug("le backup existe déjà")
+        else:
+            self.copy(dest)
+        return File(dest)
 
 
 def main():
