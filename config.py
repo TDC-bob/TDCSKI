@@ -4,6 +4,7 @@ __author__ = 'bob'
 from lib.configobj import ConfigObj
 from _logging._logging import mkLogger, logged, DEBUG
 import os
+from file import File
 logger = mkLogger(__name__, DEBUG)
 
 git_exe = None
@@ -23,9 +24,12 @@ class Config():
             #~ logger.error("impossible de trouver le fichier de configuration sur le chemin suivant: {}".format(os.path.abspath(file)))
             #~ input()
             #~ exit(1)
-        self.__config = ConfigObj(infile=file)
+        self.__file = File(file, must_exists)
+        self.__config = ConfigObj(infile=self.__file.path)
 
     @property
+    def file(self):
+        return self.__file
     def values(self):
         return self.__config.values()
 
