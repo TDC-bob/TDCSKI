@@ -60,3 +60,4 @@ __pycache__
 .idea/*
 /*.~py
 *.pyc
+coverage/
