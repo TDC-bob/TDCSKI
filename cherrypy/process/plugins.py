@@ -421,7 +421,7 @@ class PIDFile(SimplePlugin):
             pass
 
 
-class PerpetualTimer(threading.Timer):
+#class PerpetualTimer(threading.Timer):
     """A responsive subclass of threading._Timer whose run() method repeats.
     
     Use this timer only when you really need a very interruptible timer;
@@ -429,18 +429,18 @@ class PerpetualTimer(threading.Timer):
     results in pretty high CPU usage 
     """
     
-    def run(self):
-        while True:
-            self.finished.wait(self.interval)
-            if self.finished.isSet():
-                return
-            try:
-                self.function(*self.args, **self.kwargs)
-            except Exception:
-                self.bus.log("Error in perpetual timer thread function %r." %
-                             self.function, level=40, traceback=True)
-                # Quit on first error to avoid massive logs.
-                raise
+#    def run(self):
+#        while True:
+#            self.finished.wait(self.interval)
+#            if self.finished.isSet():
+#                return
+#            try:
+#                self.function(*self.args, **self.kwargs)
+#            except Exception:
+#                self.bus.log("Error in perpetual timer thread function %r." %
+#                             self.function, level=40, traceback=True)
+#                # Quit on first error to avoid massive logs.
+#                raise
 
 
 class BackgroundTask(threading.Thread):
