@@ -1,5 +1,20 @@
 # TDCSKI #
 
+
+BETA
+
+
+[![Build Status](https://travis-ci.org/TDC-bob/TDCSKI.png?branch=beta)](https://travis-ci.org/TDC-bob/TDCSKI)
+
+
+
+MASTER
+
+
+[![Build Status](https://travis-ci.org/TDC-bob/TDCSKI.png?branch=master)](https://travis-ci.org/TDC-bob/TDCSKI)
+
+
+
 __BETA 1 EN COURS__
 
 [Téléchargement](https://github.com/TDC-bob/TDCSKI/raw/master/tdcski.exe)
@@ -11,7 +26,9 @@ __BETA 1 EN COURS__
 
 Le programme permet de maintenir et d'installer une liste de mods et de skins pour DCS world. 
 
-À l'exception du lanceur, qui est au format 
+Le projet est actuellement en passe d'être complètement transposé vers un build Python via cxFreeze.
+
+La version actuellent n'est donc plus d'application, référez-vous à la branche BETA pour les dernières mises à jour.
 
 
 
