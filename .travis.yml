@@ -1,0 +1,19 @@
+language: python
+python:
+  - "3.3"
+# command to install dependencies
+# install:
+#  - python setup.py sdist --formats=zip -k
+#  - find ./dist -iname "*.zip" -print0 | xargs -0 pip install
+#  - mkdir ./tests/slpp_tests
+#  - cd ./tests/slpp_tests
+#  - wget -i ../../.travis.filelist
+#  - cd ../../tests
+# command to run tests
+script: nosetests
+# - python tdcmeme-0.0.1/tests.py
+branches:
+  only:
+    - master
+    - beta
+    - /^deploy-.*$/
