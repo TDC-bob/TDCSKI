@@ -112,11 +112,3 @@ class File():
             self.copy(dest)
         return File(dest)
 
-
-def main():
-
-    return 0
-
-if __name__ == '__main__':
-    main()
-
