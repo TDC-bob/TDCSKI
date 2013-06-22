@@ -4,6 +4,11 @@
 <img src="https://travis-ci.org/TDC-bob/TDCSKI.png" alt="Go to the Travis page" border="0">
 </a>
 
+BETA
+[![Build Status](https://travis-ci.org/TDC-bob/TDCSKI.png?branch=beta)](https://travis-ci.org/TDC-bob/TDCSKI)
+MASTER
+[![Build Status](https://travis-ci.org/TDC-bob/TDCSKI.png?branch=master)](https://travis-ci.org/TDC-bob/TDCSKI)
+
 __BETA 1 EN COURS__
 
 [Téléchargement](https://github.com/TDC-bob/TDCSKI/raw/master/tdcski.exe)
