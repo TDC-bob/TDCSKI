@@ -13,14 +13,14 @@ SaveGames_path = None
 update = False
 update_list_only = False
 
-class ConfigFileDoesnotExist(Exception):
+class ConfigFileDoesNotExist(Exception):
     def __init__(self, path_to_file):
-        logger.error("le fichier de configuration n'existe pas ({})".format(path_to_file))
+        logger.error("le fichier n'existe pas ({})".format(path_to_file))
 
 class Config():
     def __init__(self, file='../tdcski.cfg', must_exists=True):
         if must_exists and not os.path.exists(file):
-            raise ConfigFileDoesnotExist(file)
+            raise ConfigFileDoesNotExist(file)
             #~ logger.error("impossible de trouver le fichier de configuration sur le chemin suivant: {}".format(os.path.abspath(file)))
             #~ input()
             #~ exit(1)
