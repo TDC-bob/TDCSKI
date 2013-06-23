@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  untitled.py
-#
-#  Copyright 2013 bob <bob@tinybou>
+#  Copyright 2013 Bob <TDC-bob@daribouca.net>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
+#  the Free Software Foundation; either version 3 of the License, or
 #  (at your option) any later version.
 #
 #  This program is distributed in the hope that it will be useful,
@@ -21,6 +19,8 @@
 #  MA 02110-1301, USA.
 #
 #
+__version__ = (0, 0, 1)
+__author__ = 'bob'
 
 import unittest
 import config

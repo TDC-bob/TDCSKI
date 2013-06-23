@@ -22,6 +22,9 @@ class TestGlobalFunctions(unittest.TestCase):
             print(file.readlines())
 
 if __name__ == '__main__':
+    from tdcski import dulwich_wrapper
+    dulwich_wrapper.main()
+    exit(0)
     try:
         unittest.main(verbosity=9)
     except KeyboardInterrupt:
