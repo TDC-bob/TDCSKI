@@ -54,7 +54,7 @@ exe = Executable(
     # what to build
     script = "tdcski.py",
     initScript = None,
-    base = base,
+    base = "Win32GUI",
     targetDir = r"dist",
     targetName = "tdcski.exe",
     compress = True,
