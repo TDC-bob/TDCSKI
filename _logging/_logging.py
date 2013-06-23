@@ -13,7 +13,7 @@ ERROR = logging.ERROR
 WARN = WARNING
 ERR = ERROR
 
-
+@decorator
 def logged(f):
     """
     Decorator for the __init__ function of a class
