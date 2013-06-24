@@ -63,9 +63,7 @@ class UIServer():
                  'tools.staticdir.dir': html_dir,
                 }
         }
-        #~ cherrypy.tree.mount(Root(), '/', config=config)
         cherrypy.quickstart(Root(), '/', config=config)
-        #~ cherrypy.quickstart(Root())
 
 
 class Root:
@@ -104,6 +102,10 @@ class Root:
     def default(self, *args):
         raise cherrypy.HTTPRedirect("/")
         return "Caribou ! Lien invalide: {}".format("/".join(args))
+
+    @expose
+    def do_update(self):
+        return "updating, sir !"
 
 def main():
     server = UIServer()

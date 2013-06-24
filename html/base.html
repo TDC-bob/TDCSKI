@@ -26,12 +26,31 @@
         <link rel="stylesheet" href="/css/bootstrap.css" type="text/css">
         <link rel="stylesheet" href="/css/bootstrap-responsive.css" type="text/css">
         <link rel="stylesheet" href="/css/index2.css" type="text/css">
+
+        <script src="/js/jquery.js"></script>
         <script src="/js/bootstrap.js"></script>
+        <script type="text/javascript" src="/js/widgets.js"></script>
+        <script src="/js/bootstrap-transition.js"></script>
+        <script src="/js/bootstrap-alert.js"></script>
+        <script src="/js/bootstrap-modal.js"></script>
+        <script src="/js/bootstrap-dropdown.js"></script>
+        <script src="/js/bootstrap-scrollspy.js"></script>
+        <script src="/js/bootstrap-tab.js"></script>
+        <script src="/js/bootstrap-tooltip.js"></script>
+        <script src="/js/bootstrap-popover.js"></script>
+        <script src="/js/bootstrap-button.js"></script>
+        <script src="/js/bootstrap-collapse.js"></script>
+        <script src="/js/bootstrap-carousel.js"></script>
+        <script src="/js/bootstrap-typeahead.js"></script>
+        <script src="/js/bootstrap-affix.js"></script>
+
+        <script src="/js/holder.js"></script>
+        <script src="/js/prettify.js"></script>
     </head>
     <body data-spy="scroll" data-target=".bs-docs-sidebar">
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
                   <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -40,25 +59,16 @@
                   <a class="brand" href="./index.html">TDCSKI</a>
                   <div class="nav-collapse collapse">
                     <ul class="nav">
-                      <li class="active">
-                          <a href="./index.html">TDCSKI v${version}</a></li>
                       <li class="">
-                        <a href="./index.html">Home</a>
+                          <a href="/">TDCSKI v${version}</a></li>
+                      <li class="">
+                        <a href="/index">Home</a>
                       </li>
                       <li class="">
-                        <a href="https://github.com/TDC-bob/TDCSKI" target="_blank">Source</a>
+                        <a href="/config">Configuration</a>
                       </li>
                       <li class="">
-                        <a href="https://github.com/TDC-bob/TDCSKI/issues" target="_blank">Probl&egrave;mes</a>
-                      </li>
-                      <li class="">
-                        <a href="https://github.com/TDC-bob/TDCSKI/issues" target="_blank">Id&eacute;es</a>
-                      </li>
-                      <li class="">
-                        <a href="https://github.com/TDC-bob/TDCSKI/wiki" target="_blank">Wiki</a>
-                      </li>
-                      <li class="">
-                        <a href="/logs" target="_self">Journaux</a>
+                        <a href="/logs">Journaux</a>
                       </li>
                       <li class="">
                         <a href="/exit">Quitter</a>
@@ -74,7 +84,9 @@
                   <li><a href="/"><i class="icon-chevron-right"></i> Accueil</a></li>
                   <li><a href="/skins"><i class="icon-chevron-right"></i> Skins</a></li>
                   <li><a href="/mods"><i class="icon-chevron-right"></i> Mods</a></li>
+<!--
                   <li><a href="/config"><i class="icon-chevron-right"></i> Configuration</a></li>
+-->
 <!--
                   <img src="/img/gerwinski-gnu-head.png" alt="GNU logo" height="200" width="200">
 -->
@@ -103,7 +115,6 @@
               <li class="muted">&middot;</li>
               <li><a href="https://github.com/twitter/bootstrap/blob/master/CHANGELOG.md">Changelog</a></li>
             </ul>
-
           </div>
         </footer>
     </body>

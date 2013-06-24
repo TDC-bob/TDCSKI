@@ -19,7 +19,25 @@
 #
 -->
 <%inherit file="base.html"/>
+<div class="alert alert-block alert-info fade in">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <h4 class="alert-heading">Nouvelle version</h4>
+    <p>Une mise a jour de ce programme est disponible en ligne. Voulez-vous effectuer la mise a jour maintenant ?</p>
+    <p>
+        <a class="btn btn-info" href="do_update">Mettre a jour</a>
+    </p>
+</div>
             <p>test</p>
+              <button type="button" id="fat-btn" data-loading-text="loading..." class="btn btn-primary">
+                loading test
+              </button>
+              <script>
+                $('.nav-tabs').button()
+              </script>
+            <div class="alert fade in">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Holy guacamole!</strong> Best check yo self, you're not looking too good.
+          </div>
             <%
             rows = [[v for v in range(0,10)] for row in range(0,10)]
             %>
@@ -42,5 +60,7 @@
                 % endfor
                 </tr>
             </%def>
-            <address>Fait le 5 avril 2004<br>par moi.</address>
             </div>
+<script>
+    $('a[href="/index"]').parent().addClass('active');
+</script>
