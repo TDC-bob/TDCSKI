@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 __author__ = 'bob'
 
+#TODO: checker qu'il est possible d'écrire dans le répertoire DCS
+
 import os
 import sys
 import winreg
