@@ -107,7 +107,7 @@ class Root:
 
 def main():
     server = UIServer()
-    threading.Timer(5, lambda: webbrowser.open("http://127.0.0.1:10307", new=2, autoraise=True)).start()
+    threading.Timer(2, lambda: webbrowser.open("http://127.0.0.1:10307", new=2, autoraise=True)).start()
     server.start()
     return 0
 
