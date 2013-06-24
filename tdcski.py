@@ -2,6 +2,7 @@
 __author__ = 'bob'
 
 #TODO: checker qu'il est possible d'écrire dans le répertoire DCS
+#TODO: récupérer le javascript à la fin de bootstrap_example.html
 
 import os
 import sys
