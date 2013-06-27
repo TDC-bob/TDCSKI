@@ -109,3 +109,11 @@ description
 description=
 [[version2]]
 description=
+
+Branches & différentes versions
+===============================
+Si un mod propose plusieurs versions, comme par exemple les cockpit BLUE et BLACK pour le Ka,
+ou le Reworked Cokpit with Proper Neck, ajouter les différentes versions sous forme de branches.
+
+Dans l'UI, ça voudra dire, pour chaque mod:
+SI branch != master -> DISPLAY dropdown_box(branches) ELSE nil
