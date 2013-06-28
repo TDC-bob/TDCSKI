@@ -19,14 +19,13 @@
 #  MA 02110-1301, USA.
 #
 #
-__version__ = (0, 0, 1)
 __author__ = 'bob'
 
 import unittest
-import config
+from ..tdcski import config
 import os
 
-from _logging._logging import mkLogger, logged, DEBUG
+from ..lib._logging._logging import mkLogger, logged, DEBUG
 #logger = mkLogger(__name__, DEBUG)
 
 class testConfig(unittest.TestCase):

@@ -24,9 +24,9 @@ __author__ = 'bob'
 
 import unittest
 import os
-import file
+from ..tdcski import file
 
-from _logging._logging import mkLogger, logged, DEBUG
+from ..lib._logging._logging import mkLogger, logged, DEBUG
 #logger = mkLogger(__name__, DEBUG)
 
 class testFile(unittest.TestCase):
@@ -41,7 +41,7 @@ class testFile(unittest.TestCase):
         for f in self.file_list:
             if os.path.exists(f):
                 os.remove(f)
-        extra_remove = ["test7_2", "test6.tdcski"]
+        extra_remove = ["test7_2", "test6.tdcski", "test_write"]
         for x in extra_remove:
             if os.path.exists(x):
                 os.remove(x)
@@ -92,7 +92,21 @@ class testFile(unittest.TestCase):
         self.assertTrue(f.compare(copy))
         copy.remove()
 
+    def test_write(self):
+        dummy = ["caribou\n", "meuh\n", "tchoutchou\n"]
+        f = file.File("test_write", must_exist=False)
+        f.write_lines(dummy)
+        with open("test_write") as result:
+            self.assertEqual(result.readlines(), dummy)
+        with open("test_write") as result:
+            self.assertEqual(result.readlines(), f.read_lines())
 
+    ## skipped due to buggy function
+    #~ def test_is_binary(self):
+        #~ f1 = file.File("tdcski.exe")
+        #~ f2 = file.File("README.md")
+        #~ self.assertTrue(f1.is_binary)
+        #~ self.assertFalse(f2.is_binary)
 
 
 
