@@ -19,6 +19,8 @@
 #  MA 02110-1301, USA.
 #
 #
+from tdcski import _logging
+
 __version__ = (0, 0, 1)
 __author__ = 'bob'
 
@@ -27,7 +29,6 @@ import unittest, logging
 try:
     import _logging
 except ImportError:
-    from . import _logging
 
 # noinspection PyUnresolvedReferences
 class TestLoggingPackage(unittest.TestCase):

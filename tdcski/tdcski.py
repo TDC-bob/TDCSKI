@@ -8,14 +8,14 @@ import os
 import sys
 import winreg
 import traceback
-from mission import Mission
+from tdcski.mission import Mission
 from time import strftime, gmtime
-from mod import Mod
-import config
-from bobgit.git import Repo
+from tdcski.mod import Mod
+import tdcski.config
+from tdcski.git import Repo
 from optparse import OptionParser, OptionValueError, OptionError, OptionGroup
 from optparse import Option as optparseOption
-from _logging._logging import mkLogger, DEBUG
+from tdcski._logging import mkLogger, DEBUG
 
 logger = mkLogger(__name__, DEBUG, "../logs/{} - TDCSKI.log".format(strftime("%Y%m%d - %Hh%Mm%S", gmtime())))
 

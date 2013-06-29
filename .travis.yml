@@ -13,7 +13,6 @@ install:
 #  - cd ../../tests
 # command to run tests
 script: nosetests
-# - python tdcmeme-0.0.1/tests.py
 branches:
   only:
     - master

@@ -24,10 +24,10 @@ __author__ = 'bob'
 
 import unittest
 import os
-from ..tdcski import file
+from tdcski import file
 
-from ..lib._logging._logging import mkLogger, logged, DEBUG
-#logger = mkLogger(__name__, DEBUG)
+from tdcski._logging import mkLogger, logged, DEBUG
+logger = mkLogger(__name__, DEBUG)
 
 class testFile(unittest.TestCase):
     file_list = ["test{}".format(x) for x in range(1, 10)]

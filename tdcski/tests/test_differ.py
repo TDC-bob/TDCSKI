@@ -25,9 +25,9 @@ __author__ = 'TDC-Bob'
 import unittest
 import os
 
-from ..lib._logging._logging import mkLogger, logged, DEBUG
-from ..tdcski.differ import three_way_merge
-#logger = mkLogger(__name__, DEBUG)
+from tdcski._logging import mkLogger, logged, DEBUG
+from tdcski.differ import three_way_merge
+logger = mkLogger(__name__, DEBUG)
 
 class testDiffer(unittest.TestCase):
 

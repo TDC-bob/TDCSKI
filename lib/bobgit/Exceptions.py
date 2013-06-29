@@ -53,14 +53,6 @@ class GitBranchNotKnown(GitError):
     def __init__(self, long_msg="Pas d'information supplémentaire", logger=logger):
         write_error_to_log("GIT UNKNOWN BRANCH", long_msg, logger=logger)
 
-class GitMergeError(GitError):
-    def __init__(self, long_msg="Pas d'information supplémentaire", logger=logger):
-        write_error_to_log("GIT MERGE ERROR", long_msg, logger=logger)
-
-class GitInitError(GitError):
-    def __init__(self, long_msg="Pas d'information supplémentaire", logger=logger):
-        write_error_to_log("GIT INIT ERROR", long_msg, logger=logger)
-
 class GitRemoteAddError(GitError):
     def __init__(self, long_msg="Pas d'information supplémentaire", logger=logger):
         write_error_to_log("GIT REMOTE ADD ERROR", long_msg, logger=logger)

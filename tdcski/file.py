@@ -21,7 +21,7 @@
 #
 
 import os
-from _logging._logging import mkLogger, logged, DEBUG
+from tdcski._logging import mkLogger, logged, DEBUG
 import shutil
 from hashlib import md5 as MD5
 

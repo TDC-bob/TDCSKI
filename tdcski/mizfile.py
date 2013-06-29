@@ -12,9 +12,9 @@
 #!/usr/bin/env python
 
 
-import logging, makeTemp, mission
-from _logging._logging import mkLogger, logged
-logger = mkLogger(__name__, logging.INFO )
+from tdcski import makeTemp
+from tdcski._logging import mkLogger, logged, INFO
+logger = mkLogger(__name__, INFO )
 
 ##from os.path import isfile, exists, join, abspath, dirname, basename
 import os, shutil, zipfile, Exceptions

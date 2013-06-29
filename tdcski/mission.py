@@ -11,10 +11,10 @@
 #-------------------------------------------------------------------------------
 #!/usr/bin/env python
 
-
-from _logging._logging import logged, mkLogger
-import _slpp, logging, Exceptions, mizfile, os.path
-mkLogger(__name__,logging.INFO)
+import os
+from tdcski._logging import logged, mkLogger, INFO
+from tdcski import _slpp, exceptions, mizfile
+mkLogger(__name__,INFO)
 
 class Mission():
     """
@@ -64,7 +64,7 @@ class _ManagedMission():
                 self.logger.debug("lecture du contenu du fichier mission")
                 self.raw_text = file.read()
         except:
-            Exceptions.Error("Erreur fatale lors de la lecture du fichier mission",
+            exceptions.Error("Erreur fatale lors de la lecture du fichier mission",
                             "Impossible de lire le fichier mission suivant: {}".format(self.path_to_mission_file))
         self.logger.debug("délégation de la table de mission au parser SLPP")
         self.d = parser.decode(self.raw_text)
@@ -116,7 +116,7 @@ class _ManagedMission():
                     raise KeyError
     ##            print(p)
         except KeyError:
-            raise Exceptions.Error("Erreur lors de la vérification du fichier mission",
+            raise exceptions.Error("Erreur lors de la vérification du fichier mission",
             "impossible de trouver la clef \"{}\" dans la table de mission: {}"
             .format(p, os.path.dirname(self.path_to_mission_file)), self.logger)
 

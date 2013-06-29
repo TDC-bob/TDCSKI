@@ -22,11 +22,11 @@
 __author__ = 'bob'
 
 import unittest
-from ..tdcski import config
+from tdcski import config
 import os
 
-from ..lib._logging._logging import mkLogger, logged, DEBUG
-#logger = mkLogger(__name__, DEBUG)
+from tdcski._logging import mkLogger, logged, DEBUG
+logger = mkLogger(__name__, DEBUG)
 
 class testConfig(unittest.TestCase):
 

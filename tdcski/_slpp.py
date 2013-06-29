@@ -22,8 +22,8 @@
 __version__ = (0, 0, 1)
 __author__ = 'bob'
 import re
-import Exceptions
-from _logging._logging import logged, mkLogger, INFO
+import tdcski.exceptions
+from tdcski._logging import logged, mkLogger, INFO
 from collections import OrderedDict
 
 logger = mkLogger(__name__, INFO)

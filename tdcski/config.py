@@ -22,10 +22,10 @@
 __version__ = (0, 0, 1)
 __author__ = 'bob'
 
-from ..lib.configobj import ConfigObj
-from ..lib._logging._logging import mkLogger, logged, DEBUG
+from lib.configobj import ConfigObj
+from tdcski._logging import mkLogger, logged, DEBUG
 import os
-from .file import File
+from tdcski.file import File
 logger = mkLogger(__name__, DEBUG)
 
 git_exe = None

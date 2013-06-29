@@ -4,10 +4,10 @@ __author__ = 'bob'
 import os
 import re
 import shutil
-import bobgit.git as git
+from tdcski import git
 from hashlib import md5 as MD5
-from _logging._logging import mkLogger, DEBUG, logged
-import config
+from tdcski._logging import mkLogger, DEBUG, logged
+import tdcski.config
 import sys
 import imp
 

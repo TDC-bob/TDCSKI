@@ -32,8 +32,8 @@ import difflib
 
 import difflib
 import sys
-from .file import File
-from ..lib._logging._logging import mkLogger, DEBUG
+from tdcski.file import File
+from tdcski._logging import mkLogger, DEBUG
 logger = mkLogger(__name__, DEBUG)
 
 class DifferException(Exception):
