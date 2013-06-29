@@ -31,7 +31,7 @@ import os
 
 # Process the includes, excludes and packages first
 
-includes = ["html/", "tdcski/"]
+includes = ["html/"]
 excludes = []
 packages = ["tdcski","cherrypy","mako"]
 path = sys.path + ['cherrypy', 'mako', "tdcski"]
@@ -57,7 +57,7 @@ exe = Executable(
     "tdcski.py",
     initScript = None,
     # base = "Win32GUI",
-    targetDir = "dist",
+    # targetDir = "dist",
     targetName = "tdcski.exe",
     compress = True,
     copyDependentFiles = True,

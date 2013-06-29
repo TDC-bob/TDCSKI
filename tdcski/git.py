@@ -299,7 +299,7 @@ def switch_dir(new_dir):
     if os.getcwd() == new_dir:
         logger.debug("changement de répertoire réussi !")
         return True
-    raise Exceptions.GitRunError("échec du changement de répertoire courant")
+    raise GitRunError("échec du changement de répertoire courant")
 
 def dir_is_empty(path):
     return os.listdir(path)==[]

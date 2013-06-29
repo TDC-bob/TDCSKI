@@ -34,6 +34,9 @@ SaveGames_path = None
 update = False
 update_list_only = False
 
+server_interface = "127.0.0.1"
+server_port = "10307"
+
 class ConfigFileDoesNotExist(Exception):
     def __init__(self, path_to_file):
         logger.error("le fichier n'existe pas ({})".format(path_to_file))
