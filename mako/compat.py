@@ -9,69 +9,69 @@ jython = sys.platform.startswith('java')
 win32 = sys.platform.startswith('win')
 pypy = hasattr(sys, 'pypy_version_info')
 
-if py3k:
-    from io import StringIO
-    import builtins as compat_builtins
-    from urllib.parse import quote_plus, unquote_plus
-    from html.entities import codepoint2name, name2codepoint
-    string_types = str,
-    binary_type = bytes
-    text_type = str
+# if py3k:
+from io import StringIO
+import builtins as compat_builtins
+from urllib.parse import quote_plus, unquote_plus
+from html.entities import codepoint2name, name2codepoint
+string_types = str,
+binary_type = bytes
+text_type = str
 
-    def u(s):
-        return s
+def u(s):
+    return s
 
-    def octal(lit):
-        return eval("0o" + lit)
+def octal(lit):
+    return eval("0o" + lit)
 
-else:
-    import __builtin__ as compat_builtins
-    try:
-        from cStringIO import StringIO
-    except:
-        from StringIO import StringIO
-    from urllib import quote_plus, unquote_plus
-    from htmlentitydefs import codepoint2name, name2codepoint
-    string_types = basestring,
-    binary_type = str
-    text_type = unicode
+# else:
+#     import __builtin__ as compat_builtins
+#     try:
+#         from cStringIO import StringIO
+#     except:
+#         from StringIO import StringIO
+#     from urllib import quote_plus, unquote_plus
+#     from htmlentitydefs import codepoint2name, name2codepoint
+#     string_types = basestring,
+#     binary_type = str
+#     text_type = unicode
+#
+#     def u(s):
+#         return unicode(s, "utf-8")
+#
+#     def octal(lit):
+#         return eval("0" + lit)
 
-    def u(s):
-        return unicode(s, "utf-8")
 
-    def octal(lit):
-        return eval("0" + lit)
-
-
-if py33:
-    from importlib import machinery
-    def load_module(module_id, path):
-        return machinery.SourceFileLoader(module_id, path).load_module()
-else:
-    import imp
-    def load_module(module_id, path):
-        fp = open(path, 'rb')
-        try:
-            return imp.load_source(module_id, path, fp)
-        finally:
-            fp.close()
+# if py33:
+from importlib import machinery
+def load_module(module_id, path):
+    return machinery.SourceFileLoader(module_id, path).load_module()
+# else:
+#     import imp
+#     def load_module(module_id, path):
+#         fp = open(path, 'rb')
+#         try:
+#             return imp.load_source(module_id, path, fp)
+#         finally:
+#             fp.close()
 
 
 def exception_as():
     return sys.exc_info()[1]
 
 try:
-    import threading
-    if py3k:
-        import _thread as thread
-    else:
-        import thread
+#     import threading
+#     if py3k:
+    import _thread as thread
+    # else:
+    #     import thread
 except ImportError:
-    import dummy_threading as threading
-    if py3k:
-        import _dummy_thread as thread
-    else:
-        import dummy_thread as thread
+    # import dummy_threading as threading
+    # if py3k:
+    import _dummy_thread as thread
+    # else:
+    #     import dummy_thread as thread
 
 if win32 or jython:
     time_func = time.clock

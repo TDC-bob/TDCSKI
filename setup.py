@@ -23,6 +23,7 @@
 # Let's start with some default (for me) imports...
 
 from cx_Freeze import setup, Executable
+import traceback
 import sys
 import os
 
@@ -30,10 +31,11 @@ import os
 
 # Process the includes, excludes and packages first
 
-includes = []
+includes = ["html/", "tdcski/"]
 excludes = []
-packages = []
-path = ["html"]
+packages = ["tdcski","cherrypy","mako"]
+path = sys.path + ['cherrypy', 'mako', "tdcski"]
+
 
 # This is a place where the user custom code may go. You can do almost
 # whatever you want, even modify the data_files, includes and friends
@@ -46,16 +48,16 @@ path = ["html"]
 # use the Python class Executable from cx_Freeze
 
 
-base = None
-if sys.platform == "win32":
-    base = "Win32GUI"
+# base = None
+# if sys.platform == "win32":
+#     base = "Win32GUI"
 
 exe = Executable(
     # what to build
-    script = "tdcski.py",
+    "tdcski.py",
     initScript = None,
-    base = "Win32GUI",
-    targetDir = r"dist",
+    # base = "Win32GUI",
+    targetDir = "dist",
     targetName = "tdcski.exe",
     compress = True,
     copyDependentFiles = True,
@@ -75,11 +77,10 @@ setup(
     description = "description",
     author = "TDC Bob",
     name = "TDCSKI",
-
-    options = {"build_exe": {"includes": includes,
+    options = {"build_exe": {"include_files": includes,
                              "excludes": excludes,
+                             # "path": path,
                              "packages": packages,
-                             "path": path
                              }
                },
 

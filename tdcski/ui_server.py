@@ -19,9 +19,9 @@
 #  MA 02110-1301, USA.
 #
 #
-__version__ = (0, 0, 1)
 __author__ = 'bob'
 
+import tdcski
 import cherrypy
 import os
 import sys
@@ -42,7 +42,7 @@ class UIServer():
         def fake_wait_for_occupied_port(host, port): return
         cherrypy.process.servers.wait_for_occupied_port = fake_wait_for_occupied_port
         cherrypy.engine.timeout_monitor.unsubscribe()
-        html_dir = os.path.dirname(os.path.abspath(__file__)) + "/html/"
+        html_dir = tdcski.PROG_DIR + "/html/"
         css_dir = html_dir + "css/"
         img_dir = html_dir + "img/"
         js_dir = html_dir + "js/"
@@ -63,6 +63,7 @@ class UIServer():
                  'tools.staticdir.dir': html_dir,
                 }
         }
+        cherrypy.engine.autoreload.unsubscribe()
         cherrypy.quickstart(Root(), '/', config=config)
 
 
