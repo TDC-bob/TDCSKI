@@ -11,7 +11,7 @@ install:
 #  - wget -i ../../.travis.filelist
 #  - cd ../../tests
 # command to run tests
-script: nosetests
+script: nosetests -v
 # - python tdcmeme-0.0.1/tests.py
 branches:
   only:
