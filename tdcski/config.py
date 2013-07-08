@@ -45,9 +45,6 @@ class Config():
     def __init__(self, file='../tdcski.cfg', must_exists=True):
         if must_exists and not os.path.exists(file):
             raise ConfigFileDoesNotExist(file)
-            #~ logger.error("impossible de trouver le fichier de configuration sur le chemin suivant: {}".format(os.path.abspath(file)))
-            #~ input()
-            #~ exit(1)
         self.__file = File(file, must_exists)
         self.__config = ConfigObj(infile=self.__file.path)
 
@@ -102,7 +99,7 @@ class Config():
         return True
 
     def set(self, *args):
-        if self.get(*args[0:-1]) == None:
+        if self.get(*args[0:-1]) is None:
             return None
         base = self.__config
         while len(args) > 2:

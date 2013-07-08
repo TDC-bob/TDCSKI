@@ -27,7 +27,8 @@ import os
 import sys
 import threading
 import webbrowser
-from cherrypy import expose
+import tdcski.config
+from cherrypy import expose, tools
 from mako.template import Template
 from mako.lookup import TemplateLookup
 lookup = TemplateLookup(directories=['html'])
@@ -46,7 +47,7 @@ class UIServer():
         css_dir = html_dir + "css/"
         img_dir = html_dir + "img/"
         js_dir = html_dir + "js/"
-        config = {'/css':
+        server_config = {'/css':
                 {'tools.staticdir.on': True,
                  'tools.staticdir.dir': css_dir,
                 },
@@ -64,7 +65,7 @@ class UIServer():
                 }
         }
         cherrypy.engine.autoreload.unsubscribe()
-        cherrypy.quickstart(Root(), '/', config=config)
+        cherrypy.quickstart(Root(), '/', config=server_config)
 
 
 class Root:
@@ -77,7 +78,13 @@ class Root:
     @expose
     def config(self):
         tmpl = lookup.get_template("config.html")
-        return tmpl.render(version="0.0.1")
+        return tmpl.render(version="0.0.1", server_interface=tdcski.config.server_interface, server_port=tdcski.config.server_port)
+
+    @expose
+    def save_config(self, **kwargs):
+        print(kwargs)
+        # print("server_interface: {}".format(server_interface))
+        raise cherrypy.HTTPRedirect("/config")
 
     @expose
     def showMessage(self):
@@ -107,6 +114,11 @@ class Root:
     @expose
     def do_update(self):
         return "updating, sir !"
+
+    @cherrypy.expose
+    @tools.json_out()
+    def test_ajax(self, **kwargs):
+        return {"message": "Hello World!"}
 
 def main():
     server = UIServer()

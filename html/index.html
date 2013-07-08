@@ -1,66 +1,33 @@
-<!--
-#  Copyright 2013 Bob <TDC-bob@daribouca.net>
-#
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 3 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with this program; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
-#  MA 02110-1301, USA.
-#
-#
--->
 <%inherit file="base.html"/>
 <div class="alert alert-block alert-info fade in">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <h4 class="alert-heading">Nouvelle version</h4>
     <p>Une mise a jour de ce programme est disponible en ligne. Voulez-vous effectuer la mise a jour maintenant ?</p>
-    <p>
-        <a class="btn btn-info" href="do_update">Mettre a jour</a>
-    </p>
+    <p><a class="btn btn-info" href="do_update">Mettre a jour</a></p>
 </div>
-            <p>test</p>
-              <button type="button" id="fat-btn" data-loading-text="loading..." class="btn btn-primary">
-                loading test
-              </button>
-              <script>
-                $('.nav-tabs').button()
-              </script>
-            <div class="alert fade in">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>Holy guacamole!</strong> Best check yo self, you're not looking too good.
-          </div>
-            <%
-            rows = [[v for v in range(0,10)] for row in range(0,10)]
-            %>
-            <table>
-                % for row in rows:
-                    ${makerow(row)}
-                % endfor
-            </table>
-            ${salutation}
-            ${target}
-            <form name="input" action="test_receive" method="post">
-                First name: <input type="text" name="user" value=""><br>
-                Last name: <input type="text" name="pwd" value=""><br>
-                <input type="submit" value="Submit">
-            </form>
-            <%def name="makerow(row)">
-                <tr>
-                % for name in row:
-                    <td>${name}</td>\
-                % endfor
-                </tr>
-            </%def>
-            </div>
+<button id="fat-btn" type="button" class="btn btn-primary" data-loading-text="Loading...">Loading state</button>
 <script>
-    $('a[href="/index"]').parent().addClass('active');
+    $(function(){
+        var $btn = $('#fat-btn');
+        $btn.click(function(){
+            var $this = $(this);
+            $this.attr('disabled', 'disabled').html("Loading...");
+            setTimeout(function () {
+                $this.removeAttr('disabled').html('Hello');
+            }, 3000)
+        });
+    })
 </script>
+<a class="btn btn-primary" href="#">
+  <i class="icon-refresh icon-spin"></i> Synchronizing Content...</a>
+<div class="alert fade in">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Holy guacamole!</strong> Best check yo self, you're not looking too good.
+</div>
+${salutation}
+${target}
+<form name="input" action="test_receive" method="post">
+    First name: <input type="text" name="user" value=""><br>
+    Last name: <input type="text" name="pwd" value=""><br>
+    <input type="submit" value="Submit">
+</form>

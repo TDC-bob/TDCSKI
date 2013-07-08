@@ -11,7 +11,7 @@ import traceback
 from tdcski.mission import Mission
 from time import strftime, gmtime
 from tdcski.mod import Mod
-import tdcski.config
+import tdcski.config as config
 from tdcski.git import Repo
 from optparse import OptionParser, OptionValueError, OptionError, OptionGroup
 from optparse import Option as optparseOption

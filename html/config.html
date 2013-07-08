@@ -19,13 +19,28 @@
 #
 -->
 <%inherit file="base.html"/>
-<p>CONFIG PAGE</p>
-<div class="span3">
-<p><input type="checkbox" id="checkbox_1">texte some longer text</input></p>
-<p><input type="checkbox" id="checkbox_2">texte</input></p>
-<p><input type="checkbox" id="checkbox_3">texte</input></p>
-<p><input type="checkbox" id="checkbox_4">texte</input></p>
-</div>
+<form class="form-horizontal" action="save_config" method="post">
+  <div class="control-group">
+    <label class="control-label" for="server_interface">Interface</label>
+    <div class="controls">
+      <input type="text" id="server_interface" name="server_interface" value="${server_interface}" >
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="server_port">Port</label>
+    <div class="controls">
+      <input type="text" id="server_port" name="server_port" value="${server_port}" >
+    </div>
+  </div>
+  <div class="control-group">
+    <div class="controls">
+      <label class="checkbox" for="remember_me">
+        <input type="checkbox" id="remember_me" name="remember_me"> Remember me
+      </label>
+      <button type="submit" class="btn">Sign in</button>
+    </div>
+  </div>
+</form>
 <script>
     $('a[href="/config"]').parent().addClass('active');
 </script>

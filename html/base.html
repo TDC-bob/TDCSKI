@@ -23,29 +23,31 @@
     <head>
         <meta charset="UTF-8">
         <title>TDCSKI</title>
-        <link rel="stylesheet" href="/css/bootstrap.css" type="text/css">
-        <link rel="stylesheet" href="/css/bootstrap-responsive.css" type="text/css">
-        <link rel="stylesheet" href="/css/index2.css" type="text/css">
+        <link rel="stylesheet" href="css/bootstrap.css" type="text/css">
+        <link rel="stylesheet" href="css/bootstrap-responsive.css" type="text/css">
+        <link rel="stylesheet" href="css/index2.css" type="text/css">
+        <link rel="stylesheet" href="css/font-awesome.min.css">
 
-        <script src="/js/jquery.js"></script>
-        <script src="/js/bootstrap.js"></script>
-        <script type="text/javascript" src="/js/widgets.js"></script>
-        <script src="/js/bootstrap-transition.js"></script>
-        <script src="/js/bootstrap-alert.js"></script>
-        <script src="/js/bootstrap-modal.js"></script>
-        <script src="/js/bootstrap-dropdown.js"></script>
-        <script src="/js/bootstrap-scrollspy.js"></script>
-        <script src="/js/bootstrap-tab.js"></script>
-        <script src="/js/bootstrap-tooltip.js"></script>
-        <script src="/js/bootstrap-popover.js"></script>
-        <script src="/js/bootstrap-button.js"></script>
-        <script src="/js/bootstrap-collapse.js"></script>
-        <script src="/js/bootstrap-carousel.js"></script>
-        <script src="/js/bootstrap-typeahead.js"></script>
-        <script src="/js/bootstrap-affix.js"></script>
-
-        <script src="/js/holder.js"></script>
-        <script src="/js/prettify.js"></script>
+        <link rel="icon" type="image/png" href="img/favicon.png">
+        <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+        <script type="text/javascript" src="js/bootstrap.js"></script>
+        <script type="text/javascript" src="js/widgets.js"></script>
+        <script type="text/javascript" src="js/jquery.js"></script>
+        <script type="text/javascript" src="js/bootstrap-transition.js"></script>
+        <script type="text/javascript" src="js/bootstrap-alert.js"></script>
+        <script type="text/javascript" src="js/bootstrap-modal.js"></script>
+        <script type="text/javascript" src="js/bootstrap-dropdown.js"></script>
+        <script type="text/javascript" src="js/bootstrap-scrollspy.js"></script>
+        <script type="text/javascript" src="js/bootstrap-tab.js"></script>
+        <script type="text/javascript" src="js/bootstrap-tooltip.js"></script>
+        <script type="text/javascript" src="js/bootstrap-popover.js"></script>
+        <script type="text/javascript" src="js/bootstrap-button.js"></script>
+        <script type="text/javascript" src="js/bootstrap-collapse.js"></script>
+        <script type="text/javascript" src="js/bootstrap-carousel.js"></script>
+        <script type="text/javascript" src="js/bootstrap-typeahead.js"></script>
+        <script type="text/javascript" src="js/bootstrap-affix.js"></script>
+        <script type="text/javascript" src="js/holder.js"></script>
+        <script type="text/javascript" src="js/prettify.js"></script>
     </head>
     <body data-spy="scroll" data-target=".bs-docs-sidebar">
         <div class="navbar navbar-inverse navbar-fixed-top">
@@ -93,29 +95,38 @@
                 </ul>
             </div>
             <div class="span9">
-            ${self.body()}
+            <div class="alert alert-block alert-info fade in">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h4 class="alert-heading">Nouvelle version</h4>
+            <div id="notifications"></div>
+
+            </div>
+                ${self.body()}
             </div>
         </div>
         <footer class="footer">
-          <div class="container">
-            <p>Construit et entretenu par Bob, pour les <a href="http://tueurdechars.xooit.be" target="_blank">TDC</a>.</p>
-            <p>L'ensemble du code est sous <a href="http://www.gnu.org/licenses/gpl.html" target="_blank">GPL v3</a>, la documentation sous license <a href="http://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>.</p>
-            <p><a href="http://glyphicons.com">Glyphicons Free</a> licensed under <a href="http://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>.</p>
-            <ul class="footer-links">
-              <li><a href="http://blog.getbootstrap.com">Blog</a></li>
-              <li class="muted">&middot;</li>
-              <li><a href="https://github.com/twitter/bootstrap/issues?state=open">Issues</a></li>
-              <li class="muted">&middot;</li>
-              <li><a href="https://github.com/twitter/bootstrap/blob/master/CHANGELOG.md">Changelog</a></li>
-            </ul>
-            <ul class="footer-links">
-              <li><a href="http://www.gnu.org/licenses/gpl.html" target="_blank"><img src="/img/gplv3-88x31.png" alt="GPL v3" height="42" width="42"></a> </li>
-              <li class="muted">&middot;</li>
-              <li><a href="https://github.com/twitter/bootstrap/issues?state=open">Issues</a></li>
-              <li class="muted">&middot;</li>
-              <li><a href="https://github.com/twitter/bootstrap/blob/master/CHANGELOG.md">Changelog</a></li>
-            </ul>
-          </div>
+            <div class="container">
+                <p class="lead">Construit et entretenu par <a href="http://tueurdechars.xooit.be/profile.php?mode=viewprofile&u=41" target="_blank">Bob</a>, pour les <a href="http://tueurdechars.xooit.be" target="_blank">TDC</a>.</p>
+                <p class="lead">L'ensemble du code est sous license <a href="http://www.gnu.org/licenses/gpl.html" target="_blank">GPL v3</a></p>
+            </div>
+            <div class="container">
+                <p>Librairies et programmes gr&acirc;ce auxquels ce programme existe</p>
+                <ul class="footer-links">
+                    <li><a href="http://www.gnu.org/licenses/gpl.html" target="_blank"><img src="http://www.gnu.org/graphics/gplv3-88x31.png" alt="GPL v3" height="84" width="84"></a> </li>
+                    <li class="muted">&middot;</li>
+                    <li><a href="http://www.jetbrains.com/pycharm/" target="_blank"><img src="http://www.jetbrains.com/img/logos/pycharm_logo.gif" alt="Pycharm" height="120" width="120"></a> </li>
+                    <li class="muted">&middot;</li>
+                    <li><a href="http://twitter.github.io/bootstrap/" target="_blank"><img src="http://nexar.ca/assets/img/bootstrap-logo.png" alt="Twitter Boostrap" height="84" width="84"></a> </li>
+                    <li class="muted">&middot;</li>
+                    <li><a href="http://www.makotemplates.org/" target="_blank"><img src="http://www.makotemplates.org/images/makoLogo.png" alt="Mako" height="84" width="84"></a> </li>
+                    <li class="muted">&middot;</li>
+                    <li><a href="http://www.cherrypy.org/" target="_blank"><img src="http://www.cherrypy.org/images/cherrypy.png" alt="CherryPy" height="30" width="30"></a> </li>
+                    <li class="muted">&middot;</li>
+                    <li><a href="http://www.python.org/" target="_blank"><img src="http://www-igm.univ-mlv.fr/~dr/XPOSE2011/django/img/python_logo.png" alt="Python" height="120" width="120"></a> </li>
+                    <li class="muted">&middot;</li>
+                    <li><a href="http://cx-freeze.sourceforge.net/" target="_blank">CxFreeze</a> </li>
+                </ul>
+            </div>
         </footer>
     </body>
 </html>
