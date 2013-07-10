@@ -3,9 +3,9 @@ __version__ = (0, 0, 2)
 version = ".".join([str(x) for x in __version__])
 __author__="bob"
 import os
-if os.environ['TRAVIS'] == "true":
-    pass
-else:
+try:
+    os.environ['TRAVIS']
+except:
     import winreg
 from tdcski import config_handler as config_handler
 config_file = config_handler.ConfigHandler(must_exists=False)
