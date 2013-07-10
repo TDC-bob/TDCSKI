@@ -7,7 +7,7 @@ import shutil
 from tdcski import git
 from hashlib import md5 as MD5
 from tdcski._logging import mkLogger, DEBUG, logged
-import tdcski.config
+import tdcski.config_handler
 import sys
 import imp
 

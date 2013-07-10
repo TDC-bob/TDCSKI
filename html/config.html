@@ -1,47 +1,56 @@
-<!--
-#  Copyright 2013 Bob <TDC-bob@daribouca.net>
-#
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 3 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with this program; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
-#  MA 02110-1301, USA.
-#
-#
--->
 <%inherit file="base.html"/>
-<form class="form-horizontal" action="save_config" method="post">
-  <div class="control-group">
-    <label class="control-label" for="server_interface">Interface</label>
-    <div class="controls">
-      <input type="text" id="server_interface" name="server_interface" value="${server_interface}" >
-    </div>
-  </div>
-  <div class="control-group">
-    <label class="control-label" for="server_port">Port</label>
-    <div class="controls">
-      <input type="text" id="server_port" name="server_port" value="${server_port}" >
-    </div>
-  </div>
-  <div class="control-group">
-    <div class="controls">
-      <label class="checkbox" for="remember_me">
-        <input type="checkbox" id="remember_me" name="remember_me"> Remember me
-      </label>
-      <button type="submit" class="btn">Sign in</button>
-    </div>
-  </div>
+
+<!--<form class="form-horizontal">-->
+<form action="save_config" method="post">
+    <fieldset>
+        <legend>Serveur local</legend>
+        <div class="control-group">
+            <label class="control-label" for="server_interface">Interface
+                <div class="controls">
+                    <select class="input-medium" id="server_interface" name="server_interface">
+                        ${interfaces}
+                    </select>
+                    <a href="#" rel="tooltip" data-container="body" data-toggle="tooltip" data-placement="right" title="Changer l'interface vous permet de sp&eacute;cifier quelles ressources r&eacute;seau auront acc&egrave; &agrave; la page du TDCSKI"> AIDE</a>
+                </div>
+            </label>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="server_port">Port
+                <div class="controls">
+                    <input class="input-mini" type="text" name="server_port" id="server_port" value="${server_port}" pattern="[1-5][0-9]{4}" required>
+                    <span class="help-block">Choisissez un port entre 10.000 et 59.999</span>
+                </div>
+            </label>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>Chemins et dossiers</legend>
+        <div class="control-group">
+            <label class="control-label" for="saved_games">Parties sauvegard&eacute;es
+                <div class="controls">
+                    <input class="input-xxlarge" type="text" name="saved_games" id="saved_games" value="${saved_games}"/>
+                </div>
+            </label>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="dcs_dir">Installation DCS
+                <div class="controls">
+                    <input class="input-xxlarge" type="text" name="dcs_dir" id="dcs_dir" value="${dcs_path}"/>
+                </div>
+            </label>
+        </div>
+    </fieldset>
+    <button type="submit" class="btn">Sauver</button>
 </form>
+
 <script>
     $('a[href="/config"]').parent().addClass('active');
+//    $('#interface_help').popover('toggle')
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        $("[rel='tooltip']").tooltip();
+    });
 </script>
 

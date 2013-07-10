@@ -27,7 +27,9 @@ import os
 import sys
 import threading
 import webbrowser
-import tdcski.config
+from tdcski import alerts
+from tdcski.network_interfaces import all_interfaces_html
+import tdcski.config_handler
 from cherrypy import expose, tools
 from mako.template import Template
 from mako.lookup import TemplateLookup
@@ -43,7 +45,7 @@ class UIServer():
         def fake_wait_for_occupied_port(host, port): return
         cherrypy.process.servers.wait_for_occupied_port = fake_wait_for_occupied_port
         cherrypy.engine.timeout_monitor.unsubscribe()
-        html_dir = tdcski.PROG_DIR + "/html/"
+        html_dir = tdcski.config.path_to.own_dir + "/html/"
         css_dir = html_dir + "css/"
         img_dir = html_dir + "img/"
         js_dir = html_dir + "js/"
@@ -73,18 +75,34 @@ class Root:
     @expose
     def index(self):
         tmpl = lookup.get_template("index.html")
-        return tmpl.render(salutation="Hello", target="World", version="0.0.1")
+        return tmpl.render(
+            salutation="Hello",
+            target="World",
+            version="0.0.1",
+            alerts=tdcski.alerts.get_alerts(),
+        )
 
     @expose
-    def config(self):
+    def show_config(self):
         tmpl = lookup.get_template("config.html")
-        return tmpl.render(version="0.0.1", server_interface=tdcski.config.server_interface, server_port=tdcski.config.server_port)
+        return tmpl.render(
+            version="0.0.1",
+           server_interface=tdcski.config.server.interface,
+           server_port=tdcski.config.server.port,
+           dcs_path=tdcski.config.path_to.DCS,
+           saved_games=tdcski.config.path_to.saved_games,
+           interfaces=all_interfaces_html(),
+           alerts=tdcski.alerts.get_alerts()
+        )
 
     @expose
     def save_config(self, **kwargs):
         print(kwargs)
-        # print("server_interface: {}".format(server_interface))
-        raise cherrypy.HTTPRedirect("/config")
+        tdcski.config.server.interface = kwargs["server_interface"]
+        tdcski.config.server.port = kwargs["server_port"]
+        tdcski.config.path_to.DCS = kwargs["dcs_dir"]
+        tdcski.config.path_to.saved_games = kwargs["saved_games"]
+        raise cherrypy.HTTPRedirect("/show_config")
 
     @expose
     def showMessage(self):
@@ -94,7 +112,10 @@ class Root:
     def exit(self):
         tmpl = lookup.get_template("exit.html")
         threading.Timer(1, lambda: os._exit(0)).start()
-        return tmpl.render(version="0.0.1")
+        return tmpl.render(
+            version="0.0.1",
+            alerts=tdcski.alerts.get_alerts()
+        )
 
     @expose
     def user(self, name=""):

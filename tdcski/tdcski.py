@@ -11,7 +11,7 @@ import traceback
 from tdcski.mission import Mission
 from time import strftime, gmtime
 from tdcski.mod import Mod
-import tdcski.config as config
+import tdcski.config_handler as config
 from tdcski.git import Repo
 from optparse import OptionParser, OptionValueError, OptionError, OptionGroup
 from optparse import Option as optparseOption
@@ -76,22 +76,22 @@ def main():
     logger.info("lecture du fichier tdcski.cfg")
     # noinspection PyBroadException
     try:
-        config_file = config.Config()
+        config_file = config.ConfigHandler()
     except Exception:
         logger.error("le fichier de configuration est corrompu, supprimez-le et j'en réinstallerai un nouveau")
         logger.debug("appuyez sur ENTER pour quitter")
         input()
         exit(1)
 
-    logger.info("recherche du répertoire d'installation de DCS")
-    try:
-        dcs_path, caribou = winreg.QueryValueEx (winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Eagle Dynamics\DCS World"), "Path")
-    except FileNotFoundError:
-        logger.error("impossible de trouver une installation de DCS")
-        input()
-        exit(1)
+    # logger.info("recherche du répertoire d'installation de DCS")
+    # try:
+    #     dcs_path, caribou = winreg.QueryValueEx (winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Eagle Dynamics\DCS World"), "Path")
+    # except FileNotFoundError:
+    #     logger.error("impossible de trouver une installation de DCS")
+    #     input()
+    #     exit(1)
     # noinspection PyUnboundLocalVariable
-    logger.info("le répertoire d'installation DCS détecté est: \n\t\t{}".format(dcs_path))
+    # logger.info("le répertoire d'installation DCS détecté est: \n\t\t{}".format(dcs_path))
     # noinspection PyUnboundLocalVariable
     config_file.create("general", "dcs_path", dcs_path)
 

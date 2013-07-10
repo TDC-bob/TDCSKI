@@ -22,21 +22,24 @@
 __version__ = (0, 0, 1)
 __author__ = 'bob'
 
-from tdcski import ui_server
 import tdcski
 import os
 import sys
+from tdcski import ui_server
+from tdcski import alerts
+from tdcski._logging import mkLogger, DEBUG
+
+logger = mkLogger(__name__)
 
 def main():
-    tdcski.MY_FULLNAME = os.path.normpath(os.path.abspath(os.path.join(os.getcwd(), "tdcski.exe")))
-    tdcski.MY_NAME = os.path.basename(tdcski.MY_FULLNAME)
-    tdcski.PROG_DIR = os.path.dirname(tdcski.MY_FULLNAME)
-    tdcski.DATA_DIR = tdcski.PROG_DIR
-    tdcski.MY_ARGS = sys.argv[1:]
-    tdcski.CREATEPID = False
-    tdcski.DAEMON = False
-
-
+    # print(tdcski.config.path_to.DCS)
+    # print(tdcski.config.path_to.saved_games)
+    alerts.add_alert("test title", title="may Da Ribouca be with ya !", type="error")
+    alerts.add_alert("test persistent", persistent=True)
+    alerts.add_alert("test persistent error", persistent=True, type='error')
+    alerts.add_alert("test persistent success", persistent=True, type='success')
+    alerts.add_alert("test persistent info", persistent=True, type='info')
+    alerts.add_alert("test persistent warning", persistent=True, type='warning')
     ui_server.main()
 
 if __name__ == "__main__":

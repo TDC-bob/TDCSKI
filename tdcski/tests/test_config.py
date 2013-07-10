@@ -22,7 +22,7 @@
 __author__ = 'bob'
 
 import unittest
-from tdcski import config
+from tdcski import config_handler
 import os
 
 from tdcski._logging import mkLogger, logged, DEBUG
@@ -49,7 +49,7 @@ class testConfig(unittest.TestCase):
         self.file = "config.test_file"
         with open(self.file, mode="w") as file:
             file.writelines(test_content)
-        self.config = config.Config(self.file)
+        self.config = config_handler.ConfigHandler(self.file)
 
     def tearDown(self):
         os.remove(self.file)
@@ -137,11 +137,11 @@ class testConfig(unittest.TestCase):
         self.assertEqual(self.config.get(*lvl), "test_string")
 
     def test_config_fileDoesNotExist(self):
-        with self.assertRaises(config.ConfigFileDoesNotExist):
-            config.Config("i_do_not_exist")
+        with self.assertRaises(config_handler.ConfigFileDoesNotExist):
+            config_handler.ConfigHandler("i_do_not_exist")
 
     def test_config_fileCreation(self):
-        f = config.Config("tchoutchou", False)
+        f = config_handler.ConfigHandler("tchoutchou", False)
         f.set_or_create("str", "value")
         f.set_or_create("bool", False)
         f.set_or_create("int", 12)

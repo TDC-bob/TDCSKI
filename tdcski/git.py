@@ -4,7 +4,7 @@ __author__ = 'bob'
 import subprocess
 import os
 import re
-import tdcski.config
+import tdcski.config_handler
 from tdcski._logging import logged, mkLogger, DEBUG
 
 logger = mkLogger(__name__, DEBUG)

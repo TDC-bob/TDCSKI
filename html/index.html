@@ -18,8 +18,7 @@
         });
     })
 </script>
-<a class="btn btn-primary" href="#">
-  <i class="icon-refresh icon-spin"></i> Synchronizing Content...</a>
+<a class="btn btn-primary" href="#"> <i class="icon-refresh icon-spin"></i> Synchronizing Content...</a>
 <div class="alert fade in">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>Holy guacamole!</strong> Best check yo self, you're not looking too good.
@@ -27,7 +26,11 @@
 ${salutation}
 ${target}
 <form name="input" action="test_receive" method="post">
-    First name: <input type="text" name="user" value=""><br>
-    Last name: <input type="text" name="pwd" value=""><br>
+    <label for="user">
+        First name: <input type="text" id="user" name="user" value=""><br>
+    </label>
+    <label for="pwd">
+        Last name: <input type="text" id="pwd" name="pwd" value=""><br>
+    </label>
     <input type="submit" value="Submit">
 </form>

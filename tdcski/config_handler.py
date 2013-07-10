@@ -26,6 +26,7 @@ from lib.configobj import ConfigObj
 from tdcski._logging import mkLogger, logged, DEBUG
 import os
 from tdcski.file import File
+# import tdcski
 logger = mkLogger(__name__, DEBUG)
 
 git_exe = None
@@ -41,8 +42,8 @@ class ConfigFileDoesNotExist(Exception):
     def __init__(self, path_to_file):
         logger.error("le fichier n'existe pas ({})".format(path_to_file))
 
-class Config():
-    def __init__(self, file='../tdcski.cfg', must_exists=True):
+class ConfigHandler():
+    def __init__(self, file='tdcski.cfg', must_exists=True):
         if must_exists and not os.path.exists(file):
             raise ConfigFileDoesNotExist(file)
         self.__file = File(file, must_exists)
