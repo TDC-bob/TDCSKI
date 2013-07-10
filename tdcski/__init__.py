@@ -47,9 +47,13 @@ class FoldersConfig():
         self.own_name = os.path.basename(self.own_full_path)
         self.own_dir = os.path.dirname(self.own_full_path)
 
-        self.__DCS, caribou = winreg.QueryValueEx (winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Eagle Dynamics\DCS World"), "Path")
-        del caribou
-        config_file.create("paths", "dcs_install", self.DCS)
+        try:
+            os.environ['TRAVIS']
+            config_file.create("paths", "dcs_install", "dummy")
+        except:
+            self.__DCS, caribou = winreg.QueryValueEx (winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Eagle Dynamics\DCS World"), "Path")
+            del caribou
+            config_file.create("paths", "dcs_install", self.DCS)
         self.__DCS = config_file.get("paths", "dcs_install")
 
         self.__saved_games = os.path.normpath(os.path.expanduser("~/saved games/dcs"))
