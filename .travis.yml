@@ -12,7 +12,7 @@ install:
 #  - wget -i ../../.travis.filelist
 #  - cd ../../tests
 # command to run tests
-script: nosetests
+script: nosetests -v
 branches:
   only:
     - master
