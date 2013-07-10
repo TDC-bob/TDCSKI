@@ -19,7 +19,6 @@
 #  MA 02110-1301, USA.
 #
 #
-__author__ = 'bob'
 
 import tdcski
 import cherrypy
@@ -38,8 +37,8 @@ lookup = TemplateLookup(directories=['html'])
 class UIServer():
     def __init__(self):
         cherrypy.server.shutdown_timeout = 0
-        cherrypy.server.socket_port = 10307
-        cherrypy.server.socket_host = "127.0.0.1"
+        cherrypy.server.socket_port = int(tdcski.config.server.port)
+        cherrypy.server.socket_host = tdcski.config.server.interface
 
     def start(self):
         def fake_wait_for_occupied_port(host, port): return
@@ -78,7 +77,7 @@ class Root:
         return tmpl.render(
             salutation="Hello",
             target="World",
-            version="0.0.1",
+            version=tdcski.version,
             alerts=tdcski.alerts.get_alerts(),
         )
 
@@ -86,7 +85,7 @@ class Root:
     def show_config(self):
         tmpl = lookup.get_template("config.html")
         return tmpl.render(
-            version="0.0.1",
+            version=tdcski.version,
            server_interface=tdcski.config.server.interface,
            server_port=tdcski.config.server.port,
            dcs_path=tdcski.config.path_to.DCS,
@@ -113,7 +112,7 @@ class Root:
         tmpl = lookup.get_template("exit.html")
         threading.Timer(1, lambda: os._exit(0)).start()
         return tmpl.render(
-            version="0.0.1",
+            version=tdcski.version,
             alerts=tdcski.alerts.get_alerts()
         )
 
@@ -136,14 +135,9 @@ class Root:
     def do_update(self):
         return "updating, sir !"
 
-    @cherrypy.expose
-    @tools.json_out()
-    def test_ajax(self, **kwargs):
-        return {"message": "Hello World!"}
-
 def main():
     server = UIServer()
-    threading.Timer(2, lambda: webbrowser.open("http://127.0.0.1:10307", new=2, autoraise=True)).start()
+    threading.Timer(2, lambda: webbrowser.open("http://127.0.0.1:{}".format(tdcski.config.server.port), new=2, autoraise=True)).start()
     server.start()
     return 0
 

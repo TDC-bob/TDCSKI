@@ -4,13 +4,15 @@
 <form action="save_config" method="post">
     <fieldset>
         <legend>Serveur local</legend>
+        <p class="text-warning">REMARQUE: Toutes modification du serveur local ne prendra effet qu'au prochain d&eacute;marrage de l'application</p>
         <div class="control-group">
             <label class="control-label" for="server_interface">Interface
                 <div class="controls">
                     <select class="input-medium" id="server_interface" name="server_interface">
                         ${interfaces}
                     </select>
-                    <a href="#" rel="tooltip" data-container="body" data-toggle="tooltip" data-placement="right" title="Changer l'interface vous permet de sp&eacute;cifier quelles ressources r&eacute;seau auront acc&egrave; &agrave; la page du TDCSKI"> AIDE</a>
+                    <span class="help-block">N'y touchez pas si vous ne savez pas ce que vous fa&icirc;tes</span>
+                    <!--<a href="#" rel="tooltip" data-container="body" data-toggle="tooltip" data-placement="right" title="Changer l'interface vous permet de sp&eacute;cifier quelles ressources r&eacute;seau auront acc&egrave; &agrave; la page du TDCSKI"> AIDE</a>-->
                 </div>
             </label>
         </div>
@@ -44,8 +46,7 @@
 </form>
 
 <script>
-    $('a[href="/config"]').parent().addClass('active');
-//    $('#interface_help').popover('toggle')
+    $('a[href="/show_config"]').parent().addClass('active');
 </script>
 
 <script type="text/javascript">

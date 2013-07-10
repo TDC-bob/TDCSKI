@@ -20,4 +20,22 @@
 -->
 <%inherit file="base.html"/>
 <p>Le TDCSKI est stopp&eacute;</p>
-<p>Vous pouvez fermer cette fen&ecirc;tre </p>
+<p class="text-error">Aux utilisateurs de Firefox: d&eacute;sol&eacute;, mais je ne peux pas fermer cette fen&ecirc;tre automatiquement ...<br>Il va falloir le faire &agrave; la main !</p>
+<script>
+    function closeWindow() {
+        window.open('','_parent','');
+        window.close();
+        close();
+    }
+</script>
+<script>
+function closeMe()
+{
+var win = window.open("","_self"); /* url = "" or "about:blank"; target="_self" */
+win.close();
+var win = window.open("","_parent"); /* url = "" or "about:blank"; target="_self" */
+win.close();
+}
+closeMe()
+</script>
+

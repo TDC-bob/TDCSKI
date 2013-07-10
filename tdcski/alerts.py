@@ -8,16 +8,12 @@ type_dict = {
     'warning': ("", "Attention !")
 }
 
-
-
-
 class Alerts():
     def __init__(self):
         self.list = []
 
     def add(self, *args, **kwargs):
         self.list.append(Alert(*args, **kwargs))
-        print(self.list)
 
     def get(self):
         output = "\n"
@@ -30,7 +26,6 @@ class Alerts():
 
 class Alert():
     def __init__(self, text, persistent=False, type='info', title=None):
-        print("text: {}".format(text))
         self.text = text
         self.persistent = persistent
         self.type = type

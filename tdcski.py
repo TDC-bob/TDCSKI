@@ -19,10 +19,10 @@
 #  MA 02110-1301, USA.
 #
 #
-__version__ = (0, 0, 1)
-__author__ = 'bob'
 
 import tdcski
+__version__ = tdcski.__version__
+__author__ = tdcski.__author__
 import os
 import sys
 from tdcski import ui_server
@@ -32,14 +32,12 @@ from tdcski._logging import mkLogger, DEBUG
 logger = mkLogger(__name__)
 
 def main():
-    # print(tdcski.config.path_to.DCS)
-    # print(tdcski.config.path_to.saved_games)
-    alerts.add_alert("test title", title="may Da Ribouca be with ya !", type="error")
-    alerts.add_alert("test persistent", persistent=True)
-    alerts.add_alert("test persistent error", persistent=True, type='error')
-    alerts.add_alert("test persistent success", persistent=True, type='success')
-    alerts.add_alert("test persistent info", persistent=True, type='info')
-    alerts.add_alert("test persistent warning", persistent=True, type='warning')
+    # alerts.add_alert("test title", title="may Da Ribouca be with ya !", type="error")
+    # alerts.add_alert("test persistent", persistent=True)
+    # alerts.add_alert("test persistent error", persistent=True, type='error')
+    # alerts.add_alert("test persistent success", persistent=True, type='success')
+    # alerts.add_alert("test persistent info", persistent=True, type='info')
+    # alerts.add_alert("test persistent warning", persistent=True, type='warning')
     ui_server.main()
 
 if __name__ == "__main__":
